@@ -8,4 +8,15 @@
             30
         </session-timeout>
     </session-config>
+    
+    <servlet>
+        <servlet-name>TaskServlet</servlet-name>
+        <servlet-class>controller.TaskServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TaskServlet</servlet-name>
+        <url-pattern>/TaskServlet</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
