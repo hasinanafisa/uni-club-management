@@ -1,0 +1,283 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 26 Dec 2025, 5:52:11 pm
+    Author     : Razan
+*/
+
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* =========================
+   BODY BASE
+========================= */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0e7ff, #f5d0fe);
+    overflow-y: auto;
+}
+
+/* =========================
+   LOGIN PAGE ONLY
+========================= */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-page .container {
+    max-width: 420px;
+    width: 100%;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    animation: fadeIn 0.6s ease;
+}
+
+.login-page .container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 100;
+}
+
+.logo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    background: #1abc9c;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 300px;
+    height: calc(100vh - 70px);
+    background-color: #1e293b; /* slate blue */
+    padding-top: 20px;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar a {
+    display: block;
+    padding: 14px 24px;
+    color: #f8fafc;
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 6px 12px;
+    transition: 0.25s ease;
+}
+
+.sidebar a:hover {
+    background-color: #334155;
+}
+
+/* =========================
+   MAIN PAGE WRAPPER
+========================= */
+.page-wrapper {
+    margin-left: 220px;
+    padding-top: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+/* =========================
+   MAIN CONTENT CONTAINER
+========================= */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    padding: 30px;
+}
+
+/* MAIN HOME PAGE WRAPPER */
+.home-page {
+    padding-top: 120px;
+    margin-left: 220px;
+    display: flex;
+    justify-content: center;
+    height: auto;   /* IMPORTANT */
+}
+
+/* OUTER CONTAINER */
+.home-page .home-container {
+    width: 100%;
+    max-width: 1000px;
+    height: auto; 
+    background: rgba(255, 255, 255, 0.95);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: fadeIn 0.6s ease;
+    margin-bottom: 40px;
+}
+
+/* =========================
+   TEXT STYLES
+========================= */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* =========================
+   CARD SECTION
+========================= */
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    width: 240px;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+}
+
+.card i {
+    font-size: 36px;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.card a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* CLUB BUTTONS */
+.join-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.join-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+.active-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: #22c55e;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: default;
+}
