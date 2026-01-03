@@ -27,7 +27,7 @@
         <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
 
         <button type="submit">Register</button>
-    </form>
+    </form><a href="login.jsp">Login here</a>
 
     <p style="text-align:center; margin-top:15px;">
         Already have an account?

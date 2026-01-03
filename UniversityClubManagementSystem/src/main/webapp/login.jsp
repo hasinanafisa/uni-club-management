@@ -23,6 +23,11 @@
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
+    
+    <p style="text-align:center; margin-top:15px;">
+        <a href="register.jsp">Create an account</a> |
+        <a href="forgot-password.jsp">Forgot password?</a>
+    </p> 
 </div>
 
 </body>
