@@ -5,11 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="dao.AnnouncementDAO"%>
+<%@page import="model.Announcement"%>
+<%@page import="dao.EventDAO"%>
+<%@page import="model.Event"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.dao.AnnouncementDAO"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.model.Announcement"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.dao.EventDAO"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.model.Event"%>
 
 <%
     int announceId = Integer.parseInt(request.getParameter("id"));

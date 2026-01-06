@@ -5,9 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="dao.EventDAO"%>
+<%@page import="model.Event"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.dao.EventDAO"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.model.Event"%>
 
 <%
     int eventId = Integer.parseInt(request.getParameter("id"));
