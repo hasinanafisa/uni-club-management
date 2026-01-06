@@ -1,27 +1,35 @@
-package com.mycompany.universityclubmanagementsystem.controller;
+/**
+ * @izyanie
+ * @30/12/2025
+ */
 
-import com.mycompany.universityclubmanagementsystem.dao.AnnouncementDAO;
-import com.mycompany.universityclubmanagementsystem.model.Announcement;
+package controller;
+
+import dao.AnnouncementDAO;
+import model.Announcement;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.sql.SQLException;
 
 @MultipartConfig
+@WebServlet("/EditAnnouncementServlet")
 public class EditAnnouncementServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        AnnouncementDAO dao = new AnnouncementDAO();
+        
         Announcement a = new Announcement();
+        AnnouncementDAO dao = new AnnouncementDAO();
 
         int announceID = Integer.parseInt(request.getParameter("announceID"));
+        
         Announcement existing = dao.getAnnouncementById(announceID);
 
+        // TEXT FIELDS
         a.setAnnounceID(announceID);
         a.setAnnounceTitle(request.getParameter("announceTitle"));
         a.setAnnounceContent(request.getParameter("announceContent"));

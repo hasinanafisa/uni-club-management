@@ -3,21 +3,22 @@
  * @27/12/2025
  */
 
-package com.mycompany.universityclubmanagementsystem.controller;
+package controller;
 
-import com.mycompany.universityclubmanagementsystem.dao.EventDAO;
-import com.mycompany.universityclubmanagementsystem.model.Event;
+import dao.EventDAO;
+import model.Event;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 
-//@WebServlet("/CreateEventServlet")
 @MultipartConfig
+@WebServlet("/CreateEventServlet")
 public class CreateEventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -42,7 +43,7 @@ public class CreateEventServlet extends HttpServlet {
         e.setEventDate(Date.valueOf(dateStr));
         e.setEventTime(Time.valueOf(timeStr));
         
-        // FILE UPLOADS
+        // IMAGE UPLOADS
         Part bannerPart = request.getPart("bannerImagePath");
         Part qrPart = request.getPart("qrPath");
 

@@ -1,13 +1,17 @@
-package com.mycompany.universityclubmanagementsystem.dao;
+/**
+ * @izyanie
+ * @27/12/2025
+ */
 
-import com.mycompany.universityclubmanagementsystem.model.Event;
-import com.mycompany.universityclubmanagementsystem.util.DBConnection;
+package dao;
+
+import model.Event;
+import util.DBUtil;
 
 import java.sql.*;
 import java.util.*;
 
 public class EventDAO {
-
     // READ ALL
     public List<Event> getAllEvents() {
         List<Event> list = new ArrayList<>();
@@ -15,7 +19,7 @@ public class EventDAO {
                 + "banner_image_path, attendance_qr_path "
                 + "FROM event";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -40,7 +44,7 @@ public class EventDAO {
         Event e = null;
         String sql = "SELECT * FROM event WHERE event_id=?";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -68,7 +72,7 @@ public class EventDAO {
             "INSERT INTO event(event_title,event_desc,event_date,event_time,event_loc,banner_image_path,attendance_qr_path) "
                 + "VALUES (?,?,?,?,?,?,?)";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, e.getEventTitle());
@@ -89,7 +93,7 @@ public class EventDAO {
                 + "banner_image_path=?, attendance_qr_path=? "
                 + "WHERE event_id=?";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, e.getEventTitle());
@@ -109,7 +113,7 @@ public class EventDAO {
     public void deleteEvent(int id) throws SQLException {
         String sql = "DELETE FROM event WHERE event_id=?";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);

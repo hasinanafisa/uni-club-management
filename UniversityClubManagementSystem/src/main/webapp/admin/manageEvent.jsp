@@ -6,14 +6,20 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.dao.EventDAO"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.model.Event"%>
+<%@page import="dao.EventDAO"%>
+<%@page import="model.Event"%>
+<%@page import="java.text.SimpleDateFormat"%>
+
+<%
+    EventDAO dao = new EventDAO();
+    List<Event> events = dao.getAllEvents();
+%>
 
 <!DOCTYPE html>
 <html>
     <head>
         <title>Manage Events</title>
-        <link rel="stylesheet" href="../css/adminstyle.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     </head>
 
@@ -55,72 +61,65 @@
                     </div>
                 </div>
 
-                <%
-                    EventDAO dao = new EventDAO();
-                    List<Event> events = dao.getAllEvents();
-                %>
-
                 <!-- NO EVENT -->
                 <% if (events.isEmpty()) { %>
-                    <div class="no-event-box">
-                        <h3>No event found.</h3>
-                    </div>
+                <div class="no-event-box">
+                    <h3>No event found.</h3>
+                </div>
                 <% } else { %>
 
-                <!-- EVENT LIST -->
-                    <% for (Event e : events) { %>
-                        <%
-                            java.time.LocalDate eventDate = e.getEventDate().toLocalDate();
-                            java.time.LocalTime eventTime = e.getEventTime().toLocalTime();
-                            java.time.LocalDateTime eventDateTime =
-                                    java.time.LocalDateTime.of(eventDate, eventTime);
+                    <!-- EVENT LIST -->
+                    <% 
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 
-                            java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                        for (Event e : events) {
 
-                            String status;
-                            if (eventDateTime.isAfter(now)) {
-                                status = "Upcoming";
-                            } else {
-                                status = "Past";
-                            }
-                        %>
+                        java.time.LocalDate eventDate = e.getEventDate().toLocalDate();
+                        java.time.LocalTime eventTime = e.getEventTime().toLocalTime();
+                        java.time.LocalDateTime eventDateTime =
+                                java.time.LocalDateTime.of(eventDate, eventTime);
 
-                        <div class="event-card">
-                            <div class="event-info">
-                                <p>
-                                    <strong>Event Name:</strong>
-                                    <a href="previewEvent.jsp?id=<%= e.getEventID() %>"
-                                       style="text-decoration:none; font-weight:600; color:#1e3a8a;">
-                                        <%= e.getEventTitle() %>
-                                    </a>
-                                </p>
-                                <p><strong>Date:</strong> <%= e.getEventDate() %></p>
-                                <%
-                                    java.time.LocalTime time = e.getEventTime().toLocalTime();
-                                    String formattedTime =
-                                        time.format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
-                                %>
-                                <p><strong>Time:</strong> <%= formattedTime %></p>
-                                <p><strong>Status:</strong>
-                                    <span class="status <%= status.toLowerCase() %>"> <%= status %></span>
-                                </p>
-                            </div>
+                        java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
-                            <div class="event-actions">
-                                <a href="editEvent.jsp?id=<%= e.getEventID() %>"
-                                   class="icon-btn edit-btn"
-                                   title="Edit">
-                                    <i class="fa-solid fa-pen"></i>
+                        String status;
+                        if (eventDateTime.isAfter(now)) {
+                            status = "Upcoming";
+                        } else {
+                            status = "Past";
+                        }
+                    %>
+
+                    <div class="event-card">
+                        <div class="event-info">
+                            <p>
+                                <strong>Event Name:</strong>
+                                <a href="previewEvent.jsp?id=<%= e.getEventID() %>"
+                                   style="text-decoration:none; font-weight:600; color:#1e3a8a;">
+                                    <%= e.getEventTitle() %>
                                 </a>
-
-                                <a href="javascript:void(0)"
-                                    class="icon-btn delete-btn"
-                                    onclick="confirmDelete(<%= e.getEventID() %>)"
-                                    title="Delete">
-                                     <i class="fa-solid fa-trash"></i>
-                                 </a>
-                            </div>
+                            </p>
+                            <p><strong>Date:</strong> <%= e.getEventDate() %></p>
+                            <p><strong>Time:</strong> <%= timeFormat.format(e.getEventTime()) %></p>
+                            <p><strong>Status:</strong>
+                                <span class="status <%= status.toLowerCase() %>"> <%= status %></span>
+                            </p>
                         </div>
+
+                        <div class="event-actions">
+                            <a href="editEvent.jsp?id=<%= e.getEventID() %>"
+                               class="icon-btn edit-btn"
+                               title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <a href="javascript:void(0)"
+                                class="icon-btn delete-btn"
+                                onclick="confirmDelete(<%= e.getEventID() %>)"
+                                title="Delete">
+                                 <i class="fa-solid fa-trash"></i>
+                             </a>
+                        </div>
+                    </div>
                     <% } %>
                 <% } %>
 

@@ -3,7 +3,7 @@
  * @24/12/2025
  */
 
-package com.mycompany.universityclubmanagementsystem.model;
+package model;
 
 public class Announcement {
     private int announceID;

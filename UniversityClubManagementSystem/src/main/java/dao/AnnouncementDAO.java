@@ -1,14 +1,17 @@
+/**
+ * @izyanie
+ * @30/12/2025
+ */
 
-package com.mycompany.universityclubmanagementsystem.dao;
+package dao;
 
-import com.mycompany.universityclubmanagementsystem.model.Announcement;
-import com.mycompany.universityclubmanagementsystem.util.DBConnection;
+import model.Announcement;
+import util.DBUtil;
 
 import java.sql.*;
 import java.util.*;
 
 public class AnnouncementDAO {
-
     // READ ALL
     public List<Announcement> getAllAnnouncements() {
         List<Announcement> list = new ArrayList<>();
@@ -16,7 +19,7 @@ public class AnnouncementDAO {
                 + "image_path, attachment_path, event_id "
                 + "FROM announcement";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -40,7 +43,7 @@ public class AnnouncementDAO {
         Announcement a = null;
         String sql = "SELECT * FROM announcement WHERE announce_id=?";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -66,7 +69,7 @@ public class AnnouncementDAO {
             "INSERT INTO announcement(announce_title,announce_content,announce_category,image_path,attachment_path,event_id) "
                 + "VALUES (?,?,?,?,?,?)";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, a.getAnnounceTitle());
@@ -86,7 +89,7 @@ public class AnnouncementDAO {
         "UPDATE announcement SET announce_title=?, announce_content=?, announce_category=?, image_path=?, attachment_path=?, event_id=? "
                 + "WHERE announce_id=?";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, a.getAnnounceTitle());
@@ -105,7 +108,7 @@ public class AnnouncementDAO {
     public void deleteAnnouncement(int id) throws SQLException {
         String sql = "DELETE FROM announcement WHERE announce_id=?";
 
-        try (Connection con = DBConnection.getConnection();
+        try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);

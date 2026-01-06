@@ -5,8 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.dao.EventDAO"%>
-<%@page import="com.mycompany.universityclubmanagementsystem.model.Event"%>
+<%@page import="dao.EventDAO"%>
+<%@page import="model.Event"%>
 
 <%
     int eventId = Integer.parseInt(request.getParameter("id"));
@@ -45,16 +45,30 @@
                 <h1>Edit Event</h1>
                 <p class="subtitle">Update event details below</p>
 
-                <form class="create-event-form" action="<%= request.getContextPath() %>/EditEventServlet"
+                <form class="create-event-form" action="${pageContext.request.contextPath}/EditEventServlet"
                       method="post" enctype="multipart/form-data">
 
                     <!-- Hidden ID -->
                     <input type="hidden" name="eventID" value="<%= event.getEventID() %>">
-                    <input type="file" name="bannerImagePath" accept=".jpg,.png" placeholder="Change Banner Image (optional)">
+                    
+                    <!-- CURRENT BANNER IMAGE -->
+                    <% if (event.getBannerImagePath() != null && !event.getBannerImagePath().isEmpty()) { %>
+                        <p>
+                            <strong>Current Banner:</strong>
+                            <a href="<%= request.getContextPath() %>/uploads/<%= event.getBannerImagePath() %>"
+                               target="_blank">
+                                <%= event.getBannerImagePath() %>
+                            </a>
+                        </p>
+                    <% } %>
+                    <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png">
+                    
                     <input type="text" name="eventTitle" value="<%= event.getEventTitle() %>" 
                            placeholder="Event Title *" required>
+                    
                     <textarea name="eventDesc" rows="4" placeholder="Event Description *"
                            required><%= event.getEventDesc() %></textarea>
+                           
                     <div class="form-row">
                         <input type="date" name="eventDate" value="<%= event.getEventDate() %>" required>
                         <%
@@ -62,10 +76,21 @@
                         %>
                         <input type="time" name="eventTime" value="<%= timeValue %>" required>
                     </div>
+                    
                     <input type="text" name="eventLoc" value="<%= event.getEventLoc() %>"
                            placeholder="Event Location *" required>
-                    <input type="file" name="qrPath" accept=".jpg,.png"
-                           placeholder="Update Attendance QR (optional)">
+                    
+                    <!-- CURRENT QR -->
+                    <% if (event.getQrPath() != null && !event.getQrPath().isEmpty()) { %>
+                        <p>
+                            <strong>Current Attendance QR:</strong>
+                            <a href="<%= request.getContextPath() %>/uploads/<%= event.getQrPath() %>"
+                               target="_blank">
+                                <%= event.getQrPath() %>
+                            </a>
+                        </p>
+                    <% } %>
+                    <input type="file" name="qrPath" accept=".jpg,.png,image/jpeg,image/png">
                     
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">

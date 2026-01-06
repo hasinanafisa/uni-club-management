@@ -3,15 +3,15 @@
  * @24/12/2025
  */
 
-package com.mycompany.universityclubmanagementsystem.controller;
+package controller;
 
-import com.mycompany.universityclubmanagementsystem.dao.AdminDAO;
+import dao.AdminDAO;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
 public class AdminLoginServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class AdminLoginServlet extends HttpServlet {
         } else {
             //login failure → stay on login page
             req.setAttribute("error", "Invalid email or password.");
-            req.setAttribute("email", email); // 👈 remember email
+            req.setAttribute("email", email); //remember email
             req.getRequestDispatcher("/admin/adminLogin.jsp").forward(req, res);
         }
     }

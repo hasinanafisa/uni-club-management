@@ -1,17 +1,23 @@
-package com.mycompany.universityclubmanagementsystem.controller;
+/**
+ * @izyanie
+ * @30/12/2025
+ */
 
-import com.mycompany.universityclubmanagementsystem.dao.AnnouncementDAO;
-import com.mycompany.universityclubmanagementsystem.model.Announcement;
+package controller;
+
+import dao.AnnouncementDAO;
+import model.Announcement;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.MultipartConfig;
+import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.nio.file.Paths;
+import java.sql.*;
 
 @MultipartConfig
 public class PostAnnouncementServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -24,7 +30,7 @@ public class PostAnnouncementServlet extends HttpServlet {
         a.setAnnounceCategory(request.getParameter("announceCategory"));
         a.setEventID(Integer.parseInt(request.getParameter("eventID")));
 
-        // FILE UPLOADS
+        // IMAGE/FILE UPLOADS
         Part imagePart = request.getPart("imagePath");
         Part attachmentPart = request.getPart("attachmentPath");
 
@@ -40,6 +46,26 @@ public class PostAnnouncementServlet extends HttpServlet {
             a.setAttachmentPath(attachmentPart.getSubmittedFileName());
         } else {
             a.setAttachmentPath(null); // optional
+        }
+        
+        String uploadPath = getServletContext().getRealPath("") + "uploads";
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdir();
+        
+        if (imagePart != null && imagePart.getSize() > 0) {
+            String fileName = Paths.get(imagePart.getSubmittedFileName())
+                                    .getFileName().toString();
+
+            imagePart.write(uploadPath + File.separator + fileName);
+            a.setImagePath(fileName);
+        }
+        
+        if (attachmentPart != null && attachmentPart.getSize() > 0) {
+            String fileName = Paths.get(attachmentPart.getSubmittedFileName())
+                                    .getFileName().toString();
+
+            attachmentPart.write(uploadPath + File.separator + fileName);
+            a.setAttachmentPath(fileName);
         }
 
         AnnouncementDAO dao = new AnnouncementDAO();

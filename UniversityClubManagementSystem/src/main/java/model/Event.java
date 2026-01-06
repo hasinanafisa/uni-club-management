@@ -3,7 +3,7 @@
  * @24/12/2025
  */
 
-package com.mycompany.universityclubmanagementsystem.model;
+package model;
 
 import java.sql.Date;
 import java.sql.Time;

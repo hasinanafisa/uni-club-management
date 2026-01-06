@@ -1,22 +1,23 @@
-    /**
+/**
  * @izyanie
  * @27/12/2025
  */
 
-package com.mycompany.universityclubmanagementsystem.controller;
+package controller;
 
-import com.mycompany.universityclubmanagementsystem.dao.EventDAO;
-import com.mycompany.universityclubmanagementsystem.model.Event;
+import dao.EventDAO;
+import model.Event;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.sql.*;
 
 @MultipartConfig
+@WebServlet("/EditEventServlet")
 public class EditEventServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,6 +26,8 @@ public class EditEventServlet extends HttpServlet {
         EventDAO dao = new EventDAO();
         
         int eventID = Integer.parseInt(request.getParameter("eventID"));
+        
+        Event existing = dao.getEventById(eventID);
         
         String dateStr = request.getParameter("eventDate");
         String timeStr = request.getParameter("eventTime");
@@ -45,18 +48,15 @@ public class EditEventServlet extends HttpServlet {
         e.setEventDate(Date.valueOf(dateStr));
         e.setEventTime(Time.valueOf(timeStr));
         
-        // FILE UPLOADS
+        // IMAGE UPLOADS
         Part bannerPart = request.getPart("bannerImagePath");
-        Part qrPart = request.getPart("qrPath");
-        
-        Event existing = dao.getEventById(eventID);
-
         if (bannerPart != null && bannerPart.getSize() > 0) {
             e.setBannerImagePath(bannerPart.getSubmittedFileName());
         } else {
             e.setBannerImagePath(existing.getBannerImagePath());
         }
 
+        Part qrPart = request.getPart("qrPath");
         if (qrPart != null && qrPart.getSize() > 0) {
             e.setQrPath(qrPart.getSubmittedFileName());
         } else {
