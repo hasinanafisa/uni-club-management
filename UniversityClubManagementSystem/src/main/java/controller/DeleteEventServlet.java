@@ -1,0 +1,33 @@
+/**
+ * @izyanie
+ * @27/12/2025
+ */
+
+package controller;
+
+import dao.EventDAO;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
+import java.io.IOException;
+import java.sql.SQLException;
+
+@WebServlet("/DeleteEventServlet")
+public class DeleteEventServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        int eventID = Integer.parseInt(request.getParameter("eventID"));
+
+        EventDAO dao = new EventDAO();
+        try {
+            dao.deleteEvent(eventID);
+            response.sendRedirect(request.getContextPath() + "/admin/manageEvent.jsp");
+        } catch (SQLException ex) {
+            request.setAttribute("error", "Failed to delete event.");
+            request.getRequestDispatcher("admin/manageEvent.jsp").forward(request, response);
+        }
+    }
+}

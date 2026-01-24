@@ -1,0 +1,103 @@
+<%-- 
+    Document   : adminHome
+    Created on : 24 Dec 2025, 3:13:20 pm
+    Author     : izyanie
+--%>
+
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="model.Admin" %>
+
+<%
+    Boolean loginSuccess = (Boolean) session.getAttribute("loginSuccess");
+    if (loginSuccess != null && loginSuccess) {
+        session.removeAttribute("loginSuccess");
+    }
+%>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Admin Home | University Club Management System</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
+    
+    <body>
+        <!-- ===== TOAST NOTIFICATION ===== -->
+        <div id="toast" class="toast"></div>
+
+        <!-- ===== TOP NAVBAR ===== -->
+        <div class="navbar">
+            <div style="display:flex; align-items:center;">
+                <i class="fa-solid fa-bars menu-toggle" onclick="toggleSidebar()"></i>
+                <div class="logo">HOME</div>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="<%= request.getContextPath() %>/AdminLogoutServlet">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- ===== SIDEBAR ===== -->
+        <div class="sidebar">
+            <a href="../admin/adminHome.jsp" class="active-link">
+                <i class="fa-solid fa-house"></i>Home
+            </a>
+            <a href="../admin/manageEvent.jsp"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
+            <a href="../admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
+        </div>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="home-page">
+            <div class="home-container">
+                <h1>Welcome Back to University Club Management System</h1>
+                <p class="subtitle">Admin Dashboard</p>
+
+                <div class="card-container">
+                    <div class="card">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <h3>Event Creation</h3>
+                        <p>Create, update, and manage club events.</p>
+                        <a href="../admin/manageEvent.jsp">Manage</a>
+                    </div>
+
+                    <div class="card">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <h3>Post Announcement</h3>
+                        <p>Share important updates with students.</p>
+                        <a href="../admin/manageAnnouncement.jsp">Manage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== JAVASCRIPT ===== -->
+        <script>
+            function showToast(message) {
+                const toast = document.getElementById("toast");
+                toast.textContent = message;
+                toast.classList.add("show");
+
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 3000);
+            }
+
+            function toggleSidebar() {
+                document.querySelector('.sidebar').classList.toggle('collapsed');
+                document.body.classList.toggle('sidebar-collapsed');
+            }
+
+            window.onload = function () {
+                // Collapse sidebar by default
+                document.querySelector('.sidebar').classList.add('collapsed');
+                document.body.classList.add('sidebar-collapsed');
+
+                // Login success toast
+                <% if (loginSuccess != null && loginSuccess) { %>
+                    showToast("Login successful!");
+                <% } %>
+            };
+        </script>
+    </body>
+</html>
