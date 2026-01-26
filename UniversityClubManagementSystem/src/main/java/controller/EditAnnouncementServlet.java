@@ -10,13 +10,9 @@ import model.Announcement;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@MultipartConfig
-@WebServlet("/EditAnnouncementServlet")
 public class EditAnnouncementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

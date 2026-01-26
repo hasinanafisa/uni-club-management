@@ -30,7 +30,7 @@
 <div class="navbar">
     <div class="logo">EVENT PREVIEW</div>
     <ul class="nav-links">
-        <li><a href="manageEvent.jsp">Back</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Back</a></li>
     </ul>
 </div>
 

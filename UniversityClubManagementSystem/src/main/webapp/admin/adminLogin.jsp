@@ -42,7 +42,7 @@
                 </p>
             <% } %>
 
-            <form action="../AdminLoginServlet" method="post">
+            <form action="${pageContext.request.contextPath}/admin/adminLogin" method="post">
                 <input type="email" name="email" placeholder="Email"
                     value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" 
                     required>
@@ -54,7 +54,7 @@
             </form>
 
             <div class="login-links">
-                <a href="../indexAdmin.jsp">Back to Home</a>
+                <a href="${pageContext.request.contextPath}/admin/indexAdmin.jsp">Back to Home</a>
                 <span>|</span>
                 <a href="forgot-password.jsp">Forgot Password?</a>
             </div>

@@ -50,15 +50,15 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="adminHome.jsp">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
             </ul>
         </div>
 
         <!-- ===== SIDEBAR ===== -->
         <div class="sidebar">
-            <a href="../admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
-            <a href="../admin/manageEvent.jsp"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
-            <a href="../admin/manageAnnouncement.jsp" class="active-link">
+            <a href="${pageContext.request.contextPath}/admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
+            <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
+            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp" class="active-link">
                 <i class="fa-solid fa-bullhorn"></i>Manage Announcement
             </a>
         </div>
@@ -153,7 +153,7 @@
 
                 <!-- CREATE BUTTON -->
                 <div class="create-btn-wrapper">
-                    <a href="postAnnouncement.jsp" class="wide-btn">
+                    <a href="${pageContext.request.contextPath}/admin/postAnnouncement.jsp" class="wide-btn">
                         Post New Announcement
                     </a>
                 </div>
