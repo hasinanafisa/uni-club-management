@@ -18,7 +18,20 @@
 <div class="container">
     <h2><i class="fa-solid fa-user-lock"></i> Login</h2>
 
-    <form action="login" method="post">
+    <%-- Success message from Registration redirect --%>
+    <% if ("registered".equals(request.getParameter("msg"))) { %>
+        <p style="color:green; text-align:center; font-weight:bold;">Registration successful! Please login.</p>
+    <% } %>
+
+    <%-- Error message from LoginServlet --%>
+    <% 
+        String error = (String) request.getAttribute("errorMessage");
+        if (error != null) { 
+    %>
+        <p style="color:red; text-align:center;"><%= error %></p>
+    <% } %>
+
+    <form action="${pageContext.request.contextPath}/LoginServlet" method="post">
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>

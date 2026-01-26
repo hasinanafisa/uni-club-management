@@ -4,20 +4,20 @@
  */
 package model;
 
-/**
- *
- * @author Razan
- */
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
     private int userId;
     private String fullName;
     private String email;
-    private String password;
     private String role;
     private String faculty;
     private String course;
 
+    // Default constructor
+    public User() {}
+
+    // Parameterized constructor required by UserDAO
     public User(int userId, String fullName, String email, String role, String faculty, String course) {
         this.userId = userId;
         this.fullName = fullName;
@@ -27,10 +27,22 @@ public class User {
         this.course = course;
     }
 
+    // Getters and Setters
     public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+
     public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
     public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
     public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+
     public String getFaculty() { return faculty; }
+    public void setFaculty(String faculty) { this.faculty = faculty; }
+
     public String getCourse() { return course; }
+    public void setCourse(String course) { this.course = course; }
 }
