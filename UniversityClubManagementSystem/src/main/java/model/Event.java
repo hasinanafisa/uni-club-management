@@ -17,6 +17,8 @@ public class Event {
     private String eventLoc;
     private String bannerImagePath;
     private String qrPath;
+    private String name;
+    private Date date;
     
     //getters
     public int getEventID() { return eventID; }
@@ -27,6 +29,8 @@ public class Event {
     public String getEventLoc() { return eventLoc; }
     public String getBannerImagePath() { return bannerImagePath; }
     public String getQrPath() { return qrPath; }
+    public String getName() { return name; }
+    public Date getDate() { return date; }
     
     //setters
     public void setEventID(int eventID) { this.eventID = eventID; }
@@ -37,4 +41,6 @@ public class Event {
     public void setEventLoc(String eventLoc) { this.eventLoc = eventLoc; }
     public void setBannerImagePath(String bannerImagePath) { this.bannerImagePath = bannerImagePath; }
     public void setQrPath(String qrPath) { this.qrPath = qrPath; }
+    public void setName(String name) { this.name = name; }
+    public void setDate(Date date) { this.date = date; }
 }
