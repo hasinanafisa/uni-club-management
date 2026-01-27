@@ -1,14 +1,17 @@
 <%-- 
-    Document   : login
+    Document   : home
     Created on : 26 Dec 2025, 7:08:25 pm
     Author     : Razan
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.User"%>
+
 <%
+    // Session Security Check
     User user = (User) session.getAttribute("user");
     if (user == null) {
+        // Redirecting to the correct folder path
         response.sendRedirect("student/login.jsp");
         return;
     }
@@ -23,23 +26,7 @@
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-bars menu-toggle" id="toggleIcon" style="cursor:pointer; margin-right:15px;"></i>
-            UniClub
-        </div>
-        <ul class="nav-links">
-            <li><a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a></li>
-        </ul>
-    </nav>
-
-    <nav class="sidebar" id="sidebar">
-        <a href="home.jsp"><i class="fa-solid fa-house"></i> HOME</a>
-        <a href="clubList.jsp"><i class="fa-solid fa-users"></i> CLUB LIST</a>
-        <a href="dashboard.jsp"><i class="fa-solid fa-chart-line"></i> CLUB DASHBOARD</a>
-        <a href="events.jsp"><i class="fa-solid fa-calendar-check"></i> UPCOMING EVENTS</a>
-        <a href="announcements.jsp"><i class="fa-solid fa-bullhorn"></i> ANNOUNCEMENT</a>
-    </nav>
+    <%@include file="/includes/header.jsp" %>
 
     <div class="home-page" id="mainPage">
         <div class="home-container">
@@ -85,20 +72,7 @@
         </div>
     </div>
 
-    <script>
-        const toggleIcon = document.getElementById('toggleIcon');
-        const sidebar = document.getElementById('sidebar');
-        const body = document.body;
-
-        toggleIcon.addEventListener('click', () => {
-            // Toggles the sidebar visibility
-            sidebar.classList.toggle('collapsed');
-            // Toggles the main content margin
-            body.classList.toggle('sidebar-collapsed');
-        });
-    </script>
-
-    <%-- Success Message --%>
+    <%-- Success Message Logic --%>
     <% if (request.getParameter("loginSuccess") != null) { %>
     <script>
         Swal.fire({
