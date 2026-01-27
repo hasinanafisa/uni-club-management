@@ -100,11 +100,18 @@ body {
     position: fixed;
     top: 70px;
     left: 0;
-    width: 300px;
+    width: 250px; /* Standardized width */
     height: calc(100vh - 70px);
-    background-color: #1e293b; /* slate blue */
+    background-color: #1e293b;
     padding-top: 20px;
     box-shadow: 4px 0 15px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease; /* Smooth sliding effect */
+    z-index: 99;
+}
+
+/* When sidebar is hidden */
+.sidebar.collapsed {
+    left: -250px;
 }
 
 .sidebar a {
@@ -115,10 +122,36 @@ body {
     border-radius: 8px;
     margin: 6px 12px;
     transition: 0.25s ease;
+    white-space: nowrap; /* Prevents text wrapping during transition */
 }
 
-.sidebar a:hover {
-    background-color: #334155;
+/* =========================
+   MAIN HOME PAGE WRAPPER
+========================= */
+.home-page {
+    padding-top: 120px;
+    margin-left: 250px; /* Matches sidebar width */
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease; /* Matches sidebar speed */
+}
+
+/* When sidebar is collapsed, push content to the left */
+body.sidebar-collapsed .home-page {
+    margin-left: 0;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .sidebar {
+        left: -250px;
+    }
+    .home-page {
+        margin-left: 0;
+    }
+    .sidebar.collapsed {
+        left: 0;
+    }
 }
 
 /* =========================
