@@ -314,3 +314,85 @@ button:hover {
     border: none;
     cursor: default;
 }
+/* FILTER */
+.filter-bar {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.filter-bar input,
+.filter-bar select {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* ANNOUNCEMENT DETAILS */
+.details-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 120px;
+}
+
+.details-main {
+    flex: 2;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.details-main h1 {
+    margin-bottom: 15px;
+}
+
+.details-content {
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.details-section {
+    margin-top: 25px;
+}
+
+.details-section a {
+    margin-right: 10px;
+}
+
+.details-image {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.details-side {
+    flex: 1;
+    height: fit-content;
+}
+
+.details-side p {
+    margin-bottom: 12px;
+}
+
+.qr-img {
+    width: 120px;
+    margin-top: 10px;
+}
+
+.cancel-link {
+    display: block;
+    margin-top: 8px;
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    font-weight: 600;
+}
+
