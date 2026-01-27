@@ -6,8 +6,27 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="model.Admin" %>
+<%@ page import="model.User" %>
 
 <%
+    User user = (User) session.getAttribute("user");
+    String activeRole = (String) session.getAttribute("activeRole");
+
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/adminLogin.jsp");
+        return;
+    }
+
+    if ("MEMBER".equals(user.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/student/home.jsp");
+        return;
+    }
+
+    if ("PRESIDENT".equals(user.getRole()) && !"ADMIN".equals(activeRole)) {
+        response.sendRedirect(request.getContextPath() + "/selectRole.jsp");
+        return;
+    }
+  
     Boolean loginSuccess = (Boolean) session.getAttribute("loginSuccess");
     if (loginSuccess != null && loginSuccess) {
         session.removeAttribute("loginSuccess");

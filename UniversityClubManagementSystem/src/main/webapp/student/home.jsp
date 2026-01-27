@@ -8,14 +8,25 @@
 <%@page import="model.User"%>
 
 <%
-    // Session Security Check
     User user = (User) session.getAttribute("user");
+    String activeRole = (String) session.getAttribute("activeRole");
+
     if (user == null) {
-        // Redirecting to the correct folder path
-        response.sendRedirect("student/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/student/login.jsp");
+        return;
+    }
+
+    if ("ADVISOR".equals(user.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
+        return;
+    }
+
+    if ("PRESIDENT".equals(user.getRole()) && "ADMIN".equals(activeRole)) {
+        response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
         return;
     }
 %>
+
 <!DOCTYPE html>
 <html>
 <head>

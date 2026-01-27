@@ -17,7 +17,7 @@ public class User implements Serializable {
     // Default constructor
     public User() {}
 
-    // Parameterized constructor required by UserDAO
+    // ✅ FULL constructor (keep this for future/club_member join)
     public User(int userId, String fullName, String email, String role, String faculty, String course) {
         this.userId = userId;
         this.fullName = fullName;
@@ -25,6 +25,16 @@ public class User implements Serializable {
         this.role = role;
         this.faculty = faculty;
         this.course = course;
+    }
+    
+    // ✅ SIMPLE constructor (for login)
+    public User(int userId, String fullName, String email, String faculty, String course) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.email = email;
+        this.faculty = faculty;
+        this.course = course;
+        this.role = null; // role resolved later from club_member
     }
 
     // Getters and Setters
