@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
+
     private String jdbcURL = "jdbc:derby://localhost:1527/uniClub";
     private String jdbcUsername = "app";
     private String jdbcPassword = "app";
 
+    // ✅ LOGIN
     public User login(String email, String password) {
         User user = null;
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -23,11 +25,11 @@ public class UserDAO {
             Class.forName("org.apache.derby.jdbc.ClientDriver");
             try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
                  PreparedStatement ps = conn.prepareStatement(sql)) {
-                
+
                 ps.setString(1, email);
                 ps.setString(2, password);
-                ResultSet rs = ps.executeQuery();
 
+                ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     user = new User(
                         rs.getInt("user_id"),
@@ -43,5 +45,39 @@ public class UserDAO {
             e.printStackTrace();
         }
         return user;
+    }
+
+    // ✅ GET EVENTS JOINED BY STUDENT
+    public List<Event> getJoinedEvents(int userId) {
+        List<Event> events = new ArrayList<>();
+
+        String sql = """
+            SELECT e.event_id, e.event_name, e.event_date
+            FROM events e
+            JOIN event_participants ep ON e.event_id = ep.event_id
+            WHERE ep.user_id = ?
+        """;
+
+        try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    Event event = new Event();
+                    event.setEventID(rs.getInt("event_id"));
+                    event.setEventTitle(rs.getString("event_name"));
+                    event.setEventDate(rs.getDate("event_date"));
+                    events.add(event);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return events;
     }
 }

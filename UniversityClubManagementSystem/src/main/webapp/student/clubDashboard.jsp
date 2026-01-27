@@ -1,7 +1,7 @@
 <%-- 
     Document   : clubDashboard
     Created on : 27 Dec 2025, 6:39:36 pm
-    Author     : Razan
+    Author     : Razan, Hasina
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -14,84 +14,77 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo">UniClub</div>
-    <ul class="nav-links">
-        <li><a href="login.jsp">Logout</a></li>
-    </ul>
-</div>
+<%@include file="/includes/header.jsp" %>
+<!-- CONTENT -->
+<div class="notion-wrapper">
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <a href="club-dashboard.jsp"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="#"><i class="fa-solid fa-calendar-days"></i> Events</a>
-    <a href="#"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
-    <a href="#"><i class="fa-solid fa-users"></i> Members</a>
-    <a href="#"><i class="fa-solid fa-user"></i> My Profile</a>
-</div>
+    <h1>Club Overview</h1>
+    <p class="subtitle">Everything at a glance</p>
 
-<!-- MAIN CONTENT -->
-<div class="home-page">
-    <div class="home-container">
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <span>Members</span>
+            <h2>45</h2>
+        </div>
+        <div class="stat-box">
+            <span>Upcoming Events</span>
+            <h2>3</h2>
+        </div>
+        <div class="stat-box">
+            <span>Announcements</span>
+            <h2>5</h2>
+        </div>
+    </div>
 
-        <h1>Club Dashboard</h1>
-        <p class="subtitle">Manage your club activities efficiently</p>
+    <!-- MAIN GRID -->
+    <div class="notion-grid">
 
-        <div class="card-container">
+        <!-- EVENTS -->
+        <div class="panel">
+            <h3>📅 Upcoming Events</h3>
 
-            <!-- UPCOMING EVENTS -->
-            <div class="card wide-card">
-                <h3><i class="fa-solid fa-calendar-check"></i> Upcoming Events</h3>
-
-                <div class="event-row">
-                    <div>
-                        <strong>CodeFest 2026</strong><br>
-                        📅 15 Jan 2026 | ⏰ 2:00 PM
-                    </div>
-                    <span class="status upcoming">Upcoming</span>
-                    <a href="#" class="event-link">View</a>
-                </div><br>
-
-                <div class="event-row">
-                    <div>
-                        <strong>Hackathon Meetup</strong><br>
-                        📅 22 Jan 2026 | ⏰ 10:00 AM
-                    </div>
-                    <span class="status ongoing">Ongoing</span>
-                    <a href="#" class="event-link">View</a>
+            <div class="event-item">
+                <div>
+                    <strong>CodeFest 2026</strong>
+                    <small>15 Jan · 2:00 PM</small>
                 </div>
+                <span class="badge upcoming">Upcoming</span>
             </div>
 
-            <!-- ANNOUNCEMENTS -->
-            <div class="card">
-                <h3><i class="fa-solid fa-bullhorn"></i> Announcements</h3>
-                <ul>
-                    📢 Meeting moved to Friday<br>
-                    📢 New committee announced<br>
-                    📢 Registration closing soon
+            <div class="event-item">
+                <div>
+                    <strong>Hackathon Meetup</strong>
+                    <small>22 Jan · 10:00 AM</small>
+                </div>
+                <span class="badge ongoing">Ongoing</span>
+            </div>
+        </div>
+
+        <!-- SIDE -->
+        <div class="side-panels">
+
+            <div class="panel">
+                <h3>✅ My Tasks</h3>
+                <ul class="task-list">
+                    <li>✔ Prepare slides</li>
+                    <li>✔ Confirm venue</li>
+                    <li>⏳ Upload poster</li>
                 </ul>
             </div>
 
-            <!-- MEMBERS -->
-            <div class="card">
-                <h3><i class="fa-solid fa-users"></i> Members</h3>
-                <p><strong>45</strong> total members</p>
-                <p><strong>32</strong> active this month</p>
-                <a href="#" class="event-link">View Members</a>
-            </div>
-
-            <!-- TASKS -->
-            <div class="card">
-                <h3><i class="fa-solid fa-list-check"></i> My Tasks</h3>
-                <ul>
-                    ✔ Prepare event slides <br>
-                    ✔ Confirm venue<br>
-                    ⏳ Upload event poster
+            <div class="panel">
+                <h3>📢 Announcements</h3>
+                <ul class="feed-list">
+                    <li>Meeting moved to Friday</li>
+                    <li>New committee announced</li>
+                    <li>Registration closing soon</li>
                 </ul>
             </div>
 
         </div>
     </div>
+</div>
+
 </body>
 </html>
