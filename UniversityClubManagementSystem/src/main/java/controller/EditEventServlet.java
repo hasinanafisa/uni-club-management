@@ -9,10 +9,12 @@ import dao.EventDAO;
 import model.Event;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
 
+@WebServlet("/admin/editEvent")
 public class EditEventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

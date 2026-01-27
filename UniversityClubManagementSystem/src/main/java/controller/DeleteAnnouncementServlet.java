@@ -8,10 +8,12 @@ package controller;
 import dao.AnnouncementDAO;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@WebServlet("/admin/deleteAnnouncement")
 public class DeleteAnnouncementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

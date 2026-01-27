@@ -9,12 +9,14 @@ import dao.AnnouncementDAO;
 import model.Announcement;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 
+@WebServlet("/admin/postAnnouncement")
 public class PostAnnouncementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

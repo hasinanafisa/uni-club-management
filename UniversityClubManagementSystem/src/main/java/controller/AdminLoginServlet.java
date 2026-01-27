@@ -8,9 +8,11 @@ package controller;
 import dao.AdminDAO;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
+@WebServlet("/admin/adminLogin")
 public class AdminLoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)

@@ -8,10 +8,12 @@ package controller;
 import dao.EventDAO;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@WebServlet("/admin/deleteEvent")
 public class DeleteEventServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

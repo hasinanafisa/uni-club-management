@@ -9,12 +9,14 @@ import dao.EventDAO;
 import model.Event;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 
+@WebServlet("/admin/createEvent")
 public class CreateEventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
