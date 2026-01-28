@@ -17,7 +17,7 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 <h2>👤 My Profile</h2>
 
 <form action="UpdateStudentProfileServlet" method="post">
-    Name: <input type="text" name="name" value="<%= student.getName() %>"><br>
+    Name: <input type="text" name="name" value="<%= student.getFullName() %>"><br>
     Email: <input type="email" name="email" value="<%= student.getEmail() %>"><br>
     <button type="submit">Update</button>
 </form>

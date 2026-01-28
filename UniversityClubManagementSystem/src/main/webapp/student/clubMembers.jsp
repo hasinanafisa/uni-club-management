@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@include file="/includes/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,47 +15,37 @@
 </head>
 <body>
 
-<div class="navbar">
-    <div class="logo">🎓 CLUB MEMBERS</div>
-    <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Events</a></li>
-        <li><a href="#">Members</a></li>
-        <li><a href="#">Logout</a></li>
-    </ul>
-</div>
-
-<div class="sidebar">
-    <a href="#">Dashboard</a>
-    <a href="#">Club Members</a>
-    <a href="#">Upcoming Events</a>
-    <a href="#">My Profile</a>
-</div>
-
-<div class="page-wrapper">
-    <div class="container">
+<div class="home-page">
+    <div class="home-container">
 
         <h1>Club Members</h1>
         <p class="subtitle">List of registered members</p>
 
-        <input type="text" placeholder="Search by name">
+        <!-- SEARCH BOX -->
+        <div class="search-filter-bar">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="searchMembers()">
+            </div>
+        </div>
 
-        <div class="card-container">
-            <div class="card">
+        <!-- MEMBER CARDS -->
+        <div class="card-container" id="membersContainer">
+            <div class="card member-card">
                 <i>👤</i>
-                <p>Ali Abu</p>
+                <p class="member-name">Ali Abu</p>
                 <p>President</p>
             </div>
 
-            <div class="card">
+            <div class="card member-card">
                 <i>👤</i>
-                <p>Siti Aminah</p>
+                <p class="member-name">Siti Aminah</p>
                 <p>Secretary</p>
             </div>
 
-            <div class="card">
+            <div class="card member-card">
                 <i>👤</i>
-                <p>Ahmad Zaki</p>
+                <p class="member-name">Ahmad Zaki</p>
                 <p>Member</p>
             </div>
         </div>
@@ -62,6 +53,22 @@
     </div>
 </div>
 
+<!-- JAVASCRIPT SEARCH FUNCTION -->
+<script>
+function searchMembers() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const cards = document.getElementsByClassName("member-card");
+
+    for (let i = 0; i < cards.length; i++) {
+        const name = cards[i].getElementsByClassName("member-name")[0].innerText.toLowerCase();
+        if (name.includes(input)) {
+            cards[i].style.display = "";  // show card
+        } else {
+            cards[i].style.display = "none";  // hide card
+        }
+    }
+}
+</script>
+
 </body>
 </html>
-

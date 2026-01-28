@@ -126,33 +126,18 @@ body {
     white-space: nowrap; /* Prevents text wrapping during transition */
 }
 
-/* =========================
-   MAIN HOME PAGE WRAPPER
-========================= */
+/* MAIN HOME PAGE WRAPPER */
 .home-page {
     padding-top: 120px;
-    margin-left: 250px; /* Matches sidebar width */
+    margin-left: var(--sidebar-width);
     display: flex;
     justify-content: center;
-    transition: all 0.3s ease; /* Matches sidebar speed */
+    height: auto;
+    transition: margin-left 0.3s ease;
 }
 
-/* When sidebar is collapsed, push content to the left */
 body.sidebar-collapsed .home-page {
     margin-left: 0;
-}
-
-/* Responsive adjustment */
-@media (max-width: 768px) {
-    .sidebar {
-        left: -250px;
-    }
-    .home-page {
-        margin-left: 0;
-    }
-    .sidebar.collapsed {
-        left: 0;
-    }
 }
 
 /* =========================
@@ -520,4 +505,96 @@ button:hover {
 
 .search-box input:focus {
     border-color: #667eea;
+}
+/* EVENT DETAILS PAGE */
+.event-details-page {
+    max-width: 900px;
+}
+
+.event-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.event-details-card {
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+}
+
+/* INFO ROW */
+.event-info-row {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.event-info {
+    display: flex;
+    gap: 12px;
+    background: #f8fafc;
+    padding: 15px 18px;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 220px;
+}
+
+.event-info i {
+    font-size: 22px;
+    color: #667eea;
+}
+
+.event-info span {
+    font-size: 13px;
+    color: #777;
+}
+
+.event-info p {
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* DESCRIPTION */
+.event-description h3 {
+    margin-bottom: 10px;
+}
+
+.event-description p {
+    line-height: 1.7;
+    color: #444;
+}
+
+/* ACTIONS */
+.event-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* EVENT ACTION BUTTONS */
+.event-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;              /* space between buttons */
+    margin-top: 30px;
+}
+
+/* Back link styled like a button */
+.back-link {
+    padding: 10px 22px;
+    border-radius: 20px;
+    background: #e5e7eb;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    background: #d1d5db;
+    transform: translateY(-2px);
 }
