@@ -5,93 +5,61 @@
 
 package dao;
 
+import util.DBUtil;
 import model.Club;
+
 import java.sql.*;
 
 public class ClubDAO {
+    public int createClubAndReturnId(Club club) throws SQLException {
+        int generatedClubId = -1;
 
-    private static final String JDBC_URL = "jdbc:derby://localhost:1527/uniClub";
-    private static final String JDBC_USER = "app";
-    private static final String JDBC_PASS = "app";
+        String sql = "INSERT INTO club (club_name, description, logo_path, created_by) " +
+                     "VALUES (?, ?, ?, ?)";
 
-    // ✅ CREATE CLUB (ADVISOR ONLY)
-    public void createClub(Club club) throws SQLException {
-        String sql = "INSERT INTO club (club_name, description, logo, created_by) VALUES (?, ?, ?, ?)";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
 
             ps.setString(1, club.getClubName());
             ps.setString(2, club.getDescription());
-            ps.setString(3, club.getLogo());
+            ps.setString(3, club.getLogoPath()); //can be null
             ps.setInt(4, club.getCreatedBy());
 
             ps.executeUpdate();
-        }      
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                generatedClubId = rs.getInt(1);
+            }
+        }
+        return generatedClubId;
     }
-
-    // ✅ GET CLUB BY ADVISOR (used after login)
-    public Club getClubByAdvisor(int advisorUserId) {
-
+    
+    public Club getClubById(int clubId) {
         Club club = null;
-        String sql = "SELECT * FROM club WHERE created_by = ?";
 
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
+        String sql = "SELECT * FROM club WHERE club_id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, advisorUserId);
-            ResultSet rs = ps.executeQuery();
+            ps.setInt(1, clubId);
 
-            if (rs.next()) {
-                club = new Club(
-                    rs.getInt("club_id"),
-                    rs.getString("club_name"),
-                    rs.getString("description"),
-                    rs.getString("logo"),
-                    rs.getInt("created_by"),
-                    rs.getTimestamp("created_at")
-                );
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    club = new Club();
+                    club.setClubID(rs.getInt("club_id"));
+                    club.setClubName(rs.getString("club_name"));
+                    club.setDescription(rs.getString("description"));
+                    club.setLogoPath(rs.getString("logo_path"));
+                    club.setCreatedBy(rs.getInt("created_by"));
+                    club.setCreatedAt(rs.getTimestamp("created_at"));
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return club;
-    }
-
-    // ✅ UPDATE CLUB (Edit only)
-    public void updateClub(Club club) throws SQLException {
-
-        String sql = "UPDATE club SET club_name = ?, description = ?, logo = ? WHERE club_id = ?";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, club.getClubName());
-            ps.setString(2, club.getDescription());
-            ps.setString(3, club.getLogo());
-            ps.setInt(4, club.getClubId());
-
-            ps.executeUpdate();
-        }
-    }
-
-    // ✅ SAFETY CHECK - Does advisor already have club?
-    public boolean advisorHasClub(int advisorUserId) {
-        String sql = "SELECT 1 FROM club WHERE created_by = ?";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, advisorUserId);
-            ResultSet rs = ps.executeQuery();
-
-            return rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
     }
 }

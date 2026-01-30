@@ -16,15 +16,8 @@ public class ClubMember implements Serializable {
     private String role; //Advisor, President, Vice President, Secretary, Treasurer, Member
     private Date joinDate;
 
+    // Constructor
     public ClubMember() {}
-
-    public ClubMember(int clubMemberId, int userId, int clubId, String role, Date joinDate) {
-        this.clubMemberId = clubMemberId;
-        this.userId = userId;
-        this.clubId = clubId;
-        this.role = role;
-        this.joinDate = joinDate;
-    }
 
     public int getClubMemberId() { return clubMemberId; }
     public void setClubMemberId(int clubMemberId) { this.clubMemberId = clubMemberId; }
