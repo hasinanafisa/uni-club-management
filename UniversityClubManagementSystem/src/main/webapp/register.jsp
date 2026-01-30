@@ -41,7 +41,7 @@
                 Lecturer
             </button>
         </div>
-        <input type="hidden" name="userType" id="userType" value="STUDENT">
+        <input type="hidden" name="userType" id="userType" value="Student">
         <input type="text" name="fullname" placeholder="Full Name" 
                value="<%= request.getParameter("fullname") != null ? request.getParameter("fullname") : "" %>" required>
         <input type="email" name="email" placeholder="Email Address" 

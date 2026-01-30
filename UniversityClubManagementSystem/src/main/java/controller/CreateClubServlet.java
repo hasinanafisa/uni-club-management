@@ -46,6 +46,8 @@ public class CreateClubServlet extends HttpServlet {
 
         String clubName = request.getParameter("clubName");
         String description = request.getParameter("description");
+        String mission = request.getParameter("mission");
+        String achievements = request.getParameter("achievements");
         
         if (clubName == null || clubName.isBlank()) {
             request.setAttribute("error", "Club name is required");
@@ -57,6 +59,8 @@ public class CreateClubServlet extends HttpServlet {
         c.setClubName(clubName);
         c.setDescription(description);
         c.setCreatedBy(user.getUserId());
+        c.setMission(mission);
+        c.setAchievements(achievements);
         
         // 📷 Handle logo upload
         Part logoPart = request.getPart("logoPath");

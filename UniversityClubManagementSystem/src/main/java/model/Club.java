@@ -12,6 +12,8 @@ public class Club implements Serializable {
 
     private int clubID;
     private String clubName;
+    private String mission;
+    private String achievements;
     private String description;
     private String logoPath;
     private int createdBy; // user_id (advisor)
@@ -25,6 +27,12 @@ public class Club implements Serializable {
 
     public String getClubName() { return clubName; }
     public void setClubName(String clubName) { this.clubName = clubName; }
+    
+    public String getMission() {return mission;}
+    public void setMission(String mission) {this.mission = mission;}
+    
+    public String getAchievements() {return achievements;}
+    public void setAchievements(String achievements) {this.achievements = achievements;}
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

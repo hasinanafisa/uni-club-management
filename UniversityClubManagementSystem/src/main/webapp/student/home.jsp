@@ -45,14 +45,14 @@
                     <i class="fa-solid fa-users-viewfinder"></i>
                     <h3>CLUB LIST</h3>
                     <p>Find new clubs to join this semester.</p>
-                    <a href="clublist.jsp">BROWSE</a>
+                    <a href="${pageContext.request.contextPath}/student/clubs">BROWSE</a>
                 </div>
 
                 <div class="card">
                     <i class="fa-solid fa-gauge"></i>
                     <h3>DASHBOARD</h3>
                     <p>Check your membership status and roles.</p>
-                    <a href="clubDashboard.jsp">VIEW</a>
+                    <a href="${pageContext.request.contextPath}/student/clubDashboard">VIEW</a>
                 </div>
 
                 <div class="card">

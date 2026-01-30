@@ -5,71 +5,94 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.Club"%>
+<%@page import="model.User"%>
+
+<%
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    Club club = (Club) request.getAttribute("club");
+    if (club == null) {
+        response.sendRedirect(request.getContextPath() + "/student/clubs");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Club Overview</title>
+    <title><%= club.getClubName() %> | Club Overview</title>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo">UniClub</div>
-    <ul class="nav-links">
-        <li><a href="login.jsp">Logout</a></li>
-    </ul>
-</div>
+    <%@include file="/includes/header.jsp" %>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <a href="club-list.jsp"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="club-overview.jsp"><i class="fa-solid fa-users"></i> Club Overview</a>
-    <a href="club-dashboard.jsp"><i class="fa-solid fa-people-group"></i> Club Dashboard</a>
-    <a href="#"><i class="fa-solid fa-calendar-days"></i> Events</a>
-    <a href="#"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
-</div>
+    <div class="home-page">
+        <div class="home-container">
 
-<!-- MAIN CONTENT -->
-<div class="home-page">
-    <div class="home-container">
-
-        <h1>Programming Club</h1>
-        <p class="subtitle">Innovate. Code. Create.</p>
-
-        <div class="card-container">
-
-            <div class="card">
-                <h3>About the Club</h3>
-                <p>
-                    The Programming Club focuses on coding skills, problem solving,
-                    and real-world project development.
+            <!-- CLUB HEADER -->
+            <div style="text-align:center;">
+                <h1><%= club.getClubName() %></h1>
+                <p class="subtitle">
+                    <%= club.getDescription() != null ? club.getDescription() : "No description available." %>
                 </p>
             </div>
 
-            <div class="card">
-                <h3>Mission & Vision</h3>
-                <p>
-                    Empower students through technology, teamwork, and innovation.
-                </p>
+            <!-- CLUB CONTENT -->
+            <div class="card-container">
+
+                <!-- ABOUT -->
+                <div class="card">
+                    <h3>About the Club</h3>
+                    <p>
+                        <%= club.getDescription() != null
+                                ? club.getDescription()
+                                : "This club has no description yet." %>
+                    </p>
+                </div>
+
+                <!-- MISSION -->
+                <div class="card">
+                    <h3>Mission</h3>
+                    <p>
+                        <%= club.getMission() != null && !club.getMission().isBlank()
+                                ? club.getMission()
+                                : "Mission has not been set yet." %>
+                    </p>
+                </div>
+
+                <!-- ACHIEVEMENTS -->
+                <div class="card">
+                    <h3>Achievements</h3>
+                    <p>
+                        <%= club.getAchievements() != null && !club.getAchievements().isBlank()
+                                ? club.getAchievements()
+                                : "No achievements recorded yet." %>
+                    </p>
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Achievements</h3>
-                <p>
-                    Hackathon winners, national coding competitions, and workshops.
-                </p>
+            <!-- JOIN BUTTON -->
+            <div style="text-align:center; margin-top:30px;">
+                <form action="${pageContext.request.contextPath}/student/joinClub" method="post">
+                    <input type="hidden" name="clubId" value="<%= club.getClubID() %>">
+                    <button type="submit" class="join-btn">
+                        Join Club
+                    </button>
+                </form>
             </div>
 
         </div>
-
-        <div style="text-align:center; margin-top:30px;">
-            <button class="join-btn">Join Club</button>
-        </div>
-
     </div>
-</div>
 
 </body>
 </html>

@@ -56,6 +56,12 @@
 
                     <label>Description</label>
                     <textarea name="description" rows="4"></textarea>
+                    
+                    <label>Mission</label>
+                    <textarea name="mission" rows="3"></textarea>
+
+                    <label>Achievements</label>
+                    <textarea name="achievements" rows="4"></textarea>
 
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">

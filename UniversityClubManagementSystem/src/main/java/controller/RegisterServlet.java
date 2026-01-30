@@ -22,13 +22,14 @@ public class RegisterServlet extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
         String userType = request.getParameter("userType"); // STUDENT / LECTURER
 
-        // 1. Validation Logic
+        // Password validation
         if (password == null || !password.equals(confirmPassword)) {
             request.setAttribute("errorMessage", "Passwords do not match!");
-            // Forward back to the registration page
-            request.getRequestDispatcher(request.getContextPath() + "/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/register.jsp")
+                   .forward(request, response);
             return;
         }
+
 
         // 2. Database Logic
         try {
@@ -47,10 +48,11 @@ public class RegisterServlet extends HttpServlet {
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             request.setAttribute("errorMessage", "Email is already registered!");
-            request.getRequestDispatcher(request.getContextPath() + "/register.jsp").forward(request, response);
-        } catch (IOException | SQLException e) {
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
+        }
+        catch (IOException | SQLException e) {
             request.setAttribute("errorMessage", "Database Error: " + e.getMessage());
-            request.getRequestDispatcher(request.getContextPath() + "/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
         }
     }
 }
