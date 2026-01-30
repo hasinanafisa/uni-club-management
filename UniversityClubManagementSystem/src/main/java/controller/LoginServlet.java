@@ -1,7 +1,9 @@
 package controller;
 
 import dao.UserDAO;
+import dao.ClubMemberDAO;
 import model.User;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -18,60 +20,33 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         UserDAO userDAO = new UserDAO();
+        ClubMemberDAO cmDAO = new ClubMemberDAO();
+        
         User user = userDAO.login(email, password);
 
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            
+            String userType = user.getUserType();
 
-            int userId = user.getUserId();
-
-            // 🔍 CHECK club membership FIRST
-            boolean hasClub = userDAO.hasClubMembership(userId);
-
-            if (!hasClub) {
-                // ❗ No club_member row → advisor must create club
-                response.sendRedirect(
-                    request.getContextPath() + "/admin/createClub.jsp"
-                );
+            if ("Student".equals(userType)) {
+                response.sendRedirect(request.getContextPath() + "/student/home.jsp");
                 return;
             }
+            
+            // LECTURER
+            boolean hasClub = cmDAO.hasClubMembership(user.getUserId());
 
-            // Resolve role AFTER confirming club exists
-            String role = userDAO.getUserRole(userId);
-            session.setAttribute("role", role);
-
-            if (role == null) {
-                // normal member
-                response.sendRedirect(
-                    request.getContextPath() + "/student/home.jsp?loginSuccess=true"
-                );
-                return;
-            }
-
-            switch (role) {
-                case "Advisor":
-                    response.sendRedirect(
-                        request.getContextPath() + "/admin/adminHome.jsp?loginSuccess=true"
-                    );
-                    break;
-
-                case "President":
-                    response.sendRedirect(
-                        request.getContextPath() + "/selectRole.jsp"
-                    );
-                    break;
-
-                default:
-                    response.sendRedirect(
-                        request.getContextPath() + "/student/home.jsp?loginSuccess=true"
-                    );
-                    break;
+            if (!hasClub) { // Lecturer without club → MUST create club
+                response.sendRedirect(request.getContextPath() + "/admin/createClub.jsp"); 
+            } else {    // Lecturer with club
+                response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp"); 
             }
         } else {
             // Failure: Return to login with error
             request.setAttribute("errorMessage", "Invalid email or password!");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 }

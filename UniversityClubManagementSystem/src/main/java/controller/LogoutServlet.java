@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
@@ -28,9 +29,10 @@ public class LogoutServlet extends HttpServlet {
         }
         
         // 3. Redirect the user back to the login page with a logout message
-        response.sendRedirect("student/login.jsp?loggedOut=true");
+        response.sendRedirect("login.jsp?loggedOut=true");
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         doGet(request, response);

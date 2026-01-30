@@ -10,32 +10,14 @@ public class User implements Serializable {
     private int userId;
     private String fullName;
     private String email;
+    private String userType;    // STUDENT / LECTURER
     private String role;
     private String faculty;
     private String course;
+    private int clubID;
 
     // Default constructor
-    public User() {}
-
-    // ✅ FULL constructor (keep this for future/club_member join)
-    public User(int userId, String fullName, String email, String role, String faculty, String course) {
-        this.userId = userId;
-        this.fullName = fullName;
-        this.email = email;
-        this.role = role;
-        this.faculty = faculty;
-        this.course = course;
-    }
-    
-    // ✅ SIMPLE constructor (for login)
-    public User(int userId, String fullName, String email, String faculty, String course) {
-        this.userId = userId;
-        this.fullName = fullName;
-        this.email = email;
-        this.faculty = faculty;
-        this.course = course;
-        this.role = null; // role resolved later from club_member
-    }
+    public User() {}    
 
     // Getters and Setters
     public int getUserId() { return userId; }
@@ -55,4 +37,10 @@ public class User implements Serializable {
 
     public String getCourse() { return course; }
     public void setCourse(String course) { this.course = course; }
+
+    public String getUserType() { return userType; }
+    public void setUserType(String userType) { this.userType = userType; }
+    
+    public int getClubID() { return clubID; }
+    public void setClubID(int clubID) { this.clubID = clubID; }
 }

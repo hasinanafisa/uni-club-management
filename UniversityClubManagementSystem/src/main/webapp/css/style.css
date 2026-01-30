@@ -52,6 +52,28 @@ body {
     margin-bottom: 25px;
 }
 
+.role-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.role-tab {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #e5e7eb;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.role-tab.active {
+    background: linear-gradient(to right, #6c7ae0, #7c5cc4);
+    color: white;
+}
+
 
 /* =========================
    NAVBAR

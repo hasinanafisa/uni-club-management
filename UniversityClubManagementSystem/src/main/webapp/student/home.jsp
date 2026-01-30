@@ -9,20 +9,9 @@
 
 <%
     User user = (User) session.getAttribute("user");
-    String activeRole = (String) session.getAttribute("activeRole");
 
-    if (user == null) {
-        response.sendRedirect(request.getContextPath() + "/student/login.jsp");
-        return;
-    }
-
-    if ("ADVISOR".equals(user.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
-        return;
-    }
-
-    if ("PRESIDENT".equals(user.getRole()) && "ADMIN".equals(activeRole)) {
-        response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
+    if (user == null || !"Student".equals(user.getUserType())) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
 %>
