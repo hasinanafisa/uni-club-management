@@ -14,6 +14,9 @@ public class Announcement {
     private String attachmentPath;
     private int eventID;
 
+    //Constructor
+    public Announcement() {}
+    
     // getters
     public int getAnnounceID() { return announceID; }
     public String getAnnounceTitle() { return announceTitle; }

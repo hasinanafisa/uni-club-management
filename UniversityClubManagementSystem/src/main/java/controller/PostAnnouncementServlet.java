@@ -9,19 +9,28 @@ import dao.AnnouncementDAO;
 import model.Announcement;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 
 @MultipartConfig
+@WebServlet("/admin/postAnnouncement")
 public class PostAnnouncementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        // Safety: must be logged in
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        
         Announcement a = new Announcement();
 
         // TEXT FIELDS

@@ -36,15 +36,15 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="admin/adminLogin.jsp">Login</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/adminLogin.jsp">Login</a></li>
             </ul>
         </div>
 
         <!-- ===== SIDEBAR ===== -->
         <div class="sidebar">
-            <a href="admin/adminLogin.jsp"><i class="fa-solid fa-house"></i>Home</a>
-            <a href="admin/adminLogin.jsp"><i class="fa-solid fa-calendar-days"></i>Event</a>
-            <a href="admin/adminLogin.jsp"><i class="fa-solid fa-bullhorn"></i>Announcement</a>
+            <a href="${pageContext.request.contextPath}/admin/adminLogin.jsp"><i class="fa-solid fa-house"></i>Home</a>
+            <a href="${pageContext.request.contextPath}/admin/adminLogin.jsp"><i class="fa-solid fa-calendar-days"></i>Event</a>
+            <a href="${pageContext.request.contextPath}/admin/adminLogin.jsp"><i class="fa-solid fa-bullhorn"></i>Announcement</a>
         </div>
 
         <!-- ===== MAIN CONTENT ===== -->
@@ -58,14 +58,14 @@
                         <i class="fa-solid fa-calendar-plus"></i>
                         <h3>Event Creation</h3>
                         <p>Create, update, and manage club events.</p>
-                        <a href="admin/adminLogin.jsp">Manage</a>
+                        <a href="${pageContext.request.contextPath}/admin/adminLogin.jsp">Manage</a>
                     </div>
 
                     <div class="card">
                         <i class="fa-solid fa-bullhorn"></i>
                         <h3>Post Announcement</h3>
                         <p>Share important updates with students.</p>
-                        <a href="admin/adminLogin.jsp">Manage</a>
+                        <a href="${pageContext.request.contextPath}/admin/adminLogin.jsp">Manage</a>
                     </div>
                 </div>
             </div>

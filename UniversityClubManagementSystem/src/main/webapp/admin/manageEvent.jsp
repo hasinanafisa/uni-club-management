@@ -11,9 +11,17 @@
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%
+    if (session == null || session.getAttribute("clubID") == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    int clubID = (Integer) session.getAttribute("clubID");
+
     EventDAO dao = new EventDAO();
-    List<Event> events = dao.getAllEvents();
+    List<Event> events = dao.getAllEvents(clubID);
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -35,17 +43,18 @@
             </div>
             
             <ul class="nav-links">
-                <li><a href="adminHome.jsp">Home</a></li>
+                <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
             </ul>
         </div>
 
         <!-- ===== SIDEBAR ===== -->
         <div class="sidebar">
-            <a href="../admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
-            <a href="../admin/manageEvent.jsp" class="active-link">
+            <a href="${pageContext.request.contextPath}/admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
+            <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
+            <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp" class="active-link">
                 <i class="fa-solid fa-calendar-days"></i>Manage Event
             </a>
-            <a href="../admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
+            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
         </div>
 
         <!-- ===== MAIN CONTENT ===== -->
@@ -125,7 +134,7 @@
 
                 <!-- CREATE BUTTON -->
                 <div class="create-event-wrapper">
-                    <a href="createEvent.jsp" class="create-event-btn">
+                    <a href="${pageContext.request.contextPath}/admin/createEvent.jsp" class="create-event-btn">
                         Create New Event
                     </a>
                 </div>

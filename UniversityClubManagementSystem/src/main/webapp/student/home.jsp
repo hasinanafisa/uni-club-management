@@ -8,14 +8,14 @@
 <%@page import="model.User"%>
 
 <%
-    // Session Security Check
     User user = (User) session.getAttribute("user");
-    if (user == null) {
-        // Redirecting to the correct folder path
-        response.sendRedirect("student/login.jsp");
+
+    if (user == null || !"Student".equals(user.getUserType())) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
