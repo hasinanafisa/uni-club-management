@@ -9,16 +9,25 @@ import dao.AnnouncementDAO;
 import model.Announcement;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@MultipartConfig
 @WebServlet("/admin/editAnnouncement")
 public class EditAnnouncementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // Safety: must be logged in
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
         
         Announcement a = new Announcement();
         AnnouncementDAO dao = new AnnouncementDAO();

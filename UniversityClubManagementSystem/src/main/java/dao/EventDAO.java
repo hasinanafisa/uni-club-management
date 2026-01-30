@@ -13,53 +13,59 @@ import java.util.*;
 
 public class EventDAO {
     // READ ALL
-    public List<Event> getAllEvents() {
+    public List<Event> getAllEvents(int clubId) {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT event_id, event_title, event_desc, event_date, event_time, event_loc, "
-                + "banner_image_path, attendance_qr_path "
-                + "FROM event";
+        String sql = "SELECT event_id, title, description, event_date, event_time, location, "
+                   + "banner_image_path, qr_path "
+                   + "FROM event WHERE club_id = ?";
 
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                Event e = new Event();
-                e.setEventID(rs.getInt("event_id"));
-                e.setEventTitle(rs.getString("event_title"));
-                e.setEventDesc(rs.getString("event_desc"));
-                e.setEventDate(rs.getDate("event_date"));
-                e.setEventTime(rs.getTime("event_time"));
-                e.setEventLoc(rs.getString("event_loc"));
-                e.setBannerImagePath(rs.getString("banner_image_path"));
-                e.setQrPath(rs.getString("attendance_qr_path"));
-                list.add(e);
+            ps.setInt(1, clubId);   // ✅ IMPORTANT
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Event e = new Event();
+                    e.setEventID(rs.getInt("event_id"));
+                    e.setEventTitle(rs.getString("title"));
+                    e.setEventDesc(rs.getString("description"));
+                    e.setEventDate(rs.getDate("event_date"));
+                    e.setEventTime(rs.getTime("event_time"));
+                    e.setEventLoc(rs.getString("location"));
+                    e.setBannerImagePath(rs.getString("banner_image_path"));
+                    e.setQrPath(rs.getString("qr_path"));
+                    list.add(e);
+                }
             }
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
+
     
     // READ ONE (FOR EDIT)
-    public Event getEventById(int id) {
+    public Event getEventById(int clubID) {
         Event e = null;
         String sql = "SELECT * FROM event WHERE event_id=?";
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
+            ps.setInt(1, clubID);
             
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
                     e = new Event();
                     e.setEventID(rs.getInt("event_id"));
-                    e.setEventTitle(rs.getString("event_title"));
-                    e.setEventDesc(rs.getString("event_desc"));
+                    e.setEventTitle(rs.getString("title"));
+                    e.setEventDesc(rs.getString("description"));
                     e.setEventDate(rs.getDate("event_date"));
                     e.setEventTime(rs.getTime("event_time"));
-                    e.setEventLoc(rs.getString("event_loc"));
+                    e.setEventLoc(rs.getString("location"));
                     e.setBannerImagePath(rs.getString("banner_image_path"));
-                    e.setQrPath(rs.getString("attendance_qr_path"));
+                    e.setQrPath(rs.getString("qr_path"));
                 }
             }
         } catch (Exception ex) { }
@@ -69,19 +75,21 @@ public class EventDAO {
     // CREATE
     public void createEvent(Event e) throws SQLException {
         String sql =
-            "INSERT INTO event(event_title,event_desc,event_date,event_time,event_loc,banner_image_path,attendance_qr_path) "
-                + "VALUES (?,?,?,?,?,?,?)";
+            "INSERT INTO event(club_id, title, description, event_date, event_time, location, banner_image_path, qr_path, created_by)" +
+                "VALUES (?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, e.getEventTitle());
-            ps.setString(2, e.getEventDesc());
-            ps.setDate(3, e.getEventDate());
-            ps.setTime(4, e.getEventTime());
-            ps.setString(5, e.getEventLoc());
-            ps.setString(6, e.getBannerImagePath());
-            ps.setString(7, e.getQrPath());
+            ps.setInt(1, e.getClubID());
+            ps.setString(2, e.getEventTitle());
+            ps.setString(3, e.getEventDesc());
+            ps.setDate(4, e.getEventDate());
+            ps.setTime(5, e.getEventTime());
+            ps.setString(6, e.getEventLoc());
+            ps.setString(7, e.getBannerImagePath());
+            ps.setString(8, e.getQrPath());
+            ps.setInt(9, e.getCreatedBy());
 
             ps.executeUpdate();
         }
@@ -89,8 +97,8 @@ public class EventDAO {
     
     // UPDATE
     public void updateEvent(Event e) throws SQLException {
-        String sql = "UPDATE event SET event_title=?, event_desc=?, event_date=?, event_time=?, event_loc=?, "
-                + "banner_image_path=?, attendance_qr_path=? "
+        String sql = "UPDATE event SET title=?, description=?, event_date=?, event_time=?, location=?, "
+                + "banner_image_path=?, qr_path=? "
                 + "WHERE event_id=?";
 
         try (Connection con = DBUtil.getConnection();

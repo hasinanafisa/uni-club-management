@@ -18,6 +18,13 @@ public class DeleteAnnouncementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // Safety: must be logged in
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
 
         int announceID = Integer.parseInt(request.getParameter("announceID"));
 

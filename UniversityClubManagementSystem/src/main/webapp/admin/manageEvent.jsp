@@ -11,9 +11,17 @@
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%
+    if (session == null || session.getAttribute("clubID") == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    int clubID = (Integer) session.getAttribute("clubID");
+
     EventDAO dao = new EventDAO();
-    List<Event> events = dao.getAllEvents();
+    List<Event> events = dao.getAllEvents(clubID);
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -35,13 +43,14 @@
             </div>
             
             <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
+                <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
             </ul>
         </div>
 
         <!-- ===== SIDEBAR ===== -->
         <div class="sidebar">
             <a href="${pageContext.request.contextPath}/admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
+            <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
             <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp" class="active-link">
                 <i class="fa-solid fa-calendar-days"></i>Manage Event
             </a>
