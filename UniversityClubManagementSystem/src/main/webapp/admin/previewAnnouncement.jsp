@@ -36,7 +36,7 @@
 <div class="navbar">
     <div class="logo">ANNOUNCEMENT PREVIEW</div>
     <ul class="nav-links">
-        <li><a href="manageAnnouncement.jsp">Back</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp">Back</a></li>
     </ul>
 </div>
 

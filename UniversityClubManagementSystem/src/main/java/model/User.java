@@ -11,25 +11,14 @@ public class User implements Serializable {
     private int userId;
     private String fullName;
     private String email;
+    private String userType;    // STUDENT / LECTURER
     private String role;
     private String faculty;
     private String course;
-    private String profilePicture;
-    private String base64Image;
+    private int clubID;
 
     // Default constructor
-    public User() {}
-
-    // Parameterized constructor required by UserDAO
-    public User(int userId, String fullName, String email, String role, String faculty, String course, String profilePicture ) {
-        this.userId = userId;
-        this.fullName = fullName;
-        this.email = email;
-        this.role = role;
-        this.faculty = faculty;
-        this.course = course;
-        this.profilePicture = profilePicture;
-    }
+    public User() {}    
 
     // Getters and Setters
     public int getUserId() { return userId; }
@@ -49,10 +38,10 @@ public class User implements Serializable {
 
     public String getCourse() { return course; }
     public void setCourse(String course) { this.course = course; }
-       
-    public String getProfilePicture() { return profilePicture; }
-    public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
+
+    public String getUserType() { return userType; }
+    public void setUserType(String userType) { this.userType = userType; }
     
-    public String getBase64Image() { return base64Image; }
-    public void setBase64Image(String base64Image) { this.base64Image = base64Image; }
+    public int getClubID() { return clubID; }
+    public void setClubID(int clubID) { this.clubID = clubID; }
 }

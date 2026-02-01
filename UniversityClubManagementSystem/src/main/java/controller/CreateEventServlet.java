@@ -7,23 +7,31 @@ package controller;
 
 import dao.EventDAO;
 import model.Event;
+import model.User;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 
 @MultipartConfig
-@WebServlet("/CreateEventServlet")
+@WebServlet("/admin/createEvent")
 public class CreateEventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Safety: must be logged in
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        
         Event e = new Event();
         
         String dateStr = request.getParameter("eventDate");
@@ -81,6 +89,12 @@ public class CreateEventServlet extends HttpServlet {
             qrPart.write(uploadPath + File.separator + fileName);
             e.setQrPath(fileName);
         }
+        
+        User user = (User) session.getAttribute("user");
+        e.setCreatedBy(user.getUserId());
+        
+        int clubId = (int) session.getAttribute("clubId");
+        e.setClubID(clubId);
 
         EventDAO dao = new EventDAO();
         try {
@@ -90,6 +104,5 @@ public class CreateEventServlet extends HttpServlet {
             request.setAttribute("error", "Failed to create event.");
             request.getRequestDispatcher("admin/createEvent.jsp").forward(request, response);
         }
-
     }
 }

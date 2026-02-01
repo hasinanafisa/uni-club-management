@@ -25,8 +25,8 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="manageEvent.jsp">Back</a></li>
-                <li><a href="adminHome.jsp">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
             </ul>
         </div>
 
@@ -36,7 +36,7 @@
                 <h1>Create New Event</h1>
                 <p class="subtitle">Fill in all event details below</p>
 
-                <form class="create-event-form" action="${pageContext.request.contextPath}/CreateEventServlet" 
+                <form class="create-event-form" action="${pageContext.request.contextPath}/admin/createEvent" 
                       method="post" enctype="multipart/form-data">
                     
                     <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png" 

@@ -1,5 +1,5 @@
 <%-- 
-    Document   : login
+    Document   : register
     Created on : 26 Dec 2025, 6:17:09 pm
     Author     : Razan
 --%>
@@ -27,6 +27,21 @@
     <% } %>
 
     <form action="${pageContext.request.contextPath}/RegisterServlet" method="post">
+        <!-- USER TYPE TABS -->
+        <div class="role-tabs">
+            <button type="button"
+                    class="role-tab active"
+                    onclick="selectRole('Student', this)">
+                Student
+            </button>
+
+            <button type="button"
+                    class="role-tab"
+                    onclick="selectRole('Lecturer', this)">
+                Lecturer
+            </button>
+        </div>
+        <input type="hidden" name="userType" id="userType" value="Student">
         <input type="text" name="fullname" placeholder="Full Name" 
                value="<%= request.getParameter("fullname") != null ? request.getParameter("fullname") : "" %>" required>
         <input type="email" name="email" placeholder="Email Address" 
@@ -37,9 +52,21 @@
     </form>
 
     <p style="text-align:center; margin-top:15px;">
-        Already have an account? <a href="${pageContext.request.contextPath}/student/login.jsp">Login here</a>
+        Already have an account? <a href="${pageContext.request.contextPath}/login.jsp">Login here</a>
     </p>
 </div>
+<script>
+function selectRole(role, btn) {
+    // update hidden input
+    document.getElementById("userType").value = role;
 
+    // remove active from all tabs
+    document.querySelectorAll(".role-tab")
+        .forEach(tab => tab.classList.remove("active"));
+
+    // activate clicked tab
+    btn.classList.add("active");
+}
+</script>
 </body>
 </html>

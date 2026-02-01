@@ -7,6 +7,7 @@ package model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Event {
     private int eventID;
@@ -17,8 +18,12 @@ public class Event {
     private String eventLoc;
     private String bannerImagePath;
     private String qrPath;
-    private String name;
-    private Date date;
+    private int createdBy;
+    private Timestamp createdAt;
+    private int clubID;
+
+    // Constructor
+    public Event() {}
     
     //getters
     public int getEventID() { return eventID; }
@@ -29,8 +34,9 @@ public class Event {
     public String getEventLoc() { return eventLoc; }
     public String getBannerImagePath() { return bannerImagePath; }
     public String getQrPath() { return qrPath; }
-    public String getName() { return name; }
-    public Date getDate() { return date; }
+    public int getCreatedBy() { return createdBy; }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public int getClubID() { return clubID; }
     
     //setters
     public void setEventID(int eventID) { this.eventID = eventID; }
@@ -41,6 +47,7 @@ public class Event {
     public void setEventLoc(String eventLoc) { this.eventLoc = eventLoc; }
     public void setBannerImagePath(String bannerImagePath) { this.bannerImagePath = bannerImagePath; }
     public void setQrPath(String qrPath) { this.qrPath = qrPath; }
-    public void setName(String name) { this.name = name; }
-    public void setDate(Date date) { this.date = date; }
+    public void setCreatedBy(int createdBy) { this.createdBy = createdBy; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public void setClubID(int clubId) { this.clubID = clubId; }
 }

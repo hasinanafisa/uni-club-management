@@ -38,8 +38,8 @@
         <div class="navbar">
             <div class="logo">EDIT ANNOUNCEMENT</div>
             <ul class="nav-links">
-                <li><a href="manageAnnouncement.jsp">Back</a></li>
-                <li><a href="adminHome.jsp">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
             </ul>
         </div>
 
@@ -50,7 +50,7 @@
                 <h1>Edit Announcement</h1>
                 <p class="subtitle">Update announcement details below</p>
 
-                <form class="create-event-form" action="${pageContext.request.contextPath}/EditAnnouncementServlet"
+                <form class="create-event-form" action="${pageContext.request.contextPath}/admin/editAnnouncement"
                       method="post" enctype="multipart/form-data">
 
                     <!-- Hidden ID -->

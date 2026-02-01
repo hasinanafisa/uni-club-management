@@ -5,9 +5,16 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="model.Admin" %>
+<%@ page import="model.User" %>
 
 <%
+    User user = (User) session.getAttribute("user");
+
+    if (user == null || !"Lecturer".equals(user.getUserType())) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+  
     Boolean loginSuccess = (Boolean) session.getAttribute("loginSuccess");
     if (loginSuccess != null && loginSuccess) {
         session.removeAttribute("loginSuccess");
@@ -34,17 +41,18 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="<%= request.getContextPath() %>/AdminLogoutServlet">Logout</a></li>
+                <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
             </ul>
         </div>
 
         <!-- ===== SIDEBAR ===== -->
         <div class="sidebar">
-            <a href="../admin/adminHome.jsp" class="active-link">
+            <a href="${pageContext.request.contextPath}/admin/adminHome.jsp" class="active-link">
                 <i class="fa-solid fa-house"></i>Home
             </a>
-            <a href="../admin/manageEvent.jsp"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
-            <a href="../admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
+            <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
+            <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
+            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
         </div>
 
         <!-- ===== MAIN CONTENT ===== -->
@@ -54,18 +62,26 @@
                 <p class="subtitle">Admin Dashboard</p>
 
                 <div class="card-container">
+                    <!-- Manage Club Details -->
+                    <div class="card">
+                        <i class="fa-solid fa-gear"></i>
+                        <h3>Manage Club Details</h3>
+                        <p>View and update your club information and members.</p>
+                        <a href="${pageContext.request.contextPath}/admin/manageClubDetails">Manage</a>
+                    </div>
+                    <!-- Event Creation -->   
                     <div class="card">
                         <i class="fa-solid fa-calendar-plus"></i>
                         <h3>Event Creation</h3>
                         <p>Create, update, and manage club events.</p>
-                        <a href="../admin/manageEvent.jsp">Manage</a>
+                        <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Manage</a>
                     </div>
-
+                    <!-- Announcement -->
                     <div class="card">
                         <i class="fa-solid fa-bullhorn"></i>
                         <h3>Post Announcement</h3>
                         <p>Share important updates with students.</p>
-                        <a href="../admin/manageAnnouncement.jsp">Manage</a>
+                        <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp">Manage</a>
                     </div>
                 </div>
             </div>

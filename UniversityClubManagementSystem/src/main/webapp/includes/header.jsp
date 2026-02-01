@@ -19,8 +19,8 @@
 
     <nav class="sidebar" id="sidebar">
         <a href="home.jsp"><i class="fa-solid fa-house"></i> HOME</a>
-        <a href="clublist.jsp"><i class="fa-solid fa-users"></i> CLUB LIST</a>
-        <a href="clubDashboard.jsp"><i class="fa-solid fa-chart-line"></i> CLUB DASHBOARD</a>
+        <a href="${pageContext.request.contextPath}/student/clubs"><i class="fa-solid fa-users"></i> CLUB LIST</a>
+        <a href="${pageContext.request.contextPath}/student/clubDashboard"><i class="fa-solid fa-chart-line"></i> CLUB DASHBOARD</a>
         <a href="upcomingEvents.jsp"><i class="fa-solid fa-calendar-check"></i> UPCOMING EVENTS</a>
         <a href="announcement.jsp"><i class="fa-solid fa-bullhorn"></i> ANNOUNCEMENT</a>
         <a href="myProfile.jsp"><i class="fa-solid fa-user"></i> MY PROFILE</a>

@@ -41,11 +41,7 @@
                     <div class="profile-card profile-left-card">
                         <!-- Profile picture -->
                         <div class="profile-avatar">
-                            <img src="${user.base64Image != null ? user.base64Image : pageContext.request.contextPath += '/images/default-avatar.png'}" 
-                                 alt="Profile Picture" 
-                                 class="details-image" 
-                                 id="profilePreview"
-                                 style="width:150px; height:150px; border-radius:50%; object-fit: cover;">
+                            
                         </div>
                                  
                         <!-- VIEW MODE -->
@@ -132,10 +128,4 @@
         document.getElementById("profileEdit").style.display = edit ? "block" : "none";
     }
 
-    function previewProfilePic(event) {
-        const img = document.getElementById("profilePreview"); // Matches the ID added in Step 1
-        if (event.target.files[0]) {
-            img.src = URL.createObjectURL(event.target.files[0]);
-        }
-    }
 </script>

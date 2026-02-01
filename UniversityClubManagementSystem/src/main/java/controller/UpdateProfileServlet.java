@@ -50,26 +50,6 @@ public class UpdateProfileServlet extends HttpServlet {
         student.setFullName(request.getParameter("fullName"));
         student.setEmail(request.getParameter("email"));
 
-        Part profilePicPart = request.getPart("profilePic");
-
-        if (profilePicPart != null && profilePicPart.getSize() > 0) {
-
-            String uploadPath = getServletContext().getRealPath("/uploads");
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdirs();
-
-            String fileName = Paths.get(profilePicPart.getSubmittedFileName())
-                    .getFileName().toString();
-
-            profilePicPart.write(new File(uploadDir, fileName).getAbsolutePath());
-
-            student.setProfilePicture(fileName);
-            dao.updateProfileWithImage(student, fileName);
-
-        } else {
-            dao.updateProfile(student);
-        }
-
         session.setAttribute("user", student);
         response.sendRedirect(request.getContextPath() + "/StudentProfileServlet");
     }

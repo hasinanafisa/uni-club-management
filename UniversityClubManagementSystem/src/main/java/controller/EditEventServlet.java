@@ -9,18 +9,25 @@ import dao.EventDAO;
 import model.Event;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
 
 @MultipartConfig
-@WebServlet("/EditEventServlet")
+@WebServlet("/admin/editEvent")
 public class EditEventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // Safety: must be logged in
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
 
         Event e = new Event();
         EventDAO dao = new EventDAO();

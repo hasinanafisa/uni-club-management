@@ -38,8 +38,8 @@
     </form>
     
     <p style="text-align:center; margin-top:15px;">
-        <a href="register.jsp">Create an account</a> |
-        <a href="forgot-password.jsp">Forgot password?</a>
+        <a href="${pageContext.request.contextPath}/register.jsp">Create an account</a> |
+        <a href="${pageContext.request.contextPath}/forgot-password.jsp">Forgot password?</a>
     </p> 
 </div>
 
