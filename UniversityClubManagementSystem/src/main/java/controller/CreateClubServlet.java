@@ -14,7 +14,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -32,11 +31,11 @@ public class CreateClubServlet extends HttpServlet {
 
         // Safety: must be logged in
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        User user = (User) session.getAttribute("user");
+        if (session == null || user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        User user = (User) session.getAttribute("user");
         
         // 🔐 Lecturer-only access (DB-based, correct)
         if (!"Lecturer".equals(user.getUserType())) {

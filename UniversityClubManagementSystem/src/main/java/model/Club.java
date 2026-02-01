@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 public class Club implements Serializable {
 
-    private int clubID;
+    private int clubId;
     private String clubName;
     private String mission;
     private String achievements;
@@ -22,8 +22,8 @@ public class Club implements Serializable {
     // Constructor
     public Club() {}
 
-    public int getClubID() { return clubID; }
-    public void setClubID(int clubID) { this.clubID = clubID; }
+    public int getClubId() { return clubId; }
+    public void setClubId(int clubID) { this.clubId = clubId; }
 
     public String getClubName() { return clubName; }
     public void setClubName(String clubName) { this.clubName = clubName; }

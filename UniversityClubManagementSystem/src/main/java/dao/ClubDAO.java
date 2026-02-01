@@ -52,7 +52,7 @@ public class ClubDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     club = new Club();
-                    club.setClubID(rs.getInt("club_id"));
+                    club.setClubId(rs.getInt("club_id"));
                     club.setClubName(rs.getString("club_name"));
                     club.setMission(rs.getString("mission"));  
                     club.setAchievements(rs.getString("achievements"));
@@ -78,7 +78,7 @@ public class ClubDAO {
 
             while (rs.next()) {
                 Club c = new Club();
-                c.setClubID(rs.getInt("club_id"));
+                c.setClubId(rs.getInt("club_id"));
                 c.setClubName(rs.getString("club_name"));
                 c.setDescription(rs.getString("description"));
                 c.setLogoPath(rs.getString("logo_path"));

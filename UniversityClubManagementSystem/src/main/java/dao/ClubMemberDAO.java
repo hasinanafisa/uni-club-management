@@ -89,5 +89,22 @@ public class ClubMemberDAO {
         }
         return null;
     }
+    
+    public Integer getClubIdByUser(int userId) {
+        String sql = "SELECT club_id FROM club_member WHERE user_id = ?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt("club_id");
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 }

@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String role;
     private String faculty;
     private String course;
-    private int clubID;
+    private int clubId;
 
     // Default constructor
     public User() {}    
@@ -41,6 +41,6 @@ public class User implements Serializable {
     public String getUserType() { return userType; }
     public void setUserType(String userType) { this.userType = userType; }
     
-    public int getClubID() { return clubID; }
-    public void setClubID(int clubID) { this.clubID = clubID; }
+    public int getClubId() { return clubId; }
+    public void setClubId(int clubID) { this.clubId = clubId; }
 }

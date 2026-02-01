@@ -1,6 +1,6 @@
 <%-- 
     Document   : manageClubDetails
-    Created on : 28 Jan 2026, 2:07:52â¯am
+    Created on : 28 Jan 2026, 2:07:52 am
     Author     : izyan
 --%>
 
@@ -70,7 +70,7 @@
                     </p>
 
                     <div style="text-align:center; margin-top:30px;">
-                        <a href="${pageContext.request.contextPath}/admin/editClubDetails.jsp?clubId=<%= club.getClubID() %>"
+                        <a href="${pageContext.request.contextPath}/admin/editClubDetails.jsp?clubId=<%= club.getClubId() %>"
                            class="create-event-btn">
                             Edit Club Details
                         </a>
