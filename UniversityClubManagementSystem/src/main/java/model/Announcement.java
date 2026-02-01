@@ -5,33 +5,44 @@
 
 package model;
 
+import java.sql.Timestamp;
+
 public class Announcement {
-    private int announceID;
-    private String announceTitle;
-    private String announceContent;
-    private String announceCategory;
+    private int announcementId;
+    private int clubId;
+    private int eventId;
+    private String title;
+    private String content;
+    private String category;
     private String imagePath;
     private String attachmentPath;
-    private int eventID;
+    private int postedBy;
+    private Timestamp postedAt;
 
     //Constructor
     public Announcement() {}
     
     // getters
-    public int getAnnounceID() { return announceID; }
-    public String getAnnounceTitle() { return announceTitle; }
-    public String getAnnounceContent() { return announceContent; }
-    public String getAnnounceCategory() { return announceCategory; }
+    public int getAnnouncementId() { return announcementId; }
+    public int getClubId() { return clubId; }
+    public String getTitle() { return title; }
+    public String getContent() { return content; }
+    public String getCategory() { return category; }
     public String getImagePath() { return imagePath; }
     public String getAttachmentPath() { return attachmentPath; }
-    public int getEventID() { return eventID; }
+    public int getPostedBy() { return postedBy; }
+    public Timestamp getPostedAt() { return postedAt; }
+    public int getEventId() { return eventId; }
     
     //setters
-    public void setAnnounceID(int announceID) { this.announceID = announceID; }
-    public void setAnnounceTitle(String announceTitle) { this.announceTitle = announceTitle; }
-    public void setAnnounceContent(String announceContent) { this.announceContent = announceContent; }
-    public void setAnnounceCategory(String announceCategory) { this.announceCategory = announceCategory; }
+    public void setAnnouncementId(int announcementId) { this.announcementId = announcementId; }
+    public void setClubId(int clubId) { this.clubId = clubId; }
+    public void setTitle(String title) { this.title = title; }
+    public void setContent(String content) { this.content = content; }
+    public void setCategory(String category) { this.category = category; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
     public void setAttachmentPath(String attachmentPath) { this.attachmentPath = attachmentPath; }
-    public void setEventID(int eventID) { this.eventID = eventID; }
+    public void setPostedBy(int postedBy) { this.postedBy = postedBy; }
+    public void setPostedAt(Timestamp postedAt) { this.postedAt = postedAt; }
+    public void setEventId(int eventId) { this.eventId = eventId; }
 }

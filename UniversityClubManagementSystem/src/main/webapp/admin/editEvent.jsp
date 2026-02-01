@@ -56,7 +56,7 @@
                     <!-- CURRENT BANNER IMAGE -->
                     <% if (event.getBannerImagePath() != null && !event.getBannerImagePath().isEmpty()) { %>
                         <p>
-                            <strong>Current Banner:</strong>
+                            <strong>Current Banner: </strong>
                             <a href="<%= request.getContextPath() %>/uploads/events/<%= event.getBannerImagePath() %>"
                                target="_blank"> <%= event.getBannerImagePath() %>
                             </a>
@@ -81,7 +81,7 @@
                     <!-- CURRENT QR -->
                     <% if (event.getQrPath() != null && !event.getQrPath().isEmpty()) { %>
                         <p>
-                            <strong>Current Attendance QR:</strong>
+                            <strong>Current Attendance QR: </strong>
                             <a href="<%= request.getContextPath() %>/uploads/events/<%= event.getQrPath() %>"
                                target="_blank"> <%= event.getQrPath() %>
                             </a>

@@ -29,6 +29,8 @@ import java.sql.*;
     maxRequestSize = 10 * 1024 * 1024
 )
 public class CreateEventServlet extends HttpServlet {
+    
+    // ✅ SHOW FORM
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -49,6 +51,7 @@ public class CreateEventServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/createEvent.jsp").forward(request, response);
     }
     
+    // ✅ HANDLE SUBMIT
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

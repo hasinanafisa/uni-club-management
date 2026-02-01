@@ -6,19 +6,17 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="dao.AnnouncementDAO"%>
 <%@page import="model.Announcement"%>
-<%@page import="dao.EventDAO"%>
 <%@page import="model.Event"%>
 
 <%
-    int announceId = Integer.parseInt(request.getParameter("id"));
+    Announcement a = (Announcement) request.getAttribute("announcement");
+    List<Event> events = (List<Event>) request.getAttribute("events");
 
-    AnnouncementDAO dao = new AnnouncementDAO();
-    Announcement a = dao.getAnnouncementById(announceId);
-
-    EventDAO eventDao = new EventDAO();
-    List<Event> events = eventDao.getAllEvents();
+    if (a == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -38,7 +36,7 @@
         <div class="navbar">
             <div class="logo">EDIT ANNOUNCEMENT</div>
             <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
             </ul>
         </div>
@@ -46,7 +44,6 @@
         <!-- ===== MAIN CONTENT ===== -->
         <div class="home-page">
             <div class="home-container">
-
                 <h1>Edit Announcement</h1>
                 <p class="subtitle">Update announcement details below</p>
 
@@ -54,27 +51,34 @@
                       method="post" enctype="multipart/form-data">
 
                     <!-- Hidden ID -->
-                    <input type="hidden" name="announceID" value="<%= a.getAnnounceID() %>">
+                    <input type="hidden" name="announcementId" value="<%= a.getAnnouncementId() %>">
+                    
+                    <!-- RELATED EVENT -->
+                    <select name="eventId" required>
+                        <option value="">-- Select Related Event --</option>
+                        <% for (Event ev : events) { %>
+                            <option value="<%= ev.getEventID() %>"
+                                <%= ev.getEventID() == a.getEventId() ? "selected" : "" %>>
+                                <%= ev.getEventTitle() %>
+                            </option>
+                        <% } %>
+                    </select>
 
                     <!-- TITLE -->
-                    <input type="text" name="announceTitle" value="<%= a.getAnnounceTitle() %>"
-                           placeholder="Announcement Title *" required>
+                    <input type="text" name="title" value="<%= a.getTitle() %>" required>
 
                     <!-- CONTENT -->
-                    <textarea name="announceContent"
-                              rows="4"
-                              placeholder="Announcement Content *"
-                              required><%= a.getAnnounceContent() %></textarea>
+                    <textarea name="content" rows="4" required><%= a.getContent() %></textarea>
 
                     <!-- CATEGORY -->
-                    <select name="announceCategory" required>
+                    <select name="category" required>
                         <option value="">-- Select Category --</option>
                         <option value="Important"
-                            <%= "Important".equals(a.getAnnounceCategory()) ? "selected" : "" %>>
+                            <%= "Important".equals(a.getCategory()) ? "selected" : "" %>>
                             Important
                         </option>
                         <option value="General"
-                            <%= "General".equals(a.getAnnounceCategory()) ? "selected" : "" %>>
+                            <%= "General".equals(a.getCategory()) ? "selected" : "" %>>
                             General
                         </option>
                     </select>
@@ -82,7 +86,7 @@
                     <!-- CURRENT IMAGE -->
                     <% if (a.getImagePath() != null && !a.getImagePath().isEmpty()) { %>
                         <p>
-                            <strong>Current Image:</strong>
+                            <strong>Current Image: </strong>
                             <a href="<%= request.getContextPath() %>/uploads/<%= a.getImagePath() %>"
                                target="_blank">
                                 <%= a.getImagePath() %>
@@ -102,27 +106,14 @@
                         </p>
                     <% } %>
                     <input type="file" name="attachmentPath" accept=".pdf,application/pdf">
-
-                    <!-- RELATED EVENT -->
-                    <select name="eventID" required>
-                        <option value="">-- Select Related Event --</option>
-                        <% for (Event ev : events) { %>
-                            <option value="<%= ev.getEventID() %>"
-                                <%= ev.getEventID() == a.getEventID() ? "selected" : "" %>>
-                                <%= ev.getEventTitle() %>
-                            </option>
-                        <% } %>
-                    </select>
-
+                    
                     <!-- ACTIONS -->
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">
                             Update Announcement
                         </button>
                     </div>
-
                 </form>
-
             </div>
         </div>
     </body>
