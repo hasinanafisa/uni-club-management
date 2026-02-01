@@ -14,40 +14,113 @@
     List<Event> events = (List<Event>) request.getAttribute("events");
 %>
 
-<h2>👤 My Profile</h2>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Profile</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
+    <body>
+    <%@include file="/includes/header.jsp" %>
 
-<% if (student != null) { %>
-<form action="UpdateStudentProfileServlet" method="post">
-    Name:
-    <input type="text" name="name" value="<%= student.getFullName() %>"><br><br>
+        <div class="page-wrapper">
+            <div class="container profile-page">
 
-    Email:
-    <input type="email" name="email" value="<%= student.getEmail() %>"><br><br>
+                <h1>My Profile</h1>
+                <p class="subtitle">Manage your information & activities</p>
 
-    <button type="submit">Update</button>
-</form>
-<% } else { %>
-    <p style="color:red;">User not logged in.</p>
-<% } %>
+                <!-- PROFILE GRID -->
+                <div class="profile-grid">
 
-<hr>
+                    <div class="profile-card profile-left-card">
+                        <!-- Profile picture -->
+                        <div class="profile-avatar">
+                            
+                        </div>
+                                 
+                        <!-- VIEW MODE -->
+                        <div id="profileView">
+                            <p><strong>Full Name</strong><br><%= student.getFullName() %></p>
+                            <p><strong>Student ID</strong><br><%= student.getUserId() %></p>
+                            <p><strong>Course & Faculty</strong><br><%= student.getCourse() %></p>
+                            <p><strong>Join Date</strong><br><!-- student.getJoinDate() --></p>
+                            <p><strong>Email</strong><br><%= student.getEmail() %></p>
 
-<h3>📅 Events Joined</h3>
+                            <div class="profile-actions">
+                                <button class="edit-btn" onclick="toggleEdit(true)">Edit Profile</button>
+                                <button class="leave-btn">Leave Club</button>
+                            </div>
+                        </div>
 
-<% if (events != null && !events.isEmpty()) { %>
-<table border="1" cellpadding="5">
-    <tr>
-        <th>Event Name</th>
-        <th>Date</th>
-    </tr>
+                        <!-- EDIT MODE (inline) -->
+                        <form
+                            id="profileEdit"
+                            action="<%= request.getContextPath() %>/UpdateProfileServlet"
+                            method="post"
+                            enctype="multipart/form-data"
+                            style="display:none;"
+                        >
+                            <label>Profile Picture</label>
+                            <input type="file" name="profilePic" accept="image/*" onchange="previewProfilePic(event)">
 
-    <% for (Event e : events) { %>
-    <tr>
-        <td><%= e.getName() %></td>
-        <td><%= e.getDate() %></td>
-    </tr>
-    <% } %>
-</table>
-<% } else { %>
-    <p>No events joined yet.</p>
-<% } %>
+                            <label>Full Name</label>
+                            <input type="text" name="fullName" value="<%= student.getFullName() %>" required>
+
+                            <label>Email</label>
+                            <input type="email" name="email" value="<%= student.getEmail() %>" required>
+
+                            <div class="profile-actions">
+                                <button type="submit" class="save-btn">Save</button>
+                                <button type="button" class="cancel-btn" onclick="toggleEdit(false)">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- RIGHT CARD : EVENTS -->
+                    <div class="profile-card">
+                        <div class="events-header">
+                            <h3>📅 Events Joined</h3>
+                            <select class="event-filter">
+                                <option>All</option>
+                                <option>Current Event</option>
+                                <option>Past Event</option>
+                            </select>
+                        </div>
+
+                        <div class="events-list">
+                            <div class="events-title">
+                                Event Name | Role | Date
+                            </div>
+
+                            <% if (events != null && !events.isEmpty()) { 
+                                for (Event e : events) { %>
+                                <div class="event-row">
+                                    <span><%= e.getEventTitle() %></span>
+                                    <span>Member</span>
+                                    <span><%= e.getEventDate() %></span>
+                                </div>
+                            <%  } 
+                            } else { %>
+                                <p class="no-events">No events joined yet.</p>
+                            <% } %>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    function cancelEdit() {
+        document.getElementById("profileEdit").style.display = "none";
+        document.getElementById("profileView").style.display = "block";
+    }
+
+    function toggleEdit(edit) {
+        document.getElementById("profileView").style.display = edit ? "none" : "block";
+        document.getElementById("profileEdit").style.display = edit ? "block" : "none";
+    }
+
+</script>

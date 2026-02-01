@@ -129,4 +129,21 @@ public class EventDAO {
 
         } catch (Exception e) { }
     }
+    
+        public int getUpcomingEventCount(int clubId) {
+        String sql = """
+            SELECT COUNT(*) FROM event
+            WHERE club_id = ? AND event_date >= CURRENT_DATE
+        """;
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

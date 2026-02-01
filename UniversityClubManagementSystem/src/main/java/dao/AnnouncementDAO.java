@@ -104,6 +104,20 @@ public class AnnouncementDAO {
         } catch (Exception e) { }
     }
     
+    public int getAnnouncementCount(int clubId) {
+    String sql = "SELECT COUNT(*) FROM announcement WHERE club_id = ?";
+    try (Connection con = DBUtil.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, clubId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) return rs.getInt(1);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+    
     // DELETE
     public void deleteAnnouncement(int id) throws SQLException {
         String sql = "DELETE FROM announcement WHERE announce_id=?";

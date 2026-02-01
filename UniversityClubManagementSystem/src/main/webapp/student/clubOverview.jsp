@@ -80,19 +80,7 @@
                 </div>
 
             </div>
-
-            <!-- JOIN BUTTON -->
-            <div style="text-align:center; margin-top:30px;">
-                <form action="${pageContext.request.contextPath}/student/joinClub" method="post">
-                    <input type="hidden" name="clubId" value="<%= club.getClubID() %>">
-                    <button type="submit" class="join-btn">
-                        Join Club
-                    </button>
-                </form>
-            </div>
-
         </div>
     </div>
-
 </body>
 </html>

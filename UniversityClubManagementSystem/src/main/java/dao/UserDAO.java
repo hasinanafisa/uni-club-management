@@ -2,6 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
+/**
+ *
+ * @author Hasina
+ */
+
 package dao;
 
 import util.DBUtil;
@@ -11,6 +17,8 @@ import model.Event;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.InputStream;
+import util.DBConnection;
 
 public class UserDAO {
     public User login(String email, String password) {
@@ -111,4 +119,5 @@ public class UserDAO {
         }
         return events;
     }
+    
 }
