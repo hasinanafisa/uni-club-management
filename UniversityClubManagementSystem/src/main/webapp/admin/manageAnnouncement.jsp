@@ -5,17 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%>
-<%@page import="dao.AnnouncementDAO"%>
 <%@page import="model.Announcement"%>
-<%@page import="dao.EventDAO"%>
 <%@page import="model.Event"%>
+<%@page import="dao.EventDAO"%>
+<%@page import="java.util.List"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%
-    List<Announcement> announcements = (List<Announcement>) request.getAttribute("announcements");
-
-    if (announcements == null) {
+    List<Announcement> announcement = (List<Announcement>) request.getAttribute("announcement");
+    if (announcement == null) {
         response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
         return;
     }
@@ -89,12 +87,12 @@
                 %>
 
                 <!-- EMPTY STATE -->
-                <%  if (announcements.isEmpty()) { %>
+                <%  if (announcement.isEmpty()) { %>
                 <div class="empty-box"><p>No announcement found.</p></div>
                 
                 <%
                     } else {
-                        for (Announcement a : announcements) {
+                        for (Announcement a : announcement) {
                         Event ev = eventDao.getEventById(a.getEventId());
                 %>
                 <div class="announcement-card">
@@ -168,13 +166,12 @@
         }
     
         function confirmDelete(announcementId) {
-                if (!confirm("Are you sure you want to delete this event?")) {
-                    return;
-                }
-
-                window.location.href =
-                    "<%= request.getContextPath() %>/admin/deleteAnnouncement?id=" + announcementId;
+            if (!confirm("Are you sure you want to delete this event?")) {
+                return;
             }
+
+            window.location.href = "<%= request.getContextPath() %>/admin/deleteAnnouncement?id=" + announcementId;
+        }
         </script>
     </body>
 </html>

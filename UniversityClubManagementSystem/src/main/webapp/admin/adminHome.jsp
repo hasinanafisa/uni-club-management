@@ -52,7 +52,7 @@
             </a>
             <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
             <a href="${pageContext.request.contextPath}/admin/manageEvent"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
-            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
+            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
         </div>
 
         <!-- ===== MAIN CONTENT ===== -->

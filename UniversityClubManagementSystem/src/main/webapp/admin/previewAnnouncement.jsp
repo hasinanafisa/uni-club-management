@@ -64,7 +64,7 @@
                 <!-- IMAGE -->
                 <% if (a.getImagePath() != null && !a.getImagePath().startsWith("default")) { %>
                     <img src="<%= request.getContextPath() %>/uploads/announcements/<%= a.getImagePath() %>"
-                         style="width:100%; margin-top:30px; border-radius:16px;">
+                         style="width:75%; margin-top:30px; border-radius:16px;">
                 <% } %>
 
                 <!-- ATTACHMENT -->

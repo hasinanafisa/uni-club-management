@@ -11,7 +11,7 @@
 
 <%
     Announcement a = (Announcement) request.getAttribute("announcement");
-    List<Event> events = (List<Event>) request.getAttribute("events");
+    List<Event> event = (List<Event>) request.getAttribute("event");
 
     if (a == null) {
         response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
@@ -56,9 +56,8 @@
                     <!-- RELATED EVENT -->
                     <select name="eventId" required>
                         <option value="">-- Select Related Event --</option>
-                        <% for (Event ev : events) { %>
-                            <option value="<%= ev.getEventID() %>"
-                                <%= ev.getEventID() == a.getEventId() ? "selected" : "" %>>
+                        <% for (Event ev : event) { %>
+                            <option value="<%= ev.getEventID() %>" <%= ev.getEventID() == a.getEventId() ? "selected" : "" %>>
                                 <%= ev.getEventTitle() %>
                             </option>
                         <% } %>

@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.List;
 
 @MultipartConfig
 @WebServlet("/admin/editAnnouncement")
@@ -44,21 +45,27 @@ public class EditAnnouncementServlet extends HttpServlet {
             return;
         }
         
-        int eventId = Integer.parseInt(request.getParameter("id"));
-        EventDAO evDAO = new EventDAO();
-        Event event = evDAO.getEventById(eventId);
-        if (event == null) {
+        int announcementId;
+        try {
+            announcementId = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
-
-        int announcementId = Integer.parseInt(request.getParameter("id"));
-        AnnouncementDAO AnnDAO = new AnnouncementDAO();
-        Announcement announcement = AnnDAO.getAnnouncementById(announcementId);
+        
+        AnnouncementDAO aDAO = new AnnouncementDAO();
+        Announcement announcement = aDAO.getAnnouncementById(announcementId);
         if (announcement == null) {
             response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
+        
+        ClubMemberDAO cmDAO = new ClubMemberDAO();
+        int clubId = cmDAO.getClubIdByUser(user.getUserId());
+        
+        // 🔹 Load events for dropdown
+        EventDAO eDAO = new EventDAO();
+        List<Event> event = eDAO.getEventsByClubId(clubId);
         
         request.setAttribute("announcement", announcement);
         request.setAttribute("event", event);

@@ -37,9 +37,9 @@ public class ManageAnnouncementServlet extends HttpServlet {
         int clubId = cmDAO.getClubIdByUser(user.getUserId());
 
         AnnouncementDAO dao = new AnnouncementDAO();
-        List<Announcement> announcements = dao.getAnnouncementsByClubId(clubId);
+        List<Announcement> announcement = dao.getAnnouncementsByClubId(clubId);
 
-        request.setAttribute("announcements", announcements);
+        request.setAttribute("announcement", announcement);
         request.getRequestDispatcher("/admin/manageAnnouncement.jsp").forward(request, response);
     }
 }
