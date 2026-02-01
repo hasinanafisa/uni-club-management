@@ -10,54 +10,85 @@
 
 package dao;
 
+import util.DBUtil;
 import model.User;
 import model.Event;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.InputStream;
 import util.DBConnection;
 
-
 public class UserDAO {
-
-    private String jdbcURL = "jdbc:derby://localhost:1527/uniClub";
-    private String jdbcUsername = "app";
-    private String jdbcPassword = "app";
-
-    // Login
     public User login(String email, String password) {
         User user = null;
-        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        String sql = "SELECT user_id, full_name, email, user_type, faculty, course FROM users WHERE email = ? AND password = ?";
 
-        try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
 
-                ps.setString(1, email);
-                ps.setString(2, password);
-
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    user = new User(
-                        rs.getInt("user_id"),
-                        rs.getString("full_name"),
-                        rs.getString("email"),
-                        rs.getString("role"),
-                        rs.getString("faculty"),
-                        rs.getString("course"),
-                        rs.getString("profile_picture")
-                    );
-                }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setFullName(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setUserType(rs.getString("user_type")); // STUDENT / LECTURER
+                user.setFaculty(rs.getString("faculty"));
+                user.setCourse(rs.getString("course"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return user;
     }
+    
+    public void updateUserType(int userId, String role) {
+        String sql = "UPDATE users SET user_type = ? WHERE user_id = ?";
 
-    // Get Events
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, role);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public List<User> getMembersByClubId(int clubId) {
+    List<User> members = new ArrayList<>();
+
+    String sql = "SELECT user_id, full_name, email, user_type FROM users WHERE club_id = ?";
+
+    try (Connection conn = DBUtil.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, clubId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                User u = new User();
+                u.setUserId(rs.getInt("user_id"));
+                u.setFullName(rs.getString("full_name"));
+                u.setEmail(rs.getString("email"));
+                    u.setUserType(rs.getString("user_type"));
+
+                    members.add(u);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return members;
+    }
+
+    // ✅ GET EVENTS JOINED BY STUDENT
     public List<Event> getJoinedEvents(int userId) {
         List<Event> events = new ArrayList<>();
 
@@ -69,12 +100,11 @@ public class UserDAO {
         """;
 
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
                 ps.setInt(1, userId);
-                ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
                     Event event = new Event();
@@ -84,42 +114,10 @@ public class UserDAO {
                     events.add(event);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return events;
     }
     
-    public void updateProfileWithImage(User user, String fileName) {
-        String sql = "UPDATE users SET full_name = ?, email = ?, profile_picture = ? WHERE user_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, user.getFullName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, fileName);
-            ps.setInt(4, user.getUserId());
-            ps.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void updateProfile(User user) {
-        String sql = "UPDATE users SET full_name = ?, email = ? WHERE user_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, user.getFullName());
-            ps.setString(2, user.getEmail());
-            ps.setInt(3, user.getUserId());
-
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }
