@@ -6,22 +6,16 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="dao.EventDAO"%>
 <%@page import="model.Event"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%
-    if (session == null || session.getAttribute("clubID") == null) {
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
+    List<Event> events = (List<Event>) request.getAttribute("events");
+    if (events == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
         return;
     }
-
-    int clubID = (Integer) session.getAttribute("clubID");
-
-    EventDAO dao = new EventDAO();
-    List<Event> events = dao.getAllEvents(clubID);
 %>
-
 
 <!DOCTYPE html>
 <html>
@@ -51,10 +45,10 @@
         <div class="sidebar">
             <a href="${pageContext.request.contextPath}/admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
             <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
-            <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp" class="active-link">
+            <a href="${pageContext.request.contextPath}/admin/manageEvent" class="active-link">
                 <i class="fa-solid fa-calendar-days"></i>Manage Event
             </a>
-            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
+            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
         </div>
 
         <!-- ===== MAIN CONTENT ===== -->
@@ -80,29 +74,33 @@
                     <!-- EVENT LIST -->
                     <% 
                         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-
                         for (Event e : events) {
+                            java.time.LocalDate eventDate = e.getEventDate() != null
+                                    ? e.getEventDate().toLocalDate()
+                                    : java.time.LocalDate.now();
 
-                        java.time.LocalDate eventDate = e.getEventDate().toLocalDate();
-                        java.time.LocalTime eventTime = e.getEventTime().toLocalTime();
-                        java.time.LocalDateTime eventDateTime =
+                            java.time.LocalTime eventTime = e.getEventTime() != null
+                                    ? e.getEventTime().toLocalTime()
+                                    : java.time.LocalTime.MIDNIGHT;
+
+                            java.time.LocalDateTime eventDateTime =
                                 java.time.LocalDateTime.of(eventDate, eventTime);
 
-                        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                            java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
-                        String status;
-                        if (eventDateTime.isAfter(now)) {
-                            status = "Upcoming";
-                        } else {
-                            status = "Past";
-                        }
+                            String status;
+                            if (eventDateTime.isAfter(now)) {
+                                status = "Upcoming";
+                            } else {
+                                status = "Past";
+                            }
                     %>
 
                     <div class="event-card">
                         <div class="event-info">
                             <p>
                                 <strong>Event Name:</strong>
-                                <a href="previewEvent.jsp?id=<%= e.getEventID() %>"
+                                <a href="${pageContext.request.contextPath}/admin/previewEvent?id=<%= e.getEventID() %>"
                                    style="text-decoration:none; font-weight:600; color:#1e3a8a;">
                                     <%= e.getEventTitle() %>
                                 </a>
@@ -115,7 +113,7 @@
                         </div>
 
                         <div class="event-actions">
-                            <a href="editEvent.jsp?id=<%= e.getEventID() %>"
+                            <a href="${pageContext.request.contextPath}/admin/editEvent?id=<%= e.getEventID() %>"
                                class="icon-btn edit-btn"
                                title="Edit">
                                 <i class="fa-solid fa-pen"></i>
@@ -134,7 +132,7 @@
 
                 <!-- CREATE BUTTON -->
                 <div class="create-event-wrapper">
-                    <a href="${pageContext.request.contextPath}/admin/createEvent.jsp" class="create-event-btn">
+                    <a href="${pageContext.request.contextPath}/admin/createEvent" class="create-event-btn">
                         Create New Event
                     </a>
                 </div>
@@ -152,12 +150,13 @@
                 document.body.classList.toggle('sidebar-collapsed');
             }
 
-            function confirmDelete(eventId) {
-                showToast("Event deleted.", "success");
+            function confirmDelete(eventID) {
+                if (!confirm("Are you sure you want to delete this event?")) {
+                    return;
+                }
 
-                setTimeout(() => {
-                    window.location.href = "<%= request.getContextPath() %>/DeleteEventServlet?id=" + eventId;
-                }, 1200);
+                window.location.href =
+                    "<%= request.getContextPath() %>/admin/deleteEvent?id=" + eventID;
             }
         </script>
     </body>

@@ -20,7 +20,7 @@ public class Event {
     private String qrPath;
     private int createdBy;
     private Timestamp createdAt;
-    private int clubID;
+    private int clubId;
 
     // Constructor
     public Event() {}
@@ -36,7 +36,7 @@ public class Event {
     public String getQrPath() { return qrPath; }
     public int getCreatedBy() { return createdBy; }
     public Timestamp getCreatedAt() { return createdAt; }
-    public int getClubID() { return clubID; }
+    public int getClubId() { return clubId; }
     
     //setters
     public void setEventID(int eventID) { this.eventID = eventID; }
@@ -49,5 +49,5 @@ public class Event {
     public void setQrPath(String qrPath) { this.qrPath = qrPath; }
     public void setCreatedBy(int createdBy) { this.createdBy = createdBy; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-    public void setClubID(int clubId) { this.clubID = clubId; }
+    public void setClubId(int clubId) { this.clubId = clubId; }
 }

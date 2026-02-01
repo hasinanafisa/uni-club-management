@@ -12,53 +12,21 @@ import java.sql.*;
 import java.util.*;
 
 public class EventDAO {
-    // READ ALL
-    public List<Event> getAllEvents(int clubId) {
-        List<Event> list = new ArrayList<>();
-        String sql = "SELECT event_id, title, description, event_date, event_time, location, "
-                   + "banner_image_path, qr_path "
-                   + "FROM event WHERE club_id = ?";
-
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, clubId);   // ✅ IMPORTANT
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Event e = new Event();
-                    e.setEventID(rs.getInt("event_id"));
-                    e.setEventTitle(rs.getString("title"));
-                    e.setEventDesc(rs.getString("description"));
-                    e.setEventDate(rs.getDate("event_date"));
-                    e.setEventTime(rs.getTime("event_time"));
-                    e.setEventLoc(rs.getString("location"));
-                    e.setBannerImagePath(rs.getString("banner_image_path"));
-                    e.setQrPath(rs.getString("qr_path"));
-                    list.add(e);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    
-    // READ ONE (FOR EDIT)
-    public Event getEventById(int clubID) {
+    // READ ONE EVENT
+    public Event getEventById(int eventID) {
         Event e = null;
         String sql = "SELECT * FROM event WHERE event_id=?";
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, clubID);
+            ps.setInt(1, eventID);
             
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
                     e = new Event();
                     e.setEventID(rs.getInt("event_id"));
+                    e.setClubId(rs.getInt("club_id"));
                     e.setEventTitle(rs.getString("title"));
                     e.setEventDesc(rs.getString("description"));
                     e.setEventDate(rs.getDate("event_date"));
@@ -68,12 +36,48 @@ public class EventDAO {
                     e.setQrPath(rs.getString("qr_path"));
                 }
             }
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return e;
+    }
+    
+    // READ ALL
+    public List<Event> getEventsByClubId(int clubId) {
+
+        List<Event> events = new ArrayList<>();
+        String sql = "SELECT * FROM event WHERE club_id = ? ORDER BY event_date";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Event e = new Event();
+                e.setEventID(rs.getInt("event_id"));
+                e.setClubId(rs.getInt("club_id"));
+                e.setEventTitle(rs.getString("title"));
+                e.setEventDesc(rs.getString("description"));
+                e.setEventLoc(rs.getString("location"));
+                e.setEventDate(rs.getDate("event_date"));
+                e.setEventTime(rs.getTime("event_time"));
+                e.setCreatedBy(rs.getInt("created_by"));
+
+                events.add(e);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return events;
     }
 
     // CREATE
-    public void createEvent(Event e) throws SQLException {
+    public int createEvent(Event e) throws SQLException {
+        int generatedEventId = -1;
+        
         String sql =
             "INSERT INTO event(club_id, title, description, event_date, event_time, location, banner_image_path, qr_path, created_by)" +
                 "VALUES (?,?,?,?,?,?,?,?,?)";
@@ -81,7 +85,7 @@ public class EventDAO {
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, e.getClubID());
+            ps.setInt(1, e.getClubId());
             ps.setString(2, e.getEventTitle());
             ps.setString(3, e.getEventDesc());
             ps.setDate(4, e.getEventDate());
@@ -90,9 +94,16 @@ public class EventDAO {
             ps.setString(7, e.getBannerImagePath());
             ps.setString(8, e.getQrPath());
             ps.setInt(9, e.getCreatedBy());
-
             ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                generatedEventId = rs.getInt(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+        return generatedEventId;
     }
     
     // UPDATE
@@ -112,9 +123,11 @@ public class EventDAO {
             ps.setString(6, e.getBannerImagePath());
             ps.setString(7, e.getQrPath());
             ps.setInt(8, e.getEventID());
-
             ps.executeUpdate();
-        } catch (Exception ex) { }
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     // DELETE
@@ -127,6 +140,8 @@ public class EventDAO {
             ps.setInt(1, id);
             ps.executeUpdate();
 
-        } catch (Exception e) { }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

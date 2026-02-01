@@ -5,14 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="dao.EventDAO"%>
 <%@page import="model.Event"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%
-    int eventId = Integer.parseInt(request.getParameter("id"));
-    EventDAO dao = new EventDAO();
-    Event e = dao.getEventById(eventId);
+    Event e = (Event) request.getAttribute("event");
+    if (e == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
+        return;
+    }
 
     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 %>
@@ -30,7 +31,7 @@
 <div class="navbar">
     <div class="logo">EVENT PREVIEW</div>
     <ul class="nav-links">
-        <li><a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Back</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a></li>
     </ul>
 </div>
 
@@ -41,13 +42,17 @@
 
                 <!-- Banner -->
                 <div class="preview-banner">
-                    <img src="<%= request.getContextPath() %>/uploads/<%= e.getBannerImagePath() %>" alt="Banner">
+                    <img src="<%= request.getContextPath() %>/uploads/events/<%= 
+                        e.getBannerImagePath() != null ? e.getBannerImagePath() : "default-banner.png" %>"
+                        alt="Banner">
                 </div>
 
                 <!-- QR -->
                 <div class="preview-qr">
                     <h4>Attendance QR</h4>
-                    <img src="<%= request.getContextPath() %>/uploads/<%= e.getQrPath() %>" alt="QR Code">
+                    <img src="<%= request.getContextPath() %>/uploads/events/<%= 
+                        e.getQrPath() != null ? e.getQrPath() : "default-qr.png" %>" 
+                    alt="QR Code">
                 </div>
 
                 <!-- Title + Description -->
@@ -66,6 +71,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

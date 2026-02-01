@@ -9,9 +9,11 @@
 <%@page import="model.Event"%>
 
 <%
-    int eventId = Integer.parseInt(request.getParameter("id"));
-    EventDAO dao = new EventDAO();
-    Event event = dao.getEventById(eventId);
+    Event event = (Event) request.getAttribute("event");
+    if (event == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -34,7 +36,7 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
             </ul>
         </div>
@@ -55,19 +57,16 @@
                     <% if (event.getBannerImagePath() != null && !event.getBannerImagePath().isEmpty()) { %>
                         <p>
                             <strong>Current Banner:</strong>
-                            <a href="<%= request.getContextPath() %>/uploads/<%= event.getBannerImagePath() %>"
-                               target="_blank">
-                                <%= event.getBannerImagePath() %>
+                            <a href="<%= request.getContextPath() %>/uploads/events/<%= event.getBannerImagePath() %>"
+                               target="_blank"> <%= event.getBannerImagePath() %>
                             </a>
                         </p>
                     <% } %>
                     <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png">
                     
-                    <input type="text" name="eventTitle" value="<%= event.getEventTitle() %>" 
-                           placeholder="Event Title *" required>
+                    <input type="text" name="eventTitle" value="<%= event.getEventTitle() %>" required>
                     
-                    <textarea name="eventDesc" rows="4" placeholder="Event Description *"
-                           required><%= event.getEventDesc() %></textarea>
+                    <textarea name="eventDesc" rows="4" required><%= event.getEventDesc() %></textarea>
                            
                     <div class="form-row">
                         <input type="date" name="eventDate" value="<%= event.getEventDate() %>" required>
@@ -77,16 +76,14 @@
                         <input type="time" name="eventTime" value="<%= timeValue %>" required>
                     </div>
                     
-                    <input type="text" name="eventLoc" value="<%= event.getEventLoc() %>"
-                           placeholder="Event Location *" required>
+                    <input type="text" name="eventLoc" value="<%= event.getEventLoc() %>" required>
                     
                     <!-- CURRENT QR -->
                     <% if (event.getQrPath() != null && !event.getQrPath().isEmpty()) { %>
                         <p>
                             <strong>Current Attendance QR:</strong>
-                            <a href="<%= request.getContextPath() %>/uploads/<%= event.getQrPath() %>"
-                               target="_blank">
-                                <%= event.getQrPath() %>
+                            <a href="<%= request.getContextPath() %>/uploads/events/<%= event.getQrPath() %>"
+                               target="_blank"> <%= event.getQrPath() %>
                             </a>
                         </p>
                     <% } %>

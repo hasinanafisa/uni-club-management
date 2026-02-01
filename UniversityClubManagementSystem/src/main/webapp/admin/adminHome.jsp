@@ -51,7 +51,7 @@
                 <i class="fa-solid fa-house"></i>Home
             </a>
             <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
-            <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
+            <a href="${pageContext.request.contextPath}/admin/manageEvent"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
             <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
         </div>
 
@@ -74,14 +74,14 @@
                         <i class="fa-solid fa-calendar-plus"></i>
                         <h3>Event Creation</h3>
                         <p>Create, update, and manage club events.</p>
-                        <a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Manage</a>
+                        <a href="${pageContext.request.contextPath}/admin/manageEvent">Manage</a>
                     </div>
                     <!-- Announcement -->
                     <div class="card">
                         <i class="fa-solid fa-bullhorn"></i>
                         <h3>Post Announcement</h3>
                         <p>Share important updates with students.</p>
-                        <a href="${pageContext.request.contextPath}/admin/manageAnnouncement.jsp">Manage</a>
+                        <a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Manage</a>
                     </div>
                 </div>
             </div>

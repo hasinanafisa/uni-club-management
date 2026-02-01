@@ -25,7 +25,7 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/manageEvent.jsp">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
             </ul>
         </div>
@@ -39,21 +39,25 @@
                 <form class="create-event-form" action="${pageContext.request.contextPath}/admin/createEvent" 
                       method="post" enctype="multipart/form-data">
                     
-                    <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png" 
-                           placeholder="Banner Image *" required >
+                    <label>Banner Image *</label>
+                    <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png" required >
                     
-                    <input type="text" name="eventTitle" placeholder="Event Title *" required>
-                    <textarea name="eventDesc" rows="4" placeholder="Event Description *" required></textarea>
+                    <label>Title *</label>
+                    <input type="text" name="eventTitle" required>
+                    
+                    <label>Description *</label>
+                    <textarea name="eventDesc" rows="4" required></textarea>
                     
                     <div class="form-row">
                         <input type="date" name="eventDate" required>
                         <input type="time" name="eventTime" required>
                     </div>
                     
-                    <input type="text" name="eventLoc" placeholder="Event Location *" required>
+                    <label>Location *</label>
+                    <input type="text" name="eventLoc" required>
                     
-                    <input type="file" name="qrPath" accept=".jpg,.png,image/jpeg,image/png" 
-                           placeholder="Attendance QR (optional)">
+                    <label>Attendance QR *</label>
+                    <input type="file" name="qrPath" accept=".jpg,.png,image/jpeg,image/png">
                     
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">
