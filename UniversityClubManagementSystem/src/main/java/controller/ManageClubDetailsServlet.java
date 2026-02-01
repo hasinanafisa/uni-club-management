@@ -1,8 +1,9 @@
 package controller;
 
-
 import dao.ClubDAO;
+import dao.ClubMemberDAO;
 import dao.UserDAO;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,18 +23,20 @@ public class ManageClubDetailsServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-
-        User user = (User) session.getAttribute("user");
-        int clubId = user.getClubID();
-
+        
+        ClubMemberDAO cmDAO = new ClubMemberDAO();
         ClubDAO clubDAO = new ClubDAO();
         UserDAO userDAO = new UserDAO();
-
+        
+        int userId = user.getUserId();
+        int clubId = cmDAO.getClubIdByUser(userId);
         Club club = clubDAO.getClubById(clubId);
+        
         List<User> members = userDAO.getMembersByClubId(clubId);
 
         request.setAttribute("club", club);
