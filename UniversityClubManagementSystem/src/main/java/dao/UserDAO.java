@@ -2,6 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
+/**
+ *
+ * @author Hasina
+ */
+
 package dao;
 
 import model.User;
@@ -9,6 +15,9 @@ import model.Event;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.InputStream;
+import util.DBConnection;
+
 
 public class UserDAO {
 
@@ -16,7 +25,7 @@ public class UserDAO {
     private String jdbcUsername = "app";
     private String jdbcPassword = "app";
 
-    // ✅ LOGIN
+    // Login
     public User login(String email, String password) {
         User user = null;
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -37,7 +46,8 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("role"),
                         rs.getString("faculty"),
-                        rs.getString("course")
+                        rs.getString("course"),
+                        rs.getString("profile_picture")
                     );
                 }
             }
@@ -47,7 +57,7 @@ public class UserDAO {
         return user;
     }
 
-    // ✅ GET EVENTS JOINED BY STUDENT
+    // Get Events
     public List<Event> getJoinedEvents(int userId) {
         List<Event> events = new ArrayList<>();
 
@@ -80,4 +90,36 @@ public class UserDAO {
 
         return events;
     }
+    
+    public void updateProfileWithImage(User user, String fileName) {
+        String sql = "UPDATE users SET full_name = ?, email = ?, profile_picture = ? WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, fileName);
+            ps.setInt(4, user.getUserId());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateProfile(User user) {
+        String sql = "UPDATE users SET full_name = ?, email = ? WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setInt(3, user.getUserId());
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
