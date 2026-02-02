@@ -59,7 +59,7 @@
                     <i class="fa-solid fa-calendar-days"></i>
                     <h3>EVENTS</h3>
                     <p>See what's happening around campus.</p>
-                    <a href="upcomingEvents.jsp">EXPLORE</a>
+                    <a href="${pageContext.request.contextPath}/student/upcomingEvents">EXPLORE</a>
                 </div>
 
                 <div class="card">

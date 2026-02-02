@@ -57,7 +57,7 @@
 
             <!-- ADD TASK -->
             <form action="${pageContext.request.contextPath}/student/addTask" method="post">
-                <input type="hidden" name="clubId" value="<%= club.getClubID() %>">
+                <input type="hidden" name="clubId" value="<%= club.getClubId() %>">
                 <input type="text" name="title" placeholder="New task" required>
                 <button type="submit" class="join-btn">Add Task</button>
             </form>

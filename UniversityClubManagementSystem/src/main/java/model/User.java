@@ -43,5 +43,5 @@ public class User implements Serializable {
     public void setUserType(String userType) { this.userType = userType; }
     
     public int getClubId() { return clubId; }
-    public void setClubId(int clubID) { this.clubId = clubId; }
+    public void setClubId(int clubId) { this.clubId = clubId; }
 }

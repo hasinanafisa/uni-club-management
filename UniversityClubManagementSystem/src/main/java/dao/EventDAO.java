@@ -64,7 +64,6 @@ public class EventDAO {
                 e.setEventDate(rs.getDate("event_date"));
                 e.setEventTime(rs.getTime("event_time"));
                 e.setCreatedBy(rs.getInt("created_by"));
-
                 events.add(e);
             }
 
