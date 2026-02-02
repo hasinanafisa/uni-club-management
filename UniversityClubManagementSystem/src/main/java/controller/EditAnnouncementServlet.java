@@ -65,10 +65,10 @@ public class EditAnnouncementServlet extends HttpServlet {
         
         // 🔹 Load events for dropdown
         EventDAO eDAO = new EventDAO();
-        List<Event> event = eDAO.getEventsByClubId(clubId);
+        List<Event> events = eDAO.getEventsByClubId(clubId);
         
         request.setAttribute("announcement", announcement);
-        request.setAttribute("event", event);
+        request.setAttribute("events", events);
         request.getRequestDispatcher("/admin/editAnnouncement.jsp").forward(request, response);
     }
     

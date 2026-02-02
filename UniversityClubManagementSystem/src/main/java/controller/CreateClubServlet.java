@@ -96,7 +96,7 @@ public class CreateClubServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
         } catch (IOException | SQLException e) {
             e.printStackTrace();
-            request.setAttribute("error", "Failed to create club.");
+            request.setAttribute("error", "Failed to create club." + e.getMessage());
             request.getRequestDispatcher("/admin/createClub.jsp").forward(request, response);
         }
     }

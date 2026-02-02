@@ -12,8 +12,8 @@
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%
-    List<Announcement> announcement = (List<Announcement>) request.getAttribute("announcement");
-    if (announcement == null) {
+    List<Announcement> announcements = (List<Announcement>) request.getAttribute("announcements");
+    if (announcements == null) {
         response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
         return;
     }
@@ -87,12 +87,12 @@
                 %>
 
                 <!-- EMPTY STATE -->
-                <%  if (announcement.isEmpty()) { %>
+                <%  if (announcements.isEmpty()) { %>
                 <div class="empty-box"><p>No announcement found.</p></div>
                 
                 <%
                     } else {
-                        for (Announcement a : announcement) {
+                        for (Announcement a : announcements) {
                         Event ev = eventDao.getEventById(a.getEventId());
                 %>
                 <div class="announcement-card">

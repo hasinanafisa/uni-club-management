@@ -74,146 +74,6 @@ h3 {
 }
 
 /* =========================
-   LOGIN PAGE ONLY
-========================= */
-.login-page {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.login-page .container {
-    max-width: 420px;
-    width: 100%;
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    animation: fadeIn 0.6s ease;
-}
-
-.login-page .container h2 {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-/* =========================
-   LOGIN CARD REFINEMENTS
-========================= */
-
-.login-card {
-    text-align: center;
-}
-
-/* Icon on top */
-.login-icon {
-    font-size: 30px;
-    margin-bottom: 12px;
-    color: #000;
-}
-
-/* Title spacing */
-.login-card h2 {
-    margin-bottom: 25px;
-    font-weight: 600;
-}
-
-/* Login subtitle */
-.login-subtitle {
-    text-align: center;
-    font-size: 16px;
-    color: #666;
-    margin-top: -10px;
-    margin-bottom: 25px;
-}
-
-/* Inputs look softer */
-.login-card input {
-    background: #eef4ff;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    width: 100%;
-    height: 54px;
-    font-size: 17px;
-    padding: 0 14px;
-    margin-bottom: 15px;
-}
-
-.login-card input::placeholder {
-    font-size: 16px;
-    color: #6b7280;
-}
-
-/* Big rounded login button */
-.login-btn {
-    margin-top: 10px;
-    border-radius: 12px;
-    height: 48px;
-    font-size: 16px;
-}
-
-/* Links under button */
-.login-links {
-    margin-top: 18px;
-    font-size: 16px;
-}
-
-.login-links a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.login-links a:hover {
-    text-decoration: underline;
-}
-
-.login-links span {
-    margin: 0 6px;
-    color: #999;
-}
-
-.login-error {
-    color: #dc2626;
-    font-size: 15px;
-    margin-bottom: 15px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.password-wrapper {
-    position: relative;
-}
-
-.password-input {
-    padding-right: 44px; /* space for eye icon */
-}
-
-.password-wrapper i {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #6b7280;
-    cursor: pointer;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.password-wrapper i:hover {
-    color: #111827;
-}
-
-.password-wrapper i:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-/* =========================
    FORM ELEMENTS
 ========================= */
 
@@ -454,6 +314,98 @@ body.sidebar-collapsed .page-wrapper {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* =========================
+   CLUB DETAILS PAGE
+========================= */
+
+/* ===== Club Details Layout ===== */
+.club-details-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+}
+
+/* Top section */
+.club-info {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+
+.club-logo img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.club-meta h2 {
+    margin: 0;
+    text-align: center;
+}
+
+.club-desc {
+    color: #555;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.edit-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 25px;
+    text-decoration: none;
+}
+
+/* Members */
+.club-members h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.member-badge {
+    background: #667eea;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+/* Table */
+.members-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.members-table th {
+    text-align: left;
+    padding: 12px;
+    background: #f5f6fa;
+}
+
+.members-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.members-table tr:hover {
+    background: #fafafa;
+}
+
+/* Role emphasis */
+.members-table td.role {
+    font-weight: 600;
+    color: #5a67d8;
 }
 
 /* =========================

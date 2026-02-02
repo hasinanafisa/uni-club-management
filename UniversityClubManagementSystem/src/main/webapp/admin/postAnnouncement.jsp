@@ -9,7 +9,7 @@
 <%@page import="model.Event"%>
 
 <%
-    List<Event> event = (List<Event>) request.getAttribute("event");
+    List<Event> events = (List<Event>) request.getAttribute("events");
 %>
 
 <!DOCTYPE html>
@@ -46,7 +46,7 @@
                     <!-- Related Event -->
                     <select name="eventId" required>
                         <option value="">-- Related Event --</option>
-                        <% for (Event e : event) { %>
+                        <% for (Event e : events) { %>
                             <option value="<%= e.getEventID() %>">
                                 <%= e.getEventTitle() %>
                             </option>

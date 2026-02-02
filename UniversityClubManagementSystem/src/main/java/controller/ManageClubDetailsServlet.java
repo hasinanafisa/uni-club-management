@@ -3,6 +3,9 @@ package controller;
 import dao.ClubDAO;
 import dao.ClubMemberDAO;
 import dao.UserDAO;
+import model.Club;
+import model.ClubMember;
+import model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,8 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import model.Club;
-import model.User;
 
 @WebServlet("/admin/manageClubDetails")
 public class ManageClubDetailsServlet extends HttpServlet {
@@ -37,12 +38,10 @@ public class ManageClubDetailsServlet extends HttpServlet {
         int clubId = cmDAO.getClubIdByUser(userId);
         Club club = clubDAO.getClubById(clubId);
         
-        List<User> members = userDAO.getMembersByClubId(clubId);
-
-        request.setAttribute("club", club);
+        List<ClubMember> members = cmDAO.getMembersWithJoinDate(clubId);
         request.setAttribute("members", members);
+        request.setAttribute("club", club);
 
-        request.getRequestDispatcher("/admin/manageClubDetails.jsp")
-               .forward(request, response);
+        request.getRequestDispatcher("/admin/manageClubDetails.jsp").forward(request, response);
     }
 }

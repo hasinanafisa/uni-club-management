@@ -2,6 +2,9 @@ package dao;
 
 import util.DBUtil;
 import java.sql.*;
+import java.util.List;
+
+import model.ClubMember;
 
 public class ClubMemberDAO {
 
@@ -105,6 +108,47 @@ public class ClubMemberDAO {
         }
         return 0;
     }
+    
+    public List<ClubMember> getMembersWithJoinDate(int clubId) {
+        List<ClubMember> list = new java.util.ArrayList<>();
 
+        String sql = """
+            SELECT cm.club_member_id, cm.user_id, cm.club_id,
+                   cm.role, cm.join_date
+            FROM club_member cm
+            WHERE cm.club_id = ?
+            ORDER BY
+                CASE cm.role
+                    WHEN 'Advisor' THEN 1
+                    WHEN 'President' THEN 2
+                    WHEN 'Vice President' THEN 3
+                    WHEN 'Secretary' THEN 4
+                    WHEN 'Treasurer' THEN 5
+                    WHEN 'Member' THEN 6
+                END
+        """;
 
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ClubMember cm = new ClubMember();
+                cm.setClubMemberId(rs.getInt("club_member_id"));
+                cm.setUserId(rs.getInt("user_id"));
+                cm.setClubId(rs.getInt("club_id"));
+                cm.setRole(rs.getString("role"));
+                cm.setJoinDate(rs.getDate("join_date"));
+
+                list.add(cm);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }
