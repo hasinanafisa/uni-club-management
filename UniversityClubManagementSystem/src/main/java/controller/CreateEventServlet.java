@@ -5,6 +5,7 @@
 
 package controller;
 
+import util.QRCodeUtil;
 import dao.ClubMemberDAO;
 import dao.EventDAO;
 import model.Event;
@@ -122,6 +123,7 @@ public class CreateEventServlet extends HttpServlet {
         }
         e.setBannerImagePath(bannerFileName);
 
+        /*
         Part qrPart = request.getPart("qrPath");
         String qrFileName = "default-qr.png";
 
@@ -135,14 +137,37 @@ public class CreateEventServlet extends HttpServlet {
             try (InputStream in = qrPart.getInputStream()) {
                 Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
             }
-        }
-        e.setQrPath(qrFileName);
+        }*/
         
         EventDAO dao = new EventDAO();
         try {
-            dao.createEvent(e);
+            int eventId = dao.createEvent(e);
+            
+            String qrFileName = "event-" + eventId + ".png";
+            e.setQrPath("event-qr/" + qrFileName);
+            e.setEventID(eventId);
+
+            // 🔹 Generate QR
+            String qrUrl = request.getScheme() + "://" +
+                           request.getServerName() + ":" +
+                           request.getServerPort() +
+                           request.getContextPath() +
+                           "/student/registerEvent?eventId=" + eventId;
+
+            Path qrDir = Paths.get(
+                System.getProperty("user.home"),
+                "uni-club-uploads",
+                "events",
+                "event-qr"
+            );
+            Files.createDirectories(qrDir);
+
+            Path qrPath = qrDir.resolve("event-" + eventId + ".png");
+            QRCodeUtil.generate(qrUrl, qrPath);
+
             response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
             request.setAttribute("error", "Failed to create event.");
             request.getRequestDispatcher("/admin/createEvent.jsp").forward(request, response);
         }

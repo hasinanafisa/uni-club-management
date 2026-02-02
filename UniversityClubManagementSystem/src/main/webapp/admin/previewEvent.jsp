@@ -50,9 +50,8 @@
                 <!-- QR -->
                 <div class="preview-qr">
                     <h4>Attendance QR</h4>
-                    <img src="<%= request.getContextPath() %>/uploads/events/<%= 
-                        e.getQrPath() != null ? e.getQrPath() : "default-qr.png" %>" 
-                    alt="QR Code">
+                    <img src="<%= request.getContextPath() %>/uploads/events/<%= e.getQrPath() %>"
+                        alt="Attendance QR">
                 </div>
 
                 <!-- Title + Description -->

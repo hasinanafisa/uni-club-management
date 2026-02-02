@@ -83,7 +83,7 @@ public class EventDAO {
                 "VALUES (?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, e.getClubId());
             ps.setString(2, e.getEventTitle());
@@ -96,9 +96,10 @@ public class EventDAO {
             ps.setInt(9, e.getCreatedBy());
             ps.executeUpdate();
             
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs != null && rs.next()) {
-                generatedEventId = rs.getInt(1);
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs != null && rs.next()) {
+                    generatedEventId = rs.getInt(1);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
