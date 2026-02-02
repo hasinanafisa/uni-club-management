@@ -1,64 +1,85 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
-/**
- *
- * @author Hasina
- */
-import model.Task;
 import util.DBUtil;
-
+import model.Task;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDAO {
 
-    // Get tasks for logged-in user
-    public List<Task> getTasksByUser(int userId) {
-        List<Task> list = new ArrayList<>();
-
-        String sql = "SELECT * FROM task WHERE assigned_to = ?";
+    public List<Task> getTasksByUser(int clubId, int userId) {
+        List<Task> tasks = new ArrayList<>();
+        String sql = """
+            SELECT * FROM task
+            WHERE club_id = ? AND user_id = ?
+            ORDER BY created_at DESC
+        """;
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, userId);
+            ps.setInt(1, clubId);
+            ps.setInt(2, userId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Task t = new Task();
                 t.setTaskId(rs.getInt("task_id"));
                 t.setClubId(rs.getInt("club_id"));
-                t.setAssignedTo(rs.getInt("assigned_to"));
+                t.setUserId(rs.getInt("user_id"));
                 t.setTitle(rs.getString("title"));
-                t.setDescription(rs.getString("description"));
-                t.setDueDate(rs.getDate("due_date"));
                 t.setStatus(rs.getString("status"));
-                list.add(t);
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                tasks.add(t);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return tasks;
     }
 
-    // Update task status
-    public void updateStatus(int taskId, String status) {
-        String sql = "UPDATE task SET status = ? WHERE task_id = ?";
+    public void addTask(int clubId, int userId, String title) throws SQLException {
+        String sql = """
+            INSERT INTO task (club_id, user_id, title)
+            VALUES (?, ?, ?)
+        """;
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, status);
-            ps.setInt(2, taskId);
+            ps.setInt(1, clubId);
+            ps.setInt(2, userId);
+            ps.setString(3, title);
             ps.executeUpdate();
+        }
+    }
+    
+        public void markTaskDone(int taskId, int userId) throws SQLException {
+        String sql = """
+            UPDATE task
+            SET status = 'Done'
+            WHERE task_id = ? AND user_id = ?
+        """;
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, taskId);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        }
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        public void deleteTask(int taskId, int userId) throws SQLException {
+        String sql = """
+            DELETE FROM task
+            WHERE task_id = ? AND user_id = ?
+        """;
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, taskId);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
         }
     }
 }

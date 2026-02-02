@@ -49,7 +49,20 @@
 
                     <div class="card-actions">
                         <a href="${pageContext.request.contextPath}/student/club?clubId=<%= c.getClubID() %>"class="view-btn">View Details</a>
-                        <button class="join-btn">Join</button>
+                        <form action="${pageContext.request.contextPath}/student/joinClub" method="post">
+                            <input type="hidden" name="clubId" value="<%= c.getClubID() %>">
+
+                            <%
+                                dao.ClubMemberDAO cmDAO = new dao.ClubMemberDAO();
+                                boolean joined = cmDAO.isMember(user.getUserId(), c.getClubID());
+                            %>
+
+                            <button type="submit"
+                                    class="join-btn"
+                                    <%= joined ? "disabled" : "" %>>
+                                <%= joined ? "Joined" : "Join" %>
+                            </button>
+                        </form>
                     </div>
                 </div>
             <% }} else { %>

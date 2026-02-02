@@ -1,92 +1,103 @@
-<%-- 
-    Document   : clubDashboard
-    Created on : 27 Dec 2025, 6:39:36 pm
-    Author     : Razan, Hasina
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.Club"%>
+<%@page import="java.util.List"%>
+<%@page import="model.Task"%>
+
+<%
+    Club club = (Club) request.getAttribute("club");
+    if (club == null) {
+        response.sendRedirect(request.getContextPath() + "/student/clubs");
+        return;
+    }
+
+    List<Task> tasks = (List<Task>) request.getAttribute("tasks");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Club Dashboard</title>
+    <title><%= club.getClubName() %> | Club Dashboard</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <%@include file="/includes/header.jsp" %>
-<!-- CONTENT -->
 
-    <div class="notion-wrapper">
+<div class="notion-wrapper">
 
-        <h1>Club Overview</h1>
-        <p class="subtitle">Everything at a glance</p>
+    <h1><%= club.getClubName() %> Dashboard</h1>
+    <p class="subtitle">Member-only club space</p>
 
-        <!-- STATS -->
-        <div class="stats-row">
-            <div class="stat-box">
-                <span>Members</span>
-                <h2>45</h2>
-                <a href="clubMembers.jsp" class="btn-text">View Members <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-            <div class="stat-box">
-                <span>Upcoming Events</span>
-                <h2>3</h2>
-            </div>
-            <div class="stat-box">
-                <span>Announcements</span>
-                <h2>5</h2>
-            </div>
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <span>Members</span>
+            <h2>${memberCount}</h2>
         </div>
 
-        <!-- MAIN GRID -->
-        <div class="notion-grid">
+        <div class="stat-box">
+            <span>Upcoming Events</span>
+            <h2>${upcomingEventCount}</h2>
+        </div>
 
-            <!-- EVENTS -->
-            <div class="panel">
-                <h3>📅 Upcoming Events</h3>
-
-                <div class="event-item">
-                    <div>
-                        <strong>CodeFest 2026</strong>
-                        <small>15 Jan · 2:00 PM</small>
-                    </div>
-                    <span class="badge upcoming">Upcoming</span>
-                </div>
-
-                <div class="event-item">
-                    <div>
-                        <strong>Hackathon Meetup</strong>
-                        <small>22 Jan · 10:00 AM</small>
-                    </div>
-                    <span class="badge ongoing">Ongoing</span>
-                </div>
-            </div>
-
-            <!-- SIDE -->
-            <div class="side-panels">
-
-                <div class="panel">
-                    <h3>✅ My Tasks</h3>
-                    <ul class="task-list">
-                        <li>✔ Prepare slides</li>
-                        <li>✔ Confirm venue</li>
-                        <li>⏳ Upload poster</li>
-                    </ul>
-                </div>
-
-                <div class="panel">
-                    <h3>📢 Announcements</h3>
-                    <ul class="feed-list">
-                        <li>Meeting moved to Friday</li>
-                        <li>New committee announced</li>
-                        <li>Registration closing soon</li>
-                    </ul>
-                </div>
-
-            </div>
+        <div class="stat-box">
+            <span>Announcements</span>
+            <h2>${announcementCount}</h2>
         </div>
     </div>
 
+    <!-- MAIN GRID -->
+    <div class="notion-grid">
+
+        <!-- TASKS -->   
+    <div class="panel">
+            <h3>My Tasks</h3>
+
+            <!-- ADD TASK -->
+            <form action="${pageContext.request.contextPath}/student/addTask" method="post">
+                <input type="hidden" name="clubId" value="<%= club.getClubID() %>">
+                <input type="text" name="title" placeholder="New task" required>
+                <button type="submit" class="join-btn">Add Task</button>
+            </form>
+
+            <ul class="task-list">
+                <%
+                    if (tasks == null || tasks.isEmpty()) {
+                %>
+                    <li>No tasks yet.</li>
+                <%
+                    } else {
+                        for (Task t : tasks) {
+                %>
+                <li class="task-item ${t.status == 'Done' ? 'done' : ''}">
+                    <span class="task-title"><%= t.getTitle() %></span>
+                    <small class="task-status"><%= t.getStatus() %></small>
+
+                    <div class="task-actions">
+                        <% if (!"Done".equals(t.getStatus())) { %>
+                            <form action="${pageContext.request.contextPath}/student/taskAction" method="post">
+                                <input type="hidden" name="taskId" value="<%= t.getTaskId() %>">
+                                <input type="hidden" name="action" value="done">
+                                <button type="submit" class="task-btn done-btn">Done</button>
+                            </form>
+                        <% } %>
+
+                        <form action="${pageContext.request.contextPath}/student/taskAction" method="post">
+                            <input type="hidden" name="taskId" value="<%= t.getTaskId() %>">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="task-btn delete-btn">Delete</button>
+                        </form>
+                    </div>
+                </li>
+                <%
+                        }
+                    }
+                %>
+            </ul>
+        </div>
+    </div>
+</div>
 </body>
 </html>
