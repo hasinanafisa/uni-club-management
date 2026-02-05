@@ -127,5 +127,4 @@
         document.getElementById("profileView").style.display = edit ? "none" : "block";
         document.getElementById("profileEdit").style.display = edit ? "block" : "none";
     }
-
 </script>
