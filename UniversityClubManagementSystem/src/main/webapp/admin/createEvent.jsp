@@ -40,7 +40,7 @@
                       method="post" enctype="multipart/form-data">
                     
                     <label>Banner Image *</label>
-                    <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png" required >
+                    <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png">
                     
                     <label>Title *</label>
                     <input type="text" name="eventTitle" required>

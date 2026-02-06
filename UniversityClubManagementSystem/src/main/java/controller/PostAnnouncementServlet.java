@@ -102,7 +102,7 @@ public class PostAnnouncementServlet extends HttpServlet {
         // 📁 Base upload directory
         Path uploadDir = Paths.get(
                 System.getProperty("user.home"),
-                "uni-club-uploads",
+                "uploads",
                 "announcements"
         );
 

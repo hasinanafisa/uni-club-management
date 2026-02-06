@@ -23,7 +23,7 @@ public class Club implements Serializable {
     public Club() {}
 
     public int getClubId() { return clubId; }
-    public void setClubId(int clubID) { this.clubId = clubId; }
+    public void setClubId(int clubId) { this.clubId = clubId; }
 
     public String getClubName() { return clubName; }
     public void setClubName(String clubName) { this.clubName = clubName; }

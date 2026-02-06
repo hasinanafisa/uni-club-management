@@ -30,7 +30,7 @@ public class RegisterEventServlet extends HttpServlet {
 
         EventRegistrationDAO erDAO = new EventRegistrationDAO();
 
-        boolean alreadyRegistered = erDAO.isRegistered(eventId, userId);
+        /*boolean alreadyRegistered = erDAO.isRegistered(eventId, userId);
 
         if (!alreadyRegistered) {
             erDAO.register(eventId, userId);
@@ -39,6 +39,6 @@ public class RegisterEventServlet extends HttpServlet {
         } else {
             request.setAttribute("toast", "You are already registered.");
             response.sendRedirect(request.getContextPath() + "/student/viewEvents");
-        }
+        */
     }
 }

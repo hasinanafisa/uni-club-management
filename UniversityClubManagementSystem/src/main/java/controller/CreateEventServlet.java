@@ -156,7 +156,7 @@ public class CreateEventServlet extends HttpServlet {
 
             Path qrDir = Paths.get(
                 System.getProperty("user.home"),
-                "uni-club-uploads",
+                "uploads",
                 "events",
                 "event-qr"
             );

@@ -25,11 +25,9 @@ public class RegisterServlet extends HttpServlet {
         // Password validation
         if (password == null || !password.equals(confirmPassword)) {
             request.setAttribute("errorMessage", "Passwords do not match!");
-            request.getRequestDispatcher("/register.jsp")
-                   .forward(request, response);
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
             return;
         }
-
 
         // 2. Database Logic
         try {

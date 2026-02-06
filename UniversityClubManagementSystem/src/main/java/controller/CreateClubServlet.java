@@ -72,7 +72,7 @@ public class CreateClubServlet extends HttpServlet {
 
             Path uploadDir = Paths.get(
                 System.getProperty("user.home"),
-                "uni-club-uploads"
+                "uploads"
             );
 
             Files.createDirectories(uploadDir);

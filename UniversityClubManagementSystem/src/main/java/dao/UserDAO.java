@@ -17,8 +17,6 @@ import model.Event;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.InputStream;
-import util.DBConnection;
 
 public class UserDAO {
     public User login(String email, String password) {
