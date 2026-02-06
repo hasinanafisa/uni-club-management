@@ -1,15 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dao.AnnouncementDAO;
+import dao.ClubDAO;
 import dao.ClubMemberDAO;
-import jakarta.servlet.*;
+import dao.EventDAO;
+import dao.TaskDAO;
+
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import java.io.IOException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import model.Club;
+import model.Task;
 import model.User;
+
+import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/student/clubDashboard")
 public class ClubDashboardServlet extends HttpServlet {
@@ -19,6 +28,8 @@ public class ClubDashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+
+        // Check login
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -26,17 +37,45 @@ public class ClubDashboardServlet extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
 
-        ClubMemberDAO cmDAO = new ClubMemberDAO();
-        Integer clubId = cmDAO.getStudentClubId(user.getUserId());
+        ClubMemberDAO memberDAO = new ClubMemberDAO();
+        Integer clubId = memberDAO.getStudentClubId(user.getUserId());
 
-        //Student not in any club
+        // Student not in any club
         if (clubId == null) {
             response.sendRedirect(request.getContextPath() + "/student/clubs");
             return;
         }
 
-        //Student is member → allow dashboard
+        // Load club
+        ClubDAO clubDAO = new ClubDAO();
+        Club club = clubDAO.getClubById(clubId);
+
+        if (club == null) {
+            response.sendRedirect(request.getContextPath() + "/student/clubs");
+            return;
+        }
+
+        // Load tasks
+        TaskDAO taskDAO = new TaskDAO();
+        List<Task> tasks = taskDAO.getTasksByUser(clubId, user.getUserId());
+
+        // Load counts
+        int memberCount = memberDAO.getMemberCount(clubId);
+
+        EventDAO eventDAO = new EventDAO();
+        int upcomingEventCount = eventDAO.getUpcomingEventCount(clubId);
+
+        AnnouncementDAO announcementDAO = new AnnouncementDAO();
+        int announcementCount = announcementDAO.getAnnouncementCount(clubId);
+
+        // Send data to JSP
+        request.setAttribute("club", club);
         request.setAttribute("clubId", clubId);
+        request.setAttribute("tasks", tasks);
+        request.setAttribute("memberCount", memberCount);
+        request.setAttribute("upcomingEventCount", upcomingEventCount);
+        request.setAttribute("announcementCount", announcementCount);
+
         request.getRequestDispatcher("/student/clubDashboard.jsp")
                .forward(request, response);
     }

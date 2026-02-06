@@ -19,11 +19,11 @@
 
     <nav class="sidebar" id="sidebar">
         <a href="home.jsp"><i class="fa-solid fa-house"></i> HOME</a>
-        <a href="${pageContext.request.contextPath}/student/clubs"><i class="fa-solid fa-users"></i> CLUB LIST</a>
+        <a href="${pageContext.request.contextPath}/student/clublist.jsp"><i class="fa-solid fa-users"></i> CLUB LIST</a>
         <a href="${pageContext.request.contextPath}/student/clubDashboard"><i class="fa-solid fa-chart-line"></i> CLUB DASHBOARD</a>
-        <a href="upcomingEvents.jsp"><i class="fa-solid fa-calendar-check"></i> UPCOMING EVENTS</a>
-        <a href="announcement.jsp"><i class="fa-solid fa-bullhorn"></i> ANNOUNCEMENT</a>
-        <a href="myProfile.jsp"><i class="fa-solid fa-user"></i> MY PROFILE</a>
+        <a href="${pageContext.request.contextPath}/student/upcomingEvents"><i class="fa-solid fa-calendar-check"></i> UPCOMING EVENTS</a>
+        <a href="${pageContext.request.contextPath}/announcements"><i class="fa-solid fa-bullhorn"></i> ANNOUNCEMENT</a>
+        <a href="${pageContext.request.contextPath}/StudentProfileServlet"><i class="fa-solid fa-user"></i> MY PROFILE</a>
     </nav>
 
     <script>

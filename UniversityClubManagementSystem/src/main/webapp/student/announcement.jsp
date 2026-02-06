@@ -7,32 +7,14 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*, model.Announcement"%>
-<!-- dummy data start -->
 <%
-List<Announcement> announcements = new ArrayList<>();
+List<Announcement> announcements =
+        (List<Announcement>) request.getAttribute("announcements");
 
-Announcement a1 = new Announcement();
-a1.setAnnounceID(1);
-a1.setAnnounceTitle("Club Registration Open");
-a1.setAnnounceContent("All students are welcome to register for clubs starting this week.");
-a1.setAnnounceCategory("GENERAL");
-
-Announcement a2 = new Announcement();
-a2.setAnnounceID(2);
-a2.setAnnounceTitle("Important: AGM Meeting");
-a2.setAnnounceContent("Attendance is compulsory for all committee members.");
-a2.setAnnounceCategory("IMPORTANT");
-
-Announcement a3 = new Announcement();
-a3.setAnnounceID(3);
-a3.setAnnounceTitle("Sports Day 2026");
-a3.setAnnounceContent("Join us for inter-faculty sports competitions this March.");
-a3.setAnnounceCategory("EVENT");
-
-announcements.add(a1);
-announcements.add(a2);
-announcements.add(a3);
-%> <!-- dummy data end -->
+if (announcements == null) {
+    announcements = new ArrayList<>();
+}
+%>
 
 <!DOCTYPE html>
 <html>
@@ -93,30 +75,29 @@ announcements.add(a3);
         <div class="card-container">
             <% for (Announcement a : announcements) { %>
                 <div class="card"
-                data-title="<%= a.getAnnounceTitle().toLowerCase() %>"
-                data-category="<%= a.getAnnounceCategory() %>">
+                     data-title="<%= a.getTitle().toLowerCase() %>"
+                     data-category="<%= a.getCategory() %>">
 
-               <i class="fa-solid 
-                   <%= a.getAnnounceCategory().equals("IMPORTANT") ? "fa-circle-exclamation" :
-                       a.getAnnounceCategory().equals("EVENT") ? "fa-calendar-days" :
-                       "fa-bullhorn" %>"></i>
+                    <i class="fa-solid 
+                        <%= a.getCategory().equalsIgnoreCase("IMPORTANT") ? "fa-circle-exclamation" :
+                            a.getCategory().equalsIgnoreCase("EVENT") ? "fa-calendar-days" :
+                            "fa-bullhorn" %>"></i>
 
-               <h3><%= a.getAnnounceTitle() %></h3>
+                    <h3><%= a.getTitle() %></h3>
 
-               <p>
-                   <%= a.getAnnounceContent().length() > 100
-                       ? a.getAnnounceContent().substring(0,100) + "..."
-                       : a.getAnnounceContent()
-                   %>
-               </p>
+                    <p>
+                        <%= a.getContent().length() > 100
+                            ? a.getContent().substring(0,100) + "..."
+                            : a.getContent()
+                        %>
+                    </p>
 
-               <div class="card-actions">
-                   <a href="announcementDetails.jsp?id=<%= a.getAnnounceID() %>"
-                         class="view-btn">Read More</a>
-               </div>
-           </div>
-
-
+                    <div class="card-actions">
+                        <a href="${pageContext.request.contextPath}/student/announcementDetails?id=<%= a.getAnnouncementId() %>">
+                            Read more
+                        </a>
+                    </div>
+                </div>
             <% } %>
 
             <% if (announcements.isEmpty()) { %>
@@ -125,6 +106,7 @@ announcements.add(a3);
                 </p>
             <% } %>
         </div>
+
     </div>
 </div>
 

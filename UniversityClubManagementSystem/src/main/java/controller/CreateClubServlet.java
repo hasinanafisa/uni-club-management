@@ -2,19 +2,17 @@
  * @izyanie
  * @28/01/2026
  */
-
 package controller;
 
 import model.Club;
 import model.User;
 import dao.ClubDAO;
 import dao.ClubMemberDAO;
-
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -26,6 +24,7 @@ import java.sql.SQLException;
 @MultipartConfig
 @WebServlet("/admin/createClub")
 public class CreateClubServlet extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,9 +35,10 @@ public class CreateClubServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
+
         User user = (User) session.getAttribute("user");
-        
-        // 🔐 Lecturer-only access (DB-based, correct)
+
+        // Lecturer‑only access
         if (!"Lecturer".equals(user.getUserType())) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -48,38 +48,37 @@ public class CreateClubServlet extends HttpServlet {
         String description = request.getParameter("description");
         String mission = request.getParameter("mission");
         String achievements = request.getParameter("achievements");
-        
+
         if (clubName == null || clubName.isBlank()) {
             request.setAttribute("error", "Club name is required");
-            request.getRequestDispatcher("/admin/createClub.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/createClub.jsp")
+                   .forward(request, response);
             return;
         }
-        
+
         Club c = new Club();
         c.setClubName(clubName);
         c.setDescription(description);
         c.setCreatedBy(user.getUserId());
         c.setMission(mission);
         c.setAchievements(achievements);
-        
-        // 📷 Handle logo upload
+
+        // Handle logo upload
         Part logoPart = request.getPart("logoPath");
         String logoFileName = "default-logo.png";
 
         if (logoPart != null && logoPart.getSize() > 0) {
-
             logoFileName = Paths.get(logoPart.getSubmittedFileName())
                                 .getFileName().toString();
 
             Path uploadDir = Paths.get(
-                System.getProperty("user.home"),
-                "uni-club-uploads"
+                    System.getProperty("user.home"),
+                    "uni-club-uploads"
             );
 
             Files.createDirectories(uploadDir);
 
             Path target = uploadDir.resolve(logoFileName);
-
             try (InputStream in = logoPart.getInputStream()) {
                 Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -95,10 +94,12 @@ public class CreateClubServlet extends HttpServlet {
             cmDAO.addAdvisor(user.getUserId(), clubId);
 
             response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
-        } catch (IOException | SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("error", "Failed to create club.");
-            request.getRequestDispatcher("/admin/createClub.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/createClub.jsp")
+                   .forward(request, response);
         }
     }
 }

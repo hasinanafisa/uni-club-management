@@ -3,19 +3,20 @@
     Created on : 2 Jan 2026, 11:30:29 am
     Author     : USER
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.Event"%>
+
 <%
-    String title = request.getParameter("title");
-    String date = request.getParameter("date");
-    String status = request.getParameter("status");
+    Event event = (Event) request.getAttribute("event");
+    boolean hasJoined = request.getAttribute("hasJoined") != null
+                        && (Boolean) request.getAttribute("hasJoined");
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %> - Event Details</title>
+    <title><%= event.getEventTitle() %> | Event Details</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -24,30 +25,46 @@
 <div class="home-page">
     <div class="home-container">
 
-        <!-- HEADER -->
-        <div class="event-header">
-            <h1><%= title %></h1>
-            <p class="subtitle">Organised by the club</p>
+        <!-- BANNER -->
+        <div class="event-banner">
+            <img src="${pageContext.request.contextPath}/eventImage?id=<%= event.getEventID() %>&type=banner"
+                 class="banner-img">
         </div>
 
-        <!-- MAIN CONTENT -->
+        <div class="event-header">
+            <h1><%= event.getEventTitle() %></h1>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <%
+            if (request.getAttribute("success") != null) {
+        %>
+            <div class="alert-success">
+                <%= request.getAttribute("success") %>
+            </div>
+        <%
+            }
+        %>
+
+        <!-- ================= DETAILS CARD ================= -->
         <div class="event-details-card">
 
             <!-- INFO ROW -->
             <div class="event-info-row">
+
                 <div class="event-info">
                     <i class="fa-solid fa-calendar-days"></i>
                     <div>
                         <span>Date</span>
-                        <p><%= date %></p>
+                        <p><%= event.getEventDate() %></p>
                     </div>
                 </div>
 
                 <div class="event-info">
-                    <i class="fa-solid fa-circle-info"></i>
+                    <i class="fa-solid fa-clock"></i>
                     <div>
-                        <span>Status</span>
-                        <p><%= status %></p>
+                        <span>Time</span>
+                        <p><%= event.getEventTime() %></p>
                     </div>
                 </div>
 
@@ -55,43 +72,54 @@
                     <i class="fa-solid fa-location-dot"></i>
                     <div>
                         <span>Location</span>
-                        <p>Main Campus Hall</p>
+                        <p><%= event.getEventLoc() %></p>
                     </div>
                 </div>
+
             </div>
 
-            <!-- DESCRIPTION -->
+            <!-- ================= DESCRIPTION ================= -->
             <div class="event-description">
                 <h3>📌 About This Event</h3>
-                <p>
-                    This event is organised by the club to encourage participation
-                    and engagement among members. Participants will gain valuable
-                    experience, networking opportunities, and hands-on activities.
-                </p>
+                <p><%= event.getEventDesc() %></p>
             </div>
 
-                <!-- ACTIONS -->
-                <div class="event-actions">
-                    <button class="join-btn" onclick="confirmJoin(this)">Join Event</button>
-                    <a href="upcomingEvents.jsp" class="back-link">Back to Events</a>
+            <!-- QR CODE (only after joining) -->
+            <%
+                if (hasJoined) {
+            %>
+                <div class="event-qr">
+                    <h3>Attendance QR Code</h3>
+                    <img src="${pageContext.request.contextPath}/eventImage?id=<%= event.getEventID() %>&type=qr"
+                         class="qr-img">
                 </div>
-            </div>
-         </div>
-   </div>
-        <script>
-            function confirmJoin(button) {
-                const confirmed = confirm("Are you sure you want to join this event?");
-
-                if (confirmed) {
-                    alert("You have successfully joined the event!");
-
-                   // Update button state
-                    button.innerText = "Joined";
-                    button.classList.remove("join-btn");
-                    button.classList.add("active-btn");
-                    button.disabled = true;
+            <%
                 }
-            }
-        </script>
+            %>
+
+            <!-- ACTIONS -->
+            <div class="event-actions">
+                <%
+                    if (!hasJoined) {
+                %>
+                    <form action="${pageContext.request.contextPath}/student/joinEvent" method="post">
+                        <input type="hidden" name="eventId" value="<%= event.getEventID() %>">
+                        <button type="submit" class="join-btn">Join Event</button>
+                    </form>
+                <%
+                    } else {
+                %>
+                    <button class="joined-btn" disabled>Joined</button>
+                <%
+                    }
+                %>
+
+                <a href="${pageContext.request.contextPath}/student/upcomingEvents"
+                   class="back-link">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+

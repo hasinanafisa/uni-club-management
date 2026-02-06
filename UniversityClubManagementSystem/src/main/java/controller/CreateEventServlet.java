@@ -1,10 +1,6 @@
-/**
- * @izyanie
- * @27/12/2025
- */
-
 package controller;
 
+import dao.ClubMemberDAO;
 import dao.EventDAO;
 import model.Event;
 import model.User;
@@ -13,96 +9,124 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.*;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Time;
 
-@MultipartConfig
 @WebServlet("/admin/createEvent")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 5 * 1024 * 1024,
+        maxRequestSize = 10 * 1024 * 1024
+)
 public class CreateEventServlet extends HttpServlet {
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Safety: must be logged in
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        
-        Event e = new Event();
-        
+
+        request.getRequestDispatcher("/admin/createEvent.jsp")
+               .forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        User user = (User) session.getAttribute("user");
+
+        ClubMemberDAO cmDAO = new ClubMemberDAO();
+        int clubId = cmDAO.getClubIdByUser(user.getUserId());
+
+        if (clubId == 0) {
+            request.setAttribute("error", "No club found for this user.");
+            request.getRequestDispatcher("/admin/createEvent.jsp")
+                   .forward(request, response);
+            return;
+        }
+
         String dateStr = request.getParameter("eventDate");
         String timeStr = request.getParameter("eventTime");
-        
+
         if (dateStr == null || timeStr == null) {
             throw new ServletException("Date or time missing");
         }
-        if (timeStr != null && timeStr.length() == 5) {
-            timeStr = timeStr + ":00";
+
+        if (timeStr.length() == 5) {
+            timeStr += ":00";
         }
 
-        // TEXT FIELDS
+        Event e = new Event();
+        e.setClubId(clubId);
+        e.setCreatedBy(user.getUserId());
         e.setEventTitle(request.getParameter("eventTitle"));
         e.setEventDesc(request.getParameter("eventDesc"));
         e.setEventLoc(request.getParameter("eventLoc"));
         e.setEventDate(Date.valueOf(dateStr));
         e.setEventTime(Time.valueOf(timeStr));
-        
-        // IMAGE UPLOADS
+
+        // Upload directory
+        Path uploadDir = Paths.get(
+                System.getProperty("user.home"),
+                "uni-club-uploads",
+                "events"
+        );
+        Files.createDirectories(uploadDir);
+
         Part bannerPart = request.getPart("bannerImagePath");
+        String bannerFileName = "default-banner.png";
+
+        if (bannerPart != null && bannerPart.getSize() > 0) {
+            bannerFileName = Paths.get(bannerPart.getSubmittedFileName())
+                    .getFileName().toString();
+
+            Path target = uploadDir.resolve(bannerFileName);
+            try (InputStream in = bannerPart.getInputStream()) {
+                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        e.setBannerImagePath(bannerFileName);
+
         Part qrPart = request.getPart("qrPath");
+        String qrFileName = "default-qr.png";
 
-        // Save file names only
-        if (bannerPart != null && bannerPart.getSize() > 0) {
-            e.setBannerImagePath(bannerPart.getSubmittedFileName());
-        }
         if (qrPart != null && qrPart.getSize() > 0) {
-            e.setQrPath(qrPart.getSubmittedFileName());
-        }
+            qrFileName = Paths.get(qrPart.getSubmittedFileName())
+                    .getFileName().toString();
 
-        // Save file names with default if null
-        if (e.getBannerImagePath() == null) {
-            e.setBannerImagePath("default-banner.png");
+            Path target = uploadDir.resolve(qrFileName);
+            try (InputStream in = qrPart.getInputStream()) {
+                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+            }
         }
-        if (e.getQrPath() == null) {
-            e.setQrPath("default-qr.png");
-        }
-        
-        String uploadPath = getServletContext().getRealPath("") + "uploads";
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) uploadDir.mkdir();
-
-        if (bannerPart != null && bannerPart.getSize() > 0) {
-            String fileName = Paths.get(bannerPart.getSubmittedFileName())
-                                    .getFileName().toString();
-
-            bannerPart.write(uploadPath + File.separator + fileName);
-            e.setBannerImagePath(fileName);
-        }
-        if (qrPart != null && qrPart.getSize() > 0) {
-            String fileName = Paths.get(qrPart.getSubmittedFileName())
-                                    .getFileName().toString();
-
-            qrPart.write(uploadPath + File.separator + fileName);
-            e.setQrPath(fileName);
-        }
-        
-        User user = (User) session.getAttribute("user");
-        e.setCreatedBy(user.getUserId());
-        
-        int clubId = (int) session.getAttribute("clubId");
-        e.setClubID(clubId);
+        e.setQrPath(qrFileName);
 
         EventDAO dao = new EventDAO();
+
         try {
             dao.createEvent(e);
-            response.sendRedirect(request.getContextPath() + "/admin/manageEvent.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
         } catch (SQLException ex) {
             request.setAttribute("error", "Failed to create event.");
-            request.getRequestDispatcher("admin/createEvent.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/createEvent.jsp")
+                   .forward(request, response);
         }
     }
 }
