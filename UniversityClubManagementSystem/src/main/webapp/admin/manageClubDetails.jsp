@@ -62,7 +62,7 @@
                     <!-- TOP: Club Info -->
                     <div class="club-info">
                         <div class="club-logo">
-                            <img src="${pageContext.request.contextPath}/uploads/<%= club.getLogoPath() %>" />
+                            <img src="${pageContext.request.contextPath}/${club.logoPath}"/>
                         </div>
 
                         <div class="club-meta">

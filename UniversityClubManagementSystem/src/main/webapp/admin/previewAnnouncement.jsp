@@ -62,17 +62,16 @@
                 </p>
 
                 <!-- IMAGE -->
-                <% if (a.getImagePath() != null && !a.getImagePath().startsWith("default")) { %>
-                    <img src="<%= request.getContextPath() %>/uploads/announcements/<%= a.getImagePath() %>"
-                         style="width:75%; margin-top:30px; border-radius:16px;">
+                <% if (a.getImagePath() != null && !a.getImagePath().contains("default")) { %>
+                    <img src="<%= request.getContextPath() %>/<%= a.getImagePath() %>"
+                        style="width:75%; margin-top:30px; border-radius:16px;">
                 <% } %>
 
                 <!-- ATTACHMENT -->
-                <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().startsWith("default")) { %>
+                <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().contains("default")) { %>
                     <p style="margin-top:25px;">
                         <strong>Attachment: </strong>
-                        <a href="<%= request.getContextPath() %>/uploads/announcements/<%= a.getAttachmentPath() %>"
-                           target="_blank">
+                        <a href="<%= request.getContextPath() %>/<%= a.getAttachmentPath() %>" target="_blank">
                             <%= a.getAttachmentPath() %>
                         </a>
                     </p>

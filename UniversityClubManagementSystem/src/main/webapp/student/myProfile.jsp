@@ -90,7 +90,7 @@
 
                         <div class="events-list">
                             <div class="events-title">
-                                Event Name | Role | Date
+                                Event Name | Date
                             </div>
 
                             <% if (events != null && !events.isEmpty()) { 

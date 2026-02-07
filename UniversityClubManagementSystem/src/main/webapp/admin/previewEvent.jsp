@@ -42,16 +42,17 @@
 
                 <!-- Banner -->
                 <div class="preview-banner">
-                    <img src="<%= request.getContextPath() %>/uploads/events/<%= 
-                        e.getBannerImagePath() != null ? e.getBannerImagePath() : "default-banner.png" %>"
-                        alt="Banner">
+                    <img src="<%= request.getContextPath() %>/<%= 
+                        e.getBannerImagePath() != null ? e.getBannerImagePath() : "uploads/events/default-banner.png" 
+                        %>" alt="Banner">
                 </div>
 
                 <!-- QR -->
                 <div class="preview-qr">
                     <h4>Attendance QR</h4>
-                    <img src="<%= request.getContextPath() %>/uploads/events/<%= e.getQrPath() %>"
-                        alt="Attendance QR">
+                    <img src="<%= request.getContextPath() %>/<%= 
+                        e.getQrPath() != null ? e.getQrPath() : "uploads/events/default-qr.png" 
+                        %>" alt="Attendance QR">
                 </div>
 
                 <!-- Title + Description -->

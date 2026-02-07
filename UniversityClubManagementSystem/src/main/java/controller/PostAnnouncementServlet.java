@@ -100,12 +100,8 @@ public class PostAnnouncementServlet extends HttpServlet {
         a.setEventId(Integer.parseInt(request.getParameter("eventId")));
 
         // 📁 Base upload directory
-        Path uploadDir = Paths.get(
-                System.getProperty("user.home"),
-                "uploads",
-                "announcements"
-        );
-
+        String uploadPath = getServletContext().getRealPath("/uploads/announcements");
+        Path uploadDir = Paths.get(uploadPath);
         // Ensure directory exists
         Files.createDirectories(uploadDir);
         
@@ -121,7 +117,7 @@ public class PostAnnouncementServlet extends HttpServlet {
                 Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
             }
         }
-        a.setImagePath(imageFileName);
+        a.setImagePath("uploads/announcements/" + imageFileName);
         
         Part attachmentPart = request.getPart("attachmentPath");
         String attachmentFileName = "default-attachment.pdf";
@@ -134,7 +130,7 @@ public class PostAnnouncementServlet extends HttpServlet {
                 Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
             }
         }
-        a.setAttachmentPath(attachmentFileName);
+        a.setAttachmentPath("uploads/announcements/" + attachmentFileName);
 
         AnnouncementDAO dao = new AnnouncementDAO();
         try {

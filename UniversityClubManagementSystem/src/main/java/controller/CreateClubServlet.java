@@ -62,29 +62,24 @@ public class CreateClubServlet extends HttpServlet {
         c.setAchievements(achievements);
         
         // 📷 Handle logo upload
+        String uploadPath = getServletContext().getRealPath("/uploads/clubs");
+        Path uploadDir = Paths.get(uploadPath);
+        Files.createDirectories(uploadDir);
+
         Part logoPart = request.getPart("logoPath");
         String logoFileName = "default-logo.png";
 
         if (logoPart != null && logoPart.getSize() > 0) {
-
             logoFileName = Paths.get(logoPart.getSubmittedFileName())
-                                .getFileName().toString();
-
-            Path uploadDir = Paths.get(
-                System.getProperty("user.home"),
-                "uploads"
-            );
-
-            Files.createDirectories(uploadDir);
+                                .getFileName()
+                                .toString();
 
             Path target = uploadDir.resolve(logoFileName);
-
-            try (InputStream in = logoPart.getInputStream()) {
-                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-            }
+            Files.copy(logoPart.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        c.setLogoPath(logoFileName);
+        // store RELATIVE path
+        c.setLogoPath("uploads/clubs/" + logoFileName);
 
         try {
             ClubDAO clubDAO = new ClubDAO();
