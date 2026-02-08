@@ -3,6 +3,7 @@
     Created on : 30 Dec 2025, 12:32:48 pm
     Author     : izyanie
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Announcement"%>
 <%@page import="model.Event"%>

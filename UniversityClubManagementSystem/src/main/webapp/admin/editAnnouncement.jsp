@@ -3,6 +3,7 @@
     Created on : 30 Dec 2025, 12:54:42 pm
     Author     : izyanie
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Announcement"%>
@@ -81,7 +82,7 @@
 
                 <!-- CONTENT -->
                 <textarea name="content" rows="4" required>
-    <%= a.getContent() %>
+                    <%= a.getContent() %>
                 </textarea>
 
                 <!-- CATEGORY -->
