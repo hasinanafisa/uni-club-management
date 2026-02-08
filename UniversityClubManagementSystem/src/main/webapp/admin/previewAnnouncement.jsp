@@ -63,7 +63,7 @@
 
                 <!-- IMAGE -->
                 <% if (a.getImagePath() != null && !a.getImagePath().contains("default")) { %>
-                    <img src="<%= request.getContextPath() %>/<%= a.getImagePath() %>"
+                    <img src="${pageContext.request.contextPath}/announcementFile?id=<%= a.getAnnouncementId() %>&type=image"
                         style="width:75%; margin-top:30px; border-radius:16px;">
                 <% } %>
 
@@ -71,8 +71,8 @@
                 <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().contains("default")) { %>
                     <p style="margin-top:25px;">
                         <strong>Attachment: </strong>
-                        <a href="<%= request.getContextPath() %>/<%= a.getAttachmentPath() %>" target="_blank">
-                            <%= a.getAttachmentPath() %>
+                        <a href="${pageContext.request.contextPath}/announcementFile?id=<%= a.getAnnouncementId() %>&type=attachment">
+                            Download
                         </a>
                     </p>
                 <% } %>

@@ -11,12 +11,12 @@
 //Announcement a = (Announcement) request.getAttribute("announcement");
 Announcement a = new Announcement(); //dummy data
 
-a.setAnnounceID(1);
-a.setAnnounceTitle("Sports Day 2026");
-a.setAnnounceContent(
+a.setAnnouncementId(1);
+a.setTitle("Sports Day 2026");
+a.setContent(
     "Join us for inter-faculty sports competitions. All students are welcome!"
 );
-a.setAnnounceCategory("EVENT"); //sampe sitok
+a.setCategory("EVENT"); //sampe sitok
 if (a == null) {
     out.println("<p>No announcement found.</p>");
     return;
@@ -26,7 +26,7 @@ if (a == null) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= a.getAnnounceTitle() %></title>
+    <title><%= a.getTitle() %></title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet"
@@ -43,11 +43,11 @@ if (a == null) {
 
             <!-- LEFT CONTENT -->
             <div class="details-main">
-                <h1><%= a.getAnnounceTitle() %></h1>
+                <h1><%= a.getTitle() %></h1>
                 <hr>
 
                 <p class="details-content">
-                    <%= a.getAnnounceContent() %>
+                    <%= a.getContent() %>
                 </p>
 
                 <!-- ATTACHMENTS (dummy for now) -->

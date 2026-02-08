@@ -86,10 +86,7 @@
                     <% if (a.getImagePath() != null && !a.getImagePath().isEmpty()) { %>
                         <p>
                             <strong>Current Image: </strong>
-                            <a href="<%= request.getContextPath() %>/uploads/<%= a.getImagePath() %>"
-                               target="_blank">
-                                <%= a.getImagePath() %>
-                            </a>
+                            <img src="${pageContext.request.contextPath}/announcementFile?id=<%= a.getAnnouncementId() %>&type=image">
                         </p>
                     <% } %>
                     <input type="file" name="imagePath" accept=".jpg,.png,image/jpeg,image/png">
@@ -98,10 +95,7 @@
                     <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().isEmpty()) { %>
                         <p>
                             <strong>Current Attachment:</strong>
-                            <a href="<%= request.getContextPath() %>/uploads/<%= a.getAttachmentPath() %>"
-                               target="_blank">
-                                <%= a.getAttachmentPath() %>
-                            </a>
+                            <a href="${pageContext.request.contextPath}/announcementFile?id=<%= a.getAnnouncementId() %>&type=attachment">
                         </p>
                     <% } %>
                     <input type="file" name="attachmentPath" accept=".pdf,application/pdf">

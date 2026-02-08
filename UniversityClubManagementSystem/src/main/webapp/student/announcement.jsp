@@ -12,22 +12,22 @@
 List<Announcement> announcements = new ArrayList<>();
 
 Announcement a1 = new Announcement();
-a1.setAnnounceID(1);
-a1.setAnnounceTitle("Club Registration Open");
-a1.setAnnounceContent("All students are welcome to register for clubs starting this week.");
-a1.setAnnounceCategory("GENERAL");
+a1.setAnnouncementId(1);
+a1.setTitle("Club Registration Open");
+a1.setContent("All students are welcome to register for clubs starting this week.");
+a1.setCategory("GENERAL");
 
 Announcement a2 = new Announcement();
-a2.setAnnounceID(2);
-a2.setAnnounceTitle("Important: AGM Meeting");
-a2.setAnnounceContent("Attendance is compulsory for all committee members.");
-a2.setAnnounceCategory("IMPORTANT");
+a2.setAnnouncementId(2);
+a2.setTitle("Important: AGM Meeting");
+a2.setContent("Attendance is compulsory for all committee members.");
+a2.setCategory("IMPORTANT");
 
 Announcement a3 = new Announcement();
-a3.setAnnounceID(3);
-a3.setAnnounceTitle("Sports Day 2026");
-a3.setAnnounceContent("Join us for inter-faculty sports competitions this March.");
-a3.setAnnounceCategory("EVENT");
+a3.setAnnouncementId(3);
+a3.setTitle("Sports Day 2026");
+a3.setContent("Join us for inter-faculty sports competitions this March.");
+a3.setCategory("EVENT");
 
 announcements.add(a1);
 announcements.add(a2);
@@ -93,25 +93,25 @@ announcements.add(a3);
         <div class="card-container">
             <% for (Announcement a : announcements) { %>
                 <div class="card"
-                data-title="<%= a.getAnnounceTitle().toLowerCase() %>"
-                data-category="<%= a.getAnnounceCategory() %>">
+                data-title="<%= a.getTitle().toLowerCase() %>"
+                data-category="<%= a.getCategory() %>">
 
                <i class="fa-solid 
-                   <%= a.getAnnounceCategory().equals("IMPORTANT") ? "fa-circle-exclamation" :
-                       a.getAnnounceCategory().equals("EVENT") ? "fa-calendar-days" :
+                   <%= a.getCategory().equals("IMPORTANT") ? "fa-circle-exclamation" :
+                       a.getCategory().equals("EVENT") ? "fa-calendar-days" :
                        "fa-bullhorn" %>"></i>
 
-               <h3><%= a.getAnnounceTitle() %></h3>
+               <h3><%= a.getTitle() %></h3>
 
                <p>
-                   <%= a.getAnnounceContent().length() > 100
-                       ? a.getAnnounceContent().substring(0,100) + "..."
-                       : a.getAnnounceContent()
+                   <%= a.getContent().length() > 100
+                       ? a.getContent().substring(0,100) + "..."
+                       : a.getContent()
                    %>
                </p>
 
                <div class="card-actions">
-                   <a href="announcementDetails.jsp?id=<%= a.getAnnounceID() %>"
+                   <a href="announcementDetails.jsp?id=<%= a.getAnnouncementId() %>"
                          class="view-btn">Read More</a>
                </div>
            </div>

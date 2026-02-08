@@ -57,9 +57,7 @@
                     <% if (event.getBannerImagePath() != null && !event.getBannerImagePath().isEmpty()) { %>
                         <p>
                             <strong>Current Banner: </strong>
-                            <a href="<%= request.getContextPath() %>/uploads/events/<%= event.getBannerImagePath() %>"
-                               target="_blank"> <%= event.getBannerImagePath() %>
-                            </a>
+                            <img src="${pageContext.request.contextPath}/eventImage?id=<%= event.getEventID() %>&type=banner">
                         </p>
                     <% } %>
                     <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png">
@@ -81,12 +79,11 @@
                     <!-- CURRENT QR -->
                     <% if (event.getQrPath() != null && !event.getQrPath().isEmpty()) { %>
                         <p>
-                            <strong>Current Attendance QR: </strong>
-                            <a href="<%= request.getContextPath() %>/uploads/events/<%= event.getQrPath() %>"
-                               target="_blank"> <%= event.getQrPath() %>
-                            </a>
+                            <strong>Current Attendance QR:</strong><br>
+                            <img src="${pageContext.request.contextPath}/eventImage?id=<%= event.getEventID() %>&type=qr">
                         </p>
                     <% } %>
+
                     <input type="file" name="qrPath" accept=".jpg,.png,image/jpeg,image/png">
                     
                     <div class="form-actions">

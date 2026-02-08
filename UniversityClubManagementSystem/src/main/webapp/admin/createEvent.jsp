@@ -56,10 +56,8 @@
                     <label>Location *</label>
                     <input type="text" name="eventLoc" required>
                     
-                    <div class="info-box">
-                        <i class="fa-solid fa-qrcode"></i>
-                        Attendance QR will be generated automatically after event creation.
-                    </div>
+                    <label>Attendance QR *</label>
+                    <input type="file" name="qrPath" accept=".jpg,.png,image/jpeg,image/png">
                     
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">

@@ -40,7 +40,7 @@
         <p class="subtitle">Update club information below</p>
 
         <form class="create-event-form"
-              action="${pageContext.request.contextPath}/admin/updateClub"
+              action="${pageContext.request.contextPath}/admin/editClubDetails"
               method="post"
               enctype="multipart/form-data">
 
@@ -52,9 +52,8 @@
 
             <% if (club.getLogoPath() != null && !club.getLogoPath().contains("default")) { %>
                 <div style="margin-bottom:15px;">
-                    <img src="<%= request.getContextPath() %>/<%= club.getLogoPath() %>"
-                         alt="Club Logo"
-                         style="width:120px; height:120px; object-fit:cover; border-radius:12px;">
+                    <img src="${pageContext.request.contextPath}/clubImage?id=<%= club.getClubId() %>"
+                        style="width:120px; height:120px; object-fit:cover; border-radius:12px;">
                 </div>
             <% } %>
 

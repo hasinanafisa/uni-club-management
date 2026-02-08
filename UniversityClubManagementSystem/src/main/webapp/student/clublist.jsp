@@ -41,8 +41,8 @@
                 for (Club c : clubs) {
             %>
                 <div class="card">
-                    <img src="${pageContext.request.contextPath}/uploads/<%= c.getLogoPath() %>"
-                         alt="Club Logo" class="club-logo">
+                    <img src="${pageContext.request.contextPath}/clubImage?id=<%= c.getClubId() %>"
+                        alt="Club Logo" class="club-logo">
 
                     <h3><%= c.getClubName() %></h3>
                     <p><%= c.getDescription() %></p>
