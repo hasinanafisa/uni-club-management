@@ -1,4 +1,4 @@
-package controller;
+package controller.student;
 
 import dao.ClubMemberDAO;
 import jakarta.servlet.ServletException;

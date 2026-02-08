@@ -2,17 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.student;
 
 import dao.TaskDAO;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import model.User;
 import java.io.IOException;
 
-@WebServlet("/student/addTask")
-public class AddTaskServlet extends HttpServlet {
+@WebServlet("/student/taskAction")
+public class TaskActionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -25,22 +25,28 @@ public class AddTaskServlet extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
-        int clubId = Integer.parseInt(request.getParameter("clubId"));
-        String title = request.getParameter("title");
 
-        if (title == null || title.trim().isEmpty()) {
+        String action = request.getParameter("action");
+        String taskIdStr = request.getParameter("taskId");
+
+        if (action == null || taskIdStr == null) {
             response.sendRedirect(request.getContextPath() + "/student/clubDashboard");
             return;
         }
 
-        TaskDAO dao = new TaskDAO();
+        int taskId = Integer.parseInt(taskIdStr);
+        TaskDAO taskDAO = new TaskDAO();
 
         try {
-            dao.addTask(clubId, user.getUserId(), title);
-            response.sendRedirect(request.getContextPath() + "/student/clubDashboard");
+            if ("done".equals(action)) {
+                taskDAO.markTaskDone(taskId, user.getUserId());
+            } else if ("delete".equals(action)) {
+                taskDAO.deleteTask(taskId, user.getUserId());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/student/clubDashboard");
         }
+
+        response.sendRedirect(request.getContextPath() + "/student/clubDashboard");
     }
 }

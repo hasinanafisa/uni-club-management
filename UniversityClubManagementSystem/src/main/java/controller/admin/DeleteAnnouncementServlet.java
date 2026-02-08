@@ -1,10 +1,11 @@
 /**
  * @izyanie
- * @27/12/2025
+ * @30/12/2025
  */
 
-package controller;
+package controller.admin;
 
+import dao.AnnouncementDAO;
 import dao.ClubMemberDAO;
 import dao.EventDAO;
 import model.User;
@@ -17,10 +18,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import model.Announcement;
 import model.Event;
 
-@WebServlet("/admin/deleteEvent")
-public class DeleteEventServlet extends HttpServlet {
+@WebServlet("/admin/deleteAnnouncement")
+public class DeleteAnnouncementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,27 +40,36 @@ public class DeleteEventServlet extends HttpServlet {
             return;
         }
 
-        int eventID;
+        // 📌 Get announcement ID
+        int announcementId;
         try {
-            eventID = Integer.parseInt(request.getParameter("id"));
+            announcementId = Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
+            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
+            return;
+        }
+
+        AnnouncementDAO dao = new AnnouncementDAO();
+        Announcement announcement = dao.getAnnouncementById(announcementId);
+        if (announcement == null) {
+            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
         
-        EventDAO dao = new EventDAO();
-        Event event = dao.getEventById(eventID);
+        // 🔐 Ownership check via EVENT → CLUB
+        EventDAO eventDAO = new EventDAO();
+        Event event = eventDAO.getEventById(announcement.getEventId());
+
         if (event == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
+            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
         
-        // 🔐 Ownership check (event must belong to user's club)
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int userClubId = cmDAO.getClubIdByUser(user.getUserId());
 
         if (event.getClubId() != userClubId) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
+            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
         
@@ -66,23 +77,21 @@ public class DeleteEventServlet extends HttpServlet {
         Path uploadDir = Paths.get(
             System.getProperty("user.home"),
             "uni-club-uploads",
-            "events"
+            "announcements"
         );
-
-        deleteFileIfExists(uploadDir, event.getBannerImagePath());
-        deleteFileIfExists(uploadDir, event.getQrPath());
-        
+        deleteFileIfExists(uploadDir, announcement.getImagePath());
+        deleteFileIfExists(uploadDir, announcement.getAttachmentPath());
+                
         try {
-            dao.deleteEvent(eventID);
+            dao.deleteAnnouncement(announcementId);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        response.sendRedirect(request.getContextPath() + "/admin/manageEvent");
+        response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
     }
     
     private void deleteFileIfExists(Path dir, String fileName) {
-        if (fileName == null || fileName.isBlank()
-                || fileName.startsWith("default")) {
+        if (fileName == null || fileName.isBlank() || fileName.startsWith("default")) {
             return;
         }
 

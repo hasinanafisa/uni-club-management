@@ -1,4 +1,4 @@
-package controller;
+package controller.student;
 
 import dao.*;
 import jakarta.servlet.*;

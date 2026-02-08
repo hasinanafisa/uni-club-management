@@ -3,7 +3,7 @@
  * @27/12/2025
  */
 
-package controller;
+package controller.admin;
 
 import dao.ClubMemberDAO;
 import dao.EventDAO;
@@ -15,12 +15,11 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.*;
+import util.UploadUtil;
 
 @WebServlet("/admin/createEvent")
 @MultipartConfig(
@@ -97,40 +96,34 @@ public class CreateEventServlet extends HttpServlet {
         e.setEventLoc(request.getParameter("eventLoc"));
         e.setEventDate(Date.valueOf(dateStr));
         e.setEventTime(Time.valueOf(timeStr));
-        
-        // 📁 Base upload directory
-        String uploadPath = getServletContext().getRealPath("/uploads/events");
-        Path uploadDir = Paths.get(uploadPath);
-        // Ensure directory exists
-        Files.createDirectories(uploadDir);
 
         // Banner image
         Part bannerPart = request.getPart("bannerImagePath");
-        String bannerFileName = "default-banner.jpg";
-        if (bannerPart != null && bannerPart.getSize() > 0) {
-            bannerFileName = Paths.get(bannerPart.getSubmittedFileName())
-                                  .getFileName()
-                                  .toString();
-            Path target = uploadDir.resolve(bannerFileName);
-            try (InputStream in = bannerPart.getInputStream()) {
-                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-            }
+        String bannerPath = null;
+        try {
+            bannerPath = UploadUtil.upload(
+                    bannerPart,
+                    "events",
+                    "default-banner.png"
+            );
+        } catch (Exception ex) {
+            System.getLogger(CreateEventServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        e.setBannerImagePath("uploads/events/" + bannerFileName);
+        e.setBannerImagePath(bannerPath);
         
         // Attendance QR
         Part qrPart = request.getPart("qrPath");
-        String qrFileName = "default-qr.jpg";
-        if (qrPart != null && qrPart.getSize() > 0) {
-            qrFileName = Paths.get(qrPart.getSubmittedFileName())
-                                  .getFileName()
-                                  .toString();
-            Path target = uploadDir.resolve(qrFileName);
-            try (InputStream in = bannerPart.getInputStream()) {
-                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-            }
+        String qrPath = null;
+        try {
+            qrPath = UploadUtil.upload(
+                    qrPart,
+                    "events/event-qr",
+                    "default-qr.png"
+            );
+        } catch (Exception ex) {
+            System.getLogger(CreateEventServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        e.setQrPath("uploads/events/" + qrFileName);
+        e.setQrPath(qrPath);
         
         EventDAO dao = new EventDAO();
         try {

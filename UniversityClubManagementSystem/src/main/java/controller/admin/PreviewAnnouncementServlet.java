@@ -1,5 +1,4 @@
-
-package controller;
+package controller.admin;
 
 import dao.AnnouncementDAO;
 import dao.ClubMemberDAO;

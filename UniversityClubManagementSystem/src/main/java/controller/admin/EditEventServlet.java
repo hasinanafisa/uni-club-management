@@ -3,8 +3,9 @@
  * @27/12/2025
  */
 
-package controller;
+package controller.admin;
 
+import util.UploadUtil;
 import dao.EventDAO;
 import model.Event;
 import model.User;
@@ -14,11 +15,6 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.*;
 
 @WebServlet("/admin/editEvent")
@@ -101,44 +97,38 @@ public class EditEventServlet extends HttpServlet {
         e.setEventDate(Date.valueOf(dateStr));
         e.setEventTime(Time.valueOf(timeStr));
         
-        // 📁 upload dir (same pattern as createEvent / createClub)
-        Path uploadDir = Paths.get(
-            System.getProperty("user.home"),
-            "uni-club-uploads",
-            "events"
-        );
-        Files.createDirectories(uploadDir);
-        
-        // 🔹 Banner
         Part bannerPart = request.getPart("bannerImagePath");
-        String bannerFile = existing.getBannerImagePath();
+        Part qrPart = request.getPart("qrPath");
+
+        String bannerPath = existing.getBannerImagePath();
+        String qrPath = existing.getQrPath();
 
         if (bannerPart != null && bannerPart.getSize() > 0) {
-            bannerFile = Paths.get(bannerPart.getSubmittedFileName())
-                              .getFileName().toString();
-
-            try (InputStream in = bannerPart.getInputStream()) {
-                Files.copy(in, uploadDir.resolve(bannerFile),
-                           StandardCopyOption.REPLACE_EXISTING);
+            try {
+                bannerPath = UploadUtil.upload(
+                        bannerPart,
+                        "events",
+                        "default-banner.png"
+                );      
+            } catch (Exception ex) {
+                System.getLogger(EditEventServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
-        
-        // 🔹 QR
-        Part qrPart = request.getPart("qrPath");
-        String qrFile = existing.getQrPath();
 
         if (qrPart != null && qrPart.getSize() > 0) {
-            qrFile = Paths.get(qrPart.getSubmittedFileName())
-                          .getFileName().toString();
-
-            try (InputStream in = qrPart.getInputStream()) {
-                Files.copy(in, uploadDir.resolve(qrFile),
-                           StandardCopyOption.REPLACE_EXISTING);
+            try {
+                qrPath = UploadUtil.upload(
+                        qrPart,
+                        "events/event-qr",
+                        "default-qr.png"
+                );      
+            } catch (Exception ex) {
+                System.getLogger(EditEventServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
-        
-        e.setBannerImagePath(bannerFile);
-        e.setQrPath(qrFile);
+
+        e.setBannerImagePath(bannerPath);
+        e.setQrPath(qrPath);
 
         try {
             dao.updateEvent(e);

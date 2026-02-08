@@ -8,7 +8,7 @@
  * @author Hasina
  */
 
-package controller;
+package controller.student;
 
 import dao.UserDAO;
 import model.User;

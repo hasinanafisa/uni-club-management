@@ -3,8 +3,9 @@
  * @28/01/2026
  */
 
-package controller;
+package controller.admin;
 
+import util.UploadUtil;
 import model.Club;
 import model.User;
 import dao.ClubDAO;
@@ -15,11 +16,9 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 
 @MultipartConfig
@@ -62,24 +61,18 @@ public class CreateClubServlet extends HttpServlet {
         c.setAchievements(achievements);
         
         // 📷 Handle logo upload
-        String uploadPath = getServletContext().getRealPath("/uploads/clubs");
-        Path uploadDir = Paths.get(uploadPath);
-        Files.createDirectories(uploadDir);
-
         Part logoPart = request.getPart("logoPath");
-        String logoFileName = "default-logo.png";
-
-        if (logoPart != null && logoPart.getSize() > 0) {
-            logoFileName = Paths.get(logoPart.getSubmittedFileName())
-                                .getFileName()
-                                .toString();
-
-            Path target = uploadDir.resolve(logoFileName);
-            Files.copy(logoPart.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+        String logoPath = null;
+        try {
+            logoPath = UploadUtil.upload(
+                    logoPart,
+                    "clubs",
+                    "default-logo.png"
+            );
+        } catch (Exception ex) {
+            System.getLogger(CreateClubServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-
-        // store RELATIVE path
-        c.setLogoPath("uploads/clubs/" + logoFileName);
+        c.setLogoPath(logoPath);
 
         try {
             ClubDAO clubDAO = new ClubDAO();

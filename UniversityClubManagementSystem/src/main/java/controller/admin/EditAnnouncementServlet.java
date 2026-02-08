@@ -3,8 +3,9 @@
  * @30/12/2025
  */
 
-package controller;
+package controller.admin;
 
+import util.UploadUtil;
 import dao.AnnouncementDAO;
 import dao.ClubMemberDAO;
 import dao.EventDAO;
@@ -17,11 +18,6 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -114,40 +110,38 @@ public class EditAnnouncementServlet extends HttpServlet {
         a.setTitle(request.getParameter("title"));
         a.setContent(request.getParameter("content"));
         a.setCategory(request.getParameter("category"));
-
-        // 📁 upload dir (same pattern as createEvent / createClub)
-        Path uploadDir = Paths.get(
-            System.getProperty("user.home"),
-            "uni-club-uploads",
-            "announcements"
-        );
-        Files.createDirectories(uploadDir);
         
-        // 🔹 Image
         Part imagePart = request.getPart("imagePath");
-        String imageFile = existing.getImagePath();
-        if (imagePart != null && imagePart.getSize() > 0) {
-            imageFile = Paths.get(imagePart.getSubmittedFileName())
-                              .getFileName().toString();
-            try (InputStream in = imagePart.getInputStream()) {
-                Files.copy(in, uploadDir.resolve(imageFile),
-                           StandardCopyOption.REPLACE_EXISTING);
-            }
-        }
-        a.setImagePath(imageFile);
-
-        // 🔹 Attachment
         Part attachmentPart = request.getPart("attachmentPath");
-        String attachmentFile = existing.getAttachmentPath();
-        if (attachmentPart != null && attachmentPart.getSize() > 0) {
-            attachmentFile = Paths.get(attachmentPart.getSubmittedFileName())
-                              .getFileName().toString();
-            try (InputStream in = attachmentPart.getInputStream()) {
-                Files.copy(in, uploadDir.resolve(attachmentFile),
-                           StandardCopyOption.REPLACE_EXISTING);
+        
+        String imagePath = existing.getImagePath();
+        String attachmentPath = existing.getAttachmentPath();
+        
+        if (imagePart != null && imagePart.getSize() > 0) {
+            try {
+                imagePath = UploadUtil.upload(
+                        imagePart,
+                        "announcements",
+                        "default-image.png"
+                );      
+            } catch (Exception ex) {
+                System.getLogger(EditAnnouncementServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
-        a.setAttachmentPath(attachmentFile);
+        a.setImagePath(imagePath);
+        
+        if (attachmentPart != null && attachmentPart.getSize() > 0) {
+            try {
+                attachmentPath = UploadUtil.upload(
+                        attachmentPart,
+                        "announcements",
+                        "default-attachment.pdf"
+                );      
+            } catch (Exception ex) {
+                System.getLogger(EditAnnouncementServlet.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        }
+        a.setAttachmentPath(attachmentPath);
 
         try {
             aDAO.updateAnnouncement(a);

@@ -17,10 +17,9 @@ import java.nio.file.*;
 @WebServlet("/eventImage")
 public class EventImageServlet extends HttpServlet {
 
-    private static final Path IMAGE_DIR = Paths.get(
-            System.getProperty("user.home"),
-            "uni-club-uploads",
-            "events"
+    private static final Path BASE_DIR = Paths.get(
+        System.getProperty("user.home"),
+        "uni-club-uploads"
     );
 
     @Override
@@ -52,8 +51,9 @@ public class EventImageServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-
-        Path file = IMAGE_DIR.resolve(fileName);
+        
+        Path file = BASE_DIR.resolve(fileName);
+        
         if (!Files.exists(file)) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
