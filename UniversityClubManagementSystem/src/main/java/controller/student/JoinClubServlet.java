@@ -40,28 +40,41 @@ public class JoinClubServlet extends HttpServlet {
         }
 
         ClubMemberDAO dao = new ClubMemberDAO();
-
+       
         try {
-            //Already joined?
+
+            // Student can only join ONE club
+            if (dao.hasJoinedAnyClub(user.getUserId())) {
+                session.setAttribute("joinMessage",
+                        "You already joined a club. Leave first before joining another.");
+                response.sendRedirect(request.getContextPath() + "/student/clubs");
+                return;
+            }
+
+            //Already joined this specific club
             if (dao.isMember(user.getUserId(), clubId)) {
-                session.setAttribute("joinMessage", "You already joined this club.");
-                response.sendRedirect(request.getContextPath() + "/student/clubOverview?clubId=" + clubId);
+                session.setAttribute("joinMessage",
+                        "You already joined this club.");
+                response.sendRedirect(request.getContextPath()
+                        + "/student/clubOverview?clubId=" + clubId);
                 return;
             }
 
             //Join club
             dao.addStudent(user.getUserId(), clubId);
 
-            //Success message
-            session.setAttribute("joinMessage", "Successfully joined the club!");
+            session.setAttribute("joinMessage",
+                    "Successfully joined the club!");
 
-            // ➜ Go to dashboard
-            response.sendRedirect(request.getContextPath() + "/student/clubDashboard");
+            response.sendRedirect(request.getContextPath()
+                    + "/student/clubDashboard");
 
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("joinMessage", "Error joining club. Please try again.");
-            response.sendRedirect(request.getContextPath() + "/student/clubs");
+            session.setAttribute("joinMessage",
+                    "Error joining club. Please try again.");
+            response.sendRedirect(request.getContextPath()
+                    + "/student/clubs");
         }
     }
 }

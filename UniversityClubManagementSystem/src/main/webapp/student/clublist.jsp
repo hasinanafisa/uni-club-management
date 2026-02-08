@@ -3,11 +3,6 @@
     Created on : 26 Dec 2025, 10:01:26 pm
     Author     : Razan
 --%>
-
-<%-- 
-    Document   : clublist
-    Created on : 26 Dec 2025
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Club"%>
@@ -32,6 +27,26 @@
 </head>
 
 <body>
+<%
+String joinMessage = (String) session.getAttribute("joinMessage");
+if (joinMessage != null) {
+    session.removeAttribute("joinMessage");
+%>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    Swal.fire({
+        icon: 'info',
+        title: 'Notice',
+        text: "<%= joinMessage %>"
+    });
+</script>
+
+<%
+}
+%>    
+    
 <%@include file="/includes/header.jsp" %>
 
 <div class="home-page">
