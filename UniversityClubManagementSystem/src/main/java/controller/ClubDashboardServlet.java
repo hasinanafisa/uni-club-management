@@ -1,12 +1,22 @@
 package controller;
 
-import dao.*;
-import jakarta.servlet.*;
+import dao.AnnouncementDAO;
+import dao.ClubDAO;
+import dao.ClubMemberDAO;
+import dao.EventDAO;
+import dao.TaskDAO;
+
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import model.Club;
-import model.User;
 import model.Task;
+import model.User;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +28,8 @@ public class ClubDashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+
+        // Check login
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -28,7 +40,7 @@ public class ClubDashboardServlet extends HttpServlet {
         ClubMemberDAO memberDAO = new ClubMemberDAO();
         Integer clubId = memberDAO.getStudentClubId(user.getUserId());
 
-        // Not a member → block access
+        // Student not in any club
         if (clubId == null) {
             response.sendRedirect(request.getContextPath() + "/student/clubs");
             return;
@@ -42,11 +54,10 @@ public class ClubDashboardServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/student/clubs");
             return;
         }
-        
+
+        // Load tasks
         TaskDAO taskDAO = new TaskDAO();
         List<Task> tasks = taskDAO.getTasksByUser(clubId, user.getUserId());
-        request.setAttribute("tasks", tasks);
-
 
         // Load counts
         int memberCount = memberDAO.getMemberCount(clubId);
@@ -57,8 +68,10 @@ public class ClubDashboardServlet extends HttpServlet {
         AnnouncementDAO announcementDAO = new AnnouncementDAO();
         int announcementCount = announcementDAO.getAnnouncementCount(clubId);
 
-        // Send to JSP
+        // Send data to JSP
         request.setAttribute("club", club);
+        request.setAttribute("clubId", clubId);
+        request.setAttribute("tasks", tasks);
         request.setAttribute("memberCount", memberCount);
         request.setAttribute("upcomingEventCount", upcomingEventCount);
         request.setAttribute("announcementCount", announcementCount);

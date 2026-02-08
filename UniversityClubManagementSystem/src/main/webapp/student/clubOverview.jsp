@@ -48,6 +48,49 @@
 
             <!-- CLUB CONTENT -->
             <div class="card-container">
+<<<<<<< HEAD
+
+                <!-- ABOUT -->
+                <div class="card">
+                    <h3>About the Club</h3>
+                    <p>
+                        <%= club.getDescription() != null
+                                ? club.getDescription()
+                                : "This club has no description yet." %>
+                    </p>
+                </div>
+
+                <!-- MISSION -->
+                <div class="card">
+                    <h3>Mission</h3>
+                    <p>
+                        <%= club.getMission() != null && !club.getMission().isBlank()
+                                ? club.getMission()
+                                : "Mission has not been set yet." %>
+                    </p>
+                </div>
+
+                <!-- ACHIEVEMENTS -->
+                <div class="card">
+                    <h3>Achievements</h3>
+                    <p>
+                        <%= club.getAchievements() != null && !club.getAchievements().isBlank()
+                                ? club.getAchievements()
+                                : "No achievements recorded yet." %>
+                    </p>
+                </div>
+
+            </div>
+                    
+            <!-- JOIN BUTTON -->
+            <div style="text-align:center; margin-top:30px;">
+                <form action="${pageContext.request.contextPath}/student/joinClub" method="post">
+                    <input type="hidden" name="clubId" value="<%= club.getClubID() %>">
+                    <button type="submit" class="join-btn">
+                        Join Club
+                    </button>
+                </form>
+            </div>
 
                 <!-- ABOUT -->
                 <div class="card">

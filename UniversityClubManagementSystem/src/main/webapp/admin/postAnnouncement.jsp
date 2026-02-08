@@ -1,17 +1,14 @@
 <%-- 
     Document   : postAnnouncement
-    Created on : 30 Dec 2025, 12:45:17 pm
+    Created on : 30 Dec 2025, 12:45:17 pm
     Author     : izyanie
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Event"%>
-
 <%
     List<Event> events = (List<Event>) request.getAttribute("events");
 %>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,7 +23,6 @@
             <div style="display:flex; align-items:center;">
                 <div class="logo">POST ANNOUNCEMENT</div>
             </div>
-
             <ul class="nav-links">
                 <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
@@ -36,12 +32,13 @@
         <!-- ===== MAIN CONTENT ===== -->
         <div class="home-page">
             <div class="home-container">
-
                 <h1>Post New Announcement</h1>
                 <p class="subtitle">Fill in announcement details below</p>
 
-                <form class="create-event-form" action="${pageContext.request.contextPath}/admin/postAnnouncement"
-                      method="post" enctype="multipart/form-data">
+                <form class="create-event-form"
+                      action="${pageContext.request.contextPath}/admin/postAnnouncement"
+                      method="post"
+                      enctype="multipart/form-data">
 
                     <!-- Related Event -->
                     <select name="eventId" required>
@@ -55,7 +52,7 @@
 
                     <!-- Title -->
                     <label>Title *</label>
-                    <input type="text" name="title" equired>
+                    <input type="text" name="title" required>
 
                     <!-- Content -->
                     <label>Content *</label>

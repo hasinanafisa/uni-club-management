@@ -347,7 +347,6 @@ button:hover {
 .details-container {
     display: flex;
     gap: 30px;
-    margin-top: 120px;
 }
 
 .details-main {
@@ -629,10 +628,6 @@ button:hover {
 /* =========================
    PROFILE PAGE
 ========================= */
-img {
-    display: none;
-}
-
 .profile-pic-wrapper {
     text-align: center;
     margin-bottom: 15px;
@@ -703,39 +698,71 @@ img {
 
 .profile-actions {
     display: flex;
-    justify-content: space-between;
+    gap: 12px;
     margin-top: 15px;
 }
 
-.edit-btn {
-    background: #ffe58a;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-.leave-btn {
-    background: #ffb3b3;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-.save-btn {
-    background: #6c63ff;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 12px;
-}
-
+/* profile buttons */
+.edit-btn,
+.leave-btn,
+.save-btn,
 .cancel-btn {
-    background: #ccc;
     border: none;
-    padding: 10px 16px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 999px; /* pill shape */
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff; /* same text color for all buttons */
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* Button colors */
+.edit-btn { background: #f4c542; }
+.leave-btn { background: #e57373; }
+.save-btn { background: #6c63ff; }
+.cancel-btn { background: #9e9e9e; }
+
+/* Hover effect */
+.edit-btn:hover { background: #e0b437; }
+.leave-btn:hover { background: #d85c5c; }
+.save-btn:hover { background: #5a52e0; }
+.cancel-btn:hover { background: #7e7e7e; }
+
+/* Lift effect */
+.edit-btn:hover,
+.leave-btn:hover,
+.save-btn:hover,
+.cancel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Click effect */
+.edit-btn:active,
+.leave-btn:active,
+.save-btn:active,
+.cancel-btn:active {
+    transform: scale(0.97);
+}
+
+.ripple {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-animation 0.5s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(20);
+        opacity: 0;
+    }
 }
 
 /* EVENTS */
@@ -751,19 +778,23 @@ img {
     border: 1px solid #ccc;
 }
 
+.events-title,
+.event-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 8px 0;
+}
+
 .events-title {
-    font-weight: bold;
-    margin: 20px 0 10px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 8px;
+    font-weight: 600;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 6px;
 }
 
 .event-row {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f1f1f1;
 }
+
 
 .no-events {
     text-align: center;
@@ -777,6 +808,7 @@ img {
         grid-template-columns: 1fr;
     }
 }
+
 .task-list {
     list-style: none;
     padding: 0;

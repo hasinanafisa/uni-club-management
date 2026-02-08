@@ -1,13 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Hasina
- */
-
 package dao;
 
 import util.DBUtil;
@@ -17,35 +7,43 @@ import model.Event;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.InputStream;
-import util.DBConnection;
 
 public class UserDAO {
+
     public User login(String email, String password) {
         User user = null;
-        String sql = "SELECT user_id, full_name, email, user_type, faculty, course FROM users WHERE email = ? AND password = ?";
+
+        String sql = """
+            SELECT user_id, full_name, email, user_type, faculty, course, profile_image
+            FROM users
+            WHERE email = ? AND password = ?
+        """;
 
         try (Connection conn = DBUtil.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, email);
             ps.setString(2, password);
-
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt("user_id"));
                 user.setFullName(rs.getString("full_name"));
                 user.setEmail(rs.getString("email"));
-                user.setUserType(rs.getString("user_type")); // STUDENT / LECTURER
+                user.setUserType(rs.getString("user_type"));
                 user.setFaculty(rs.getString("faculty"));
                 user.setCourse(rs.getString("course"));
+                user.setProfileImage(rs.getString("profile_image"));
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return user;
     }
-    
+
     public void updateUserType(int userId, String role) {
         String sql = "UPDATE users SET user_type = ? WHERE user_id = ?";
 
@@ -55,32 +53,37 @@ public class UserDAO {
             ps.setString(1, role);
             ps.setInt(2, userId);
             ps.executeUpdate();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public List<User> getMembersByClubId(int clubId) {
-    List<User> members = new ArrayList<>();
+        List<User> members = new ArrayList<>();
 
-    String sql = "SELECT user_id, full_name, email, user_type FROM users WHERE club_id = ?";
+        String sql = """
+            SELECT user_id, full_name, email, user_type
+            FROM users
+            WHERE club_id = ?
+        """;
 
-    try (Connection conn = DBUtil.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setInt(1, clubId);
+            ps.setInt(1, clubId);
 
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                User u = new User();
-                u.setUserId(rs.getInt("user_id"));
-                u.setFullName(rs.getString("full_name"));
-                u.setEmail(rs.getString("email"));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User u = new User();
+                    u.setUserId(rs.getInt("user_id"));
+                    u.setFullName(rs.getString("full_name"));
+                    u.setEmail(rs.getString("email"));
                     u.setUserType(rs.getString("user_type"));
-
                     members.add(u);
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,38 +91,38 @@ public class UserDAO {
         return members;
     }
 
-    // ✅ GET EVENTS JOINED BY STUDENT
+    // GET EVENTS JOINED BY STUDENT
     public List<Event> getJoinedEvents(int userId) {
         List<Event> events = new ArrayList<>();
 
         String sql = """
-            SELECT e.event_id, e.event_name, e.event_date
-            FROM events e
-            JOIN event_participants ep ON e.event_id = ep.event_id
+            SELECT e.event_id, e.title, e.event_date
+            FROM event e
+            JOIN event_registration ep ON e.event_id = ep.event_id
             WHERE ep.user_id = ?
         """;
 
-        try {
-            try (Connection con = DBUtil.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-                ps.setInt(1, userId);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
 
-                while (rs.next()) {
-                    Event event = new Event();
-                    event.setEventID(rs.getInt("event_id"));
-                    event.setEventTitle(rs.getString("event_name"));
-                    event.setEventDate(rs.getDate("event_date"));
-                    events.add(event);
-                }
+            while (rs.next()) {
+                Event event = new Event();
+                event.setEventID(rs.getInt("event_id"));
+                event.setEventTitle(rs.getString("title"));
+                event.setEventDate(rs.getDate("event_date"));
+                events.add(event);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return events;
     }
-    
+
     public User getUserById(int userId) {
         String sql = "SELECT * FROM users WHERE user_id = ?";
 
@@ -135,12 +138,98 @@ public class UserDAO {
                 u.setFullName(rs.getString("full_name"));
                 u.setEmail(rs.getString("email"));
                 u.setUserType(rs.getString("user_type"));
+                u.setCourse(rs.getString("course"));
+                u.setFaculty(rs.getString("faculty"));
+                u.setProfileImage(rs.getString("profile_image"));
                 return u;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
+    
+    public void updateProfile(User user) {
+        String sql = "UPDATE users SET full_name=?, email=?, course=?, faculty=?, profile_image=? WHERE user_id=?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getCourse());
+            ps.setString(4, user.getFaculty());
+            ps.setString(5, user.getProfileImage()); 
+            ps.setInt(6, user.getUserId());          
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void updatePassword(int userId, String password) {
+        String sql = "UPDATE users SET password=? WHERE user_id=?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, password);
+            ps.setInt(2, userId);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateProfileImage(int userId, String imagePath) {
+        String sql = "UPDATE users SET profile_image=? WHERE user_id=?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, imagePath);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //forgot pw
+    public boolean emailExists(String email) {
+        String sql = "SELECT user_id FROM users WHERE email = ?";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
+    public void updatePassword(String email, String password) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, password);
+            ps.setString(2, email);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

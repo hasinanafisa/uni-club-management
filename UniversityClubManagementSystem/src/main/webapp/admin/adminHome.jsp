@@ -6,15 +6,13 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="model.User" %>
-
 <%
     User user = (User) session.getAttribute("user");
-
     if (user == null || !"Lecturer".equals(user.getUserType())) {
         response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
-  
+
     Boolean loginSuccess = (Boolean) session.getAttribute("loginSuccess");
     if (loginSuccess != null && loginSuccess) {
         session.removeAttribute("loginSuccess");
@@ -28,55 +26,56 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     </head>
-    
+
     <body>
-        <!-- ===== TOAST NOTIFICATION ===== -->
+
         <div id="toast" class="toast"></div>
 
-        <!-- ===== TOP NAVBAR ===== -->
         <div class="navbar">
             <div style="display:flex; align-items:center;">
                 <i class="fa-solid fa-bars menu-toggle" onclick="toggleSidebar()"></i>
                 <div class="logo">HOME</div>
             </div>
-
             <ul class="nav-links">
                 <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
             </ul>
         </div>
 
-        <!-- ===== SIDEBAR ===== -->
         <div class="sidebar">
             <a href="${pageContext.request.contextPath}/admin/adminHome.jsp" class="active-link">
                 <i class="fa-solid fa-house"></i>Home
             </a>
-            <a href="${pageContext.request.contextPath}/admin/manageClubDetails"><i class="fa-solid fa-gear"></i>Manage Club Details</a>
-            <a href="${pageContext.request.contextPath}/admin/manageEvent"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
-            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
+            <a href="${pageContext.request.contextPath}/admin/manageClubDetails">
+                <i class="fa-solid fa-gear"></i>Manage Club Details
+            </a>
+            <a href="${pageContext.request.contextPath}/admin/manageEvent">
+                <i class="fa-solid fa-calendar-days"></i>Manage Event
+            </a>
+            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement">
+                <i class="fa-solid fa-bullhorn"></i>Manage Announcement
+            </a>
         </div>
 
-        <!-- ===== MAIN CONTENT ===== -->
         <div class="home-page">
             <div class="home-container">
                 <h1>Welcome Back to University Club Management System</h1>
                 <p class="subtitle">Admin Dashboard</p>
 
                 <div class="card-container">
-                    <!-- Manage Club Details -->
                     <div class="card">
                         <i class="fa-solid fa-gear"></i>
                         <h3>Manage Club Details</h3>
                         <p>View and update your club information and members.</p>
                         <a href="${pageContext.request.contextPath}/admin/manageClubDetails">Manage</a>
                     </div>
-                    <!-- Event Creation -->   
+
                     <div class="card">
                         <i class="fa-solid fa-calendar-plus"></i>
                         <h3>Event Creation</h3>
                         <p>Create, update, and manage club events.</p>
                         <a href="${pageContext.request.contextPath}/admin/manageEvent">Manage</a>
                     </div>
-                    <!-- Announcement -->
+
                     <div class="card">
                         <i class="fa-solid fa-bullhorn"></i>
                         <h3>Post Announcement</h3>
@@ -87,33 +86,30 @@
             </div>
         </div>
 
-        <!-- ===== JAVASCRIPT ===== -->
         <script>
-            function showToast(message) {
-                const toast = document.getElementById("toast");
-                toast.textContent = message;
-                toast.classList.add("show");
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
 
-                setTimeout(() => {
-                    toast.classList.remove("show");
-                }, 3000);
-            }
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
+        }
 
-            function toggleSidebar() {
-                document.querySelector('.sidebar').classList.toggle('collapsed');
-                document.body.classList.toggle('sidebar-collapsed');
-            }
+        window.onload = function () {
+            document.querySelector('.sidebar').classList.add('collapsed');
+            document.body.classList.add('sidebar-collapsed');
 
-            window.onload = function () {
-                // Collapse sidebar by default
-                document.querySelector('.sidebar').classList.add('collapsed');
-                document.body.classList.add('sidebar-collapsed');
-
-                // Login success toast
-                <% if (loginSuccess != null && loginSuccess) { %>
-                    showToast("Login successful!");
-                <% } %>
-            };
+            <% if (loginSuccess != null && loginSuccess) { %>
+                showToast("Login successful!");
+            <% } %>
+        };
         </script>
+
     </body>
 </html>

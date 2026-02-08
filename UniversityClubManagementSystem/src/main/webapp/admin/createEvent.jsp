@@ -3,9 +3,7 @@
     Created on : 27 Dec 2025, 8:34:45 pm
     Author     : izyanie
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,10 +21,17 @@
             <div style="display:flex; align-items:center;">
                 <div class="logo">CREATE NEW EVENT</div>
             </div>
-
             <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/manageEvent">
+                        Back
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">
+                        Home
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -36,29 +41,31 @@
                 <h1>Create New Event</h1>
                 <p class="subtitle">Fill in all event details below</p>
 
-                <form class="create-event-form" action="${pageContext.request.contextPath}/admin/createEvent" 
-                      method="post" enctype="multipart/form-data">
-                    
+                <form class="create-event-form"
+                      action="${pageContext.request.contextPath}/admin/createEvent"
+                      method="post"
+                      enctype="multipart/form-data">
+
                     <label>Banner Image *</label>
                     <input type="file" name="bannerImagePath" accept=".jpg,.png,image/jpeg,image/png">
-                    
+
                     <label>Title *</label>
                     <input type="text" name="eventTitle" required>
-                    
+
                     <label>Description *</label>
                     <textarea name="eventDesc" rows="4" required></textarea>
-                    
+
                     <div class="form-row">
                         <input type="date" name="eventDate" required>
                         <input type="time" name="eventTime" required>
                     </div>
-                    
+
                     <label>Location *</label>
                     <input type="text" name="eventLoc" required>
-                    
+
                     <label>Attendance QR *</label>
                     <input type="file" name="qrPath" accept=".jpg,.png,image/jpeg,image/png">
-                    
+
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">
                             Create Event

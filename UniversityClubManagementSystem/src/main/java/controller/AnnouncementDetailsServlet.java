@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Hasina
  */
-@WebServlet(name = "AnnouncementDetailsServlet", urlPatterns = {"/AnnouncementDetailsServlet"})
+@WebServlet("/student/announcementDetails")
 public class AnnouncementDetailsServlet extends HttpServlet {
 
     @Override
@@ -29,10 +29,12 @@ public class AnnouncementDetailsServlet extends HttpServlet {
             throws ServletException, IOException {
 
         int id = Integer.parseInt(request.getParameter("id"));
+
         AnnouncementDAO dao = new AnnouncementDAO();
         Announcement announcement = dao.getAnnouncementById(id);
 
         request.setAttribute("announcement", announcement);
-        request.getRequestDispatcher("student/announcementDetails.jsp").forward(request, response);
+        request.getRequestDispatcher("/student/announcementDetails.jsp")
+               .forward(request, response);
     }
 }

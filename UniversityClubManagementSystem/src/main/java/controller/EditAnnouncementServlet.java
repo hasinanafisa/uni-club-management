@@ -1,8 +1,3 @@
-/**
- * @izyanie
- * @30/12/2025
- */
-
 package controller;
 
 import dao.AnnouncementDAO;
@@ -16,6 +11,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -28,23 +24,19 @@ import java.util.List;
 @MultipartConfig
 @WebServlet("/admin/editAnnouncement")
 public class EditAnnouncementServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Safety: must be logged in
+
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-            return;
-        }
-        
+
         int announcementId;
         try {
             announcementId = Integer.parseInt(request.getParameter("id"));
@@ -52,99 +44,96 @@ public class EditAnnouncementServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
-        
+
         AnnouncementDAO aDAO = new AnnouncementDAO();
         Announcement announcement = aDAO.getAnnouncementById(announcementId);
         if (announcement == null) {
             response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
-        
+
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int clubId = cmDAO.getClubIdByUser(user.getUserId());
-        
-        // 🔹 Load events for dropdown
+
         EventDAO eDAO = new EventDAO();
         List<Event> events = eDAO.getEventsByClubId(clubId);
-        
+
         request.setAttribute("announcement", announcement);
         request.setAttribute("events", events);
-        request.getRequestDispatcher("/admin/editAnnouncement.jsp").forward(request, response);
+        request.getRequestDispatcher("/admin/editAnnouncement.jsp")
+               .forward(request, response);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Safety: must be logged in
+
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-            return;
-        }
-        
+
         int announcementId = Integer.parseInt(request.getParameter("announcementId"));
+
         AnnouncementDAO aDAO = new AnnouncementDAO();
         Announcement existing = aDAO.getAnnouncementById(announcementId);
         if (existing == null) {
             response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
-        
+
         EventDAO eDAO = new EventDAO();
         Event event = eDAO.getEventById(existing.getEventId());
+
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int userClubId = cmDAO.getClubIdByUser(user.getUserId());
+
         if (event == null || event.getClubId() != userClubId) {
             response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
             return;
         }
 
         Announcement a = new Announcement();
-        
-        // TEXT FIELDS
         a.setAnnouncementId(announcementId);
         a.setEventId(Integer.parseInt(request.getParameter("eventId")));
         a.setTitle(request.getParameter("title"));
         a.setContent(request.getParameter("content"));
         a.setCategory(request.getParameter("category"));
 
-        // 📁 upload dir (same pattern as createEvent / createClub)
         Path uploadDir = Paths.get(
-            System.getProperty("user.home"),
-            "uni-club-uploads",
-            "announcements"
+                System.getProperty("user.home"),
+                "uni-club-uploads",
+                "announcements"
         );
         Files.createDirectories(uploadDir);
-        
-        // 🔹 Image
+
+        // Image upload
         Part imagePart = request.getPart("imagePath");
         String imageFile = existing.getImagePath();
         if (imagePart != null && imagePart.getSize() > 0) {
             imageFile = Paths.get(imagePart.getSubmittedFileName())
-                              .getFileName().toString();
+                    .getFileName().toString();
+
             try (InputStream in = imagePart.getInputStream()) {
                 Files.copy(in, uploadDir.resolve(imageFile),
-                           StandardCopyOption.REPLACE_EXISTING);
+                        StandardCopyOption.REPLACE_EXISTING);
             }
         }
         a.setImagePath(imageFile);
 
-        // 🔹 Attachment
+        // Attachment upload
         Part attachmentPart = request.getPart("attachmentPath");
         String attachmentFile = existing.getAttachmentPath();
         if (attachmentPart != null && attachmentPart.getSize() > 0) {
             attachmentFile = Paths.get(attachmentPart.getSubmittedFileName())
-                              .getFileName().toString();
+                    .getFileName().toString();
+
             try (InputStream in = attachmentPart.getInputStream()) {
                 Files.copy(in, uploadDir.resolve(attachmentFile),
-                           StandardCopyOption.REPLACE_EXISTING);
+                        StandardCopyOption.REPLACE_EXISTING);
             }
         }
         a.setAttachmentPath(attachmentFile);
@@ -155,7 +144,8 @@ public class EditAnnouncementServlet extends HttpServlet {
         } catch (SQLException ex) {
             request.setAttribute("error", "Failed to update announcement.");
             request.setAttribute("announcement", existing);
-            request.getRequestDispatcher("admin/editAnnouncement.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/editAnnouncement.jsp")
+                   .forward(request, response);
         }
     }
 }

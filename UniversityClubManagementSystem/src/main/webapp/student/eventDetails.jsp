@@ -5,11 +5,25 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Event"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.LocalTime"%>
+<%@page import="java.time.LocalDateTime"%>
+
 
 <%
     Event event = (Event) request.getAttribute("event");
     boolean hasJoined = request.getAttribute("hasJoined") != null
                         && (Boolean) request.getAttribute("hasJoined");
+    
+    //Check if event already passed
+    LocalDate eventDate = event.getEventDate().toLocalDate();
+    LocalTime eventTime = event.getEventTime().toLocalTime();
+
+    LocalDateTime eventDateTime = LocalDateTime.of(eventDate, eventTime);
+    LocalDateTime now = LocalDateTime.now();
+
+    boolean isExpired = eventDateTime.isBefore(now);
+
 %>
 
 <!DOCTYPE html>
@@ -17,6 +31,8 @@
 <head>
     <title><%= event.getEventTitle() %> | Event Details</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -100,12 +116,18 @@
             <!-- ACTIONS -->
             <div class="event-actions">
                 <%
-                    if (!hasJoined) {
+                    if (isExpired) {
+                %>
+                    <button class="joined-btn" disabled>Event Ended</button>
+
+                <%
+                    } else if (!hasJoined) {
                 %>
                     <form action="${pageContext.request.contextPath}/student/joinEvent" method="post">
                         <input type="hidden" name="eventId" value="<%= event.getEventID() %>">
                         <button type="submit" class="join-btn">Join Event</button>
                     </form>
+
                 <%
                     } else {
                 %>
@@ -113,12 +135,9 @@
                 <%
                     }
                 %>
-
-                <a href="${pageContext.request.contextPath}/student/upcomingEvents"
-                   class="back-link">Back</a>
             </div>
-        </div>
     </div>
 </div>
 </body>
 </html>
+
