@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.List;
 
 import model.ClubMember;
+import model.User;
 
 public class ClubMemberDAO {
 
@@ -46,11 +47,12 @@ public class ClubMemberDAO {
     }
 
     //Get user role in club
-    public String getUserRole(int userId) {
-        String sql = "SELECT role FROM club_member WHERE user_id = ?";
+    public String getUserRole(int userId, int clubId) {
+        String sql = "SELECT role FROM club_member WHERE user_id = ? AND club_id = ?";
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
+            ps.setInt(2, clubId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getString("role");
         } catch (Exception e) {
@@ -163,6 +165,48 @@ public class ClubMemberDAO {
                 cm.setJoinDate(rs.getDate("join_date"));
 
                 list.add(cm);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
+    public List<User> getMembersByClubId(int clubId) {
+        List<User> list = new java.util.ArrayList<>();
+
+        String sql = """
+            SELECT u.user_id, u.full_name, u.email, cm.role
+            FROM club_member cm
+            JOIN users u ON cm.user_id = u.user_id
+            WHERE cm.club_id = ?
+            ORDER BY
+                CASE cm.role
+                    WHEN 'Advisor' THEN 1
+                    WHEN 'President' THEN 2
+                    WHEN 'Vice President' THEN 3
+                    WHEN 'Secretary' THEN 4
+                    WHEN 'Treasurer' THEN 5
+                    WHEN 'Member' THEN 6
+                END
+        """;
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User u = new User();
+                u.setUserId(rs.getInt("user_id"));
+                u.setFullName(rs.getString("full_name"));
+                u.setEmail(rs.getString("email"));
+                u.setRole(rs.getString("role")); // club role
+
+                list.add(u);
             }
 
         } catch (Exception e) {

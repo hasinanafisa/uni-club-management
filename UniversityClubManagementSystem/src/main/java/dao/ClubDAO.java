@@ -67,7 +67,8 @@ public class ClubDAO {
 
         return club;
     }
-        public List<Club> getAllClubs() throws SQLException {
+    
+    public List<Club> getAllClubs() throws SQLException {
         List<Club> clubs = new ArrayList<>();
         String sql = "SELECT club_id, club_name, description, logo_path FROM club";
 
@@ -85,5 +86,29 @@ public class ClubDAO {
             }
         }
         return clubs;
+    }
+    
+    public void updateClub(Club club) {
+        String sql = """
+            UPDATE club
+            SET club_name = ?, description = ?, mission = ?, achievements = ?, logo_path = ?
+            WHERE club_id = ?
+        """;
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, club.getClubName());
+            ps.setString(2, club.getDescription());
+            ps.setString(3, club.getMission());
+            ps.setString(4, club.getAchievements());
+            ps.setString(5, club.getLogoPath());
+            ps.setInt(6, club.getClubId());
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

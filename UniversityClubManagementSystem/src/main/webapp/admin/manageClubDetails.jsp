@@ -17,6 +17,7 @@
     List<ClubMember> members = (List<ClubMember>) request.getAttribute("members");
 
     UserDAO userDAO = new UserDAO();
+    User advisor = userDAO.getUserById(club.getCreatedBy());
 
     if (user == null || club == null) {
         response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
@@ -62,7 +63,7 @@
                     <!-- TOP: Club Info -->
                     <div class="club-info">
                         <div class="club-logo">
-                            <img src="${pageContext.request.contextPath}/${club.logoPath}"/>
+                            <img src="${pageContext.request.contextPath}/clubImage?id=<%= club.getClubId() %>">
                         </div>
 
                         <div class="club-meta">
@@ -70,10 +71,12 @@
                             <p class="club-desc"><%= club.getDescription() %></p>
 
                             <p class="club-created">
-                                <strong>Created By:</strong> <%= club.getCreatedBy() %><br>
-                                <strong>Created At:</strong> <%= club.getCreatedAt() %>
+                                <strong>Created By: </strong>
+                                <%= advisor != null ? advisor.getFullName() : "Unknown" %><br>
+                                <strong>Created At: </strong>
+                                <%= club.getCreatedAt() %>
                             </p>
-
+                            
                             <a href="editClubDetails.jsp?clubId=<%= club.getClubId() %>"
                                class="edit-btn">
                                Edit Club Details
@@ -122,6 +125,27 @@
 
                         <% } %>
                     </div>
+                    
+                    <%-- Only Advisor or President can manage members --%>
+                    <%
+                        String myRole = null;
+                        for (ClubMember m : members) {
+                            if (m.getUserId() == user.getUserId()) {
+                                myRole = m.getRole();
+                                break;
+                            }
+                        }
+                    %>
+
+                    <% if ("Advisor".equals(myRole) || "President".equals(myRole)) { %>
+                        <div style="margin-top: 15px;">
+                            <a href="<%= request.getContextPath() %>/admin/manageClubMembers?clubId=<%= club.getClubId() %>"
+                               class="edit-btn">
+                                Manage Club Members
+                            </a>
+                        </div>
+                    <% } %>
+                    
                 </div>
             </div>
         </div>
@@ -129,7 +153,7 @@
         <script>
             window.onload = function () {
                 document.querySelector('.sidebar').classList.add('collapsed');
-                document.body.classLiSst.add('sidebar-collapsed');
+                document.body.classList.add('sidebar-collapsed');
             };
 
             function toggleSidebar() {
