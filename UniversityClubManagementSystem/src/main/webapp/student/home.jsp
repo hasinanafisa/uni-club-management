@@ -32,14 +32,7 @@
         <div class="home-container">
             <h1>WELCOME, <%= user.getFullName().toUpperCase() %></h1>
             <p class="subtitle">Select a category to manage your club activities</p>
-
-            <div class="search-filter-bar">
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search clubs or events...">
-                </div>
-            </div>
-
+            
             <div class="card-container">
                 <div class="card">
                     <i class="fa-solid fa-users-viewfinder"></i>

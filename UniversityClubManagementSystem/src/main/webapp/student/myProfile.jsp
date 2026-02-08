@@ -9,16 +9,19 @@
 <%@ page import="model.Event" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="dao.ClubMemberDAO" %>
 
 <%
     User student = (User) session.getAttribute("user");
     List<Event> events = (List<Event>) request.getAttribute("events");
-    
+
     if (student == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 
+    ClubMemberDAO cmDAO = new ClubMemberDAO();
+    boolean joinedClub = cmDAO.hasAnyClub(student.getUserId());
 %>
 
 <!DOCTYPE html>
@@ -81,10 +84,16 @@
                                     : student.getFaculty() %>
                             </p>
                             <p><strong>Email</strong><br><%= student.getEmail() %></p>
-
+                                
                             <div class="profile-actions">
                                 <button class="edit-btn" onclick="toggleEdit(true)">Edit Profile</button>
-                                <button class="leave-btn">Leave Club</button>
+                                <button type="button"
+                                        class="leave-btn"
+                                        onclick="confirmLeave()"
+                                        <%= !joinedClub ? "disabled" : "" %>>
+                                    Leave Club
+                                </button>
+
                             </div>
                         </div>
 
@@ -192,16 +201,25 @@
                     session.removeAttribute("success");
                 %>
                 <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: '<%= success %>'
-                });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: '<%= success %>'
+                    });
                 </script>
                 <% } %>
     </body>
 </html>
 <script>
+    function confirmLeave() {
+        if (confirm("Are you sure you want to leave this club?")) {
+            const form = document.createElement("form");
+            form.method = "post";
+            form.action = "LeaveClubServlet";
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
     function cancelEdit() {
         document.getElementById("profileEdit").style.display = "none";
         document.getElementById("profileView").style.display = "block";

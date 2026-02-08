@@ -230,6 +230,23 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+    
+    //leave club
+    public boolean leaveClub(int userId) {
+        boolean success = false;
+        String sql = "DELETE FROM CLUB_MEMBER WHERE USER_ID = ?";
 
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            success = ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
 
 }

@@ -23,6 +23,17 @@
     List<Club> clubs = (List<Club>) request.getAttribute("clubs");
 %>
 
+<%
+String success = (String) session.getAttribute("success");
+if (success != null) {
+    session.removeAttribute("success");
+%>
+<script>
+alert("<%= success %>");
+</script>
+<% } %>
+
+
 <!DOCTYPE html>
 <html>
 <head>

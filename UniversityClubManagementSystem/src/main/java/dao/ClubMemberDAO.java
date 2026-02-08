@@ -168,4 +168,20 @@ public class ClubMemberDAO {
 
         return list;
     }
+    
+    public boolean hasAnyClub(int userId) {
+        String sql = "SELECT 1 FROM club_member WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
