@@ -1,11 +1,9 @@
 <%-- 
     Document   : editEvent
-    Created on : 27 Dec 2025, 11:04:25 pm
+    Created on : 27 Dec 2025, 11:04:25 pm
     Author     : izyanie
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="dao.EventDAO"%>
 <%@page import="model.Event"%>
 
 <%
@@ -20,35 +18,38 @@
 <html>
     <head>
         <title>Edit Event</title>
-        <link rel="stylesheet" href="../css/adminstyle.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     </head>
 
     <body class="no-sidebar">
-        <!-- ===== TOAST NOTIFICATION ===== -->
-        <div id="toast" class="toast"></div>
 
-        <!-- ===== NAVBAR ===== -->
-        <div class="navbar">
-            <div style="display:flex; align-items:center;">
-                <div class="logo">EDIT EVENT</div>
-            </div>
+    <div id="toast" class="toast"></div>
 
-            <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
-            </ul>
+    <div class="navbar">
+        <div style="display:flex; align-items:center;">
+            <div class="logo">EDIT EVENT</div>
         </div>
+        <ul class="nav-links">
+            <li>
+                <a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a>
+            </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a>
+            </li>
+        </ul>
+    </div>
 
-        <!-- ===== MAIN CONTENT ===== -->
-        <div class="home-page">
-            <div class="home-container">
-                <h1>Edit Event</h1>
-                <p class="subtitle">Update event details below</p>
+    <div class="home-page">
+        <div class="home-container">
+            <h1>Edit Event</h1>
+            <p class="subtitle">Update event details below</p>
 
-                <form class="create-event-form" action="${pageContext.request.contextPath}/admin/editEvent"
-                      method="post" enctype="multipart/form-data">
+            <form class="create-event-form"
+                  action="${pageContext.request.contextPath}/admin/editEvent"
+                  method="post"
+                  enctype="multipart/form-data">
 
                     <!-- Hidden ID -->
                     <input type="hidden" name="eventID" value="<%= event.getEventID() %>">
@@ -94,5 +95,7 @@
                 </form>
             </div>
         </div>
+    </div>
+
     </body>
 </html>

@@ -1,9 +1,8 @@
 <%-- 
     Document   : manageClubDetails
     Created on : 28 Jan 2026, 2:07:52 am
-    Author     : izyan
+    Author     : izyanie
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Club"%>
 <%@page import="model.ClubMember"%>
@@ -15,7 +14,6 @@
     User user = (User) session.getAttribute("user");
     Club club = (Club) request.getAttribute("club");
     List<ClubMember> members = (List<ClubMember>) request.getAttribute("members");
-
     UserDAO userDAO = new UserDAO();
     User advisor = userDAO.getUserById(club.getCreatedBy());
 
@@ -27,38 +25,45 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Manage Club Details</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    </head>
-    <body>
-        <!-- ===== NAVBAR ===== -->
-        <div class="navbar">
-            <div style="display:flex; align-items:center;">
-                <i class="fa-solid fa-bars menu-toggle" onclick="toggleSidebar()"></i>
-                <div class="logo">CLUB MANAGEMENT</div>
-            </div>
+<head>
+    <title>Manage Club Details</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
 
-            <ul class="nav-links">
-                <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
-            </ul>
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div style="display:flex; align-items:center;">
+            <i class="fa-solid fa-bars menu-toggle" onclick="toggleSidebar()"></i>
+            <div class="logo">CLUB MANAGEMENT</div>
         </div>
+        <ul class="nav-links">
+            <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
+        </ul>
+    </div>
 
-        <!-- ===== SIDEBAR ===== -->
-        <div class="sidebar">
-            <a href="${pageContext.request.contextPath}/admin/adminHome.jsp"><i class="fa-solid fa-house"></i>Home</a>
-            <a href="${pageContext.request.contextPath}/admin/manageClubDetails" class="active-link">
-                <i class="fa-solid fa-gear"></i>Manage Club Details
-            </a>
-            <a href="${pageContext.request.contextPath}/admin/manageEvent"><i class="fa-solid fa-calendar-days"></i>Manage Event</a>
-            <a href="${pageContext.request.contextPath}/admin/manageAnnouncement"><i class="fa-solid fa-bullhorn"></i>Manage Announcement</a>
-        </div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">
+            <i class="fa-solid fa-house"></i>Home
+        </a>
+        <a href="${pageContext.request.contextPath}/admin/manageClubDetails" class="active-link">
+            <i class="fa-solid fa-gear"></i>Manage Club Details
+        </a>
+        <a href="${pageContext.request.contextPath}/admin/manageEvent">
+            <i class="fa-solid fa-calendar-days"></i>Manage Event
+        </a>
+        <a href="${pageContext.request.contextPath}/admin/manageAnnouncement">
+            <i class="fa-solid fa-bullhorn"></i>Manage Announcement
+        </a>
+    </div>
 
-        <!-- ===== MAIN CONTENT ===== -->
-        <div class="home-page">
-            <div class="home-container">
-                <div class="club-details-card">
+    <!-- MAIN CONTENT -->
+    <div class="home-page">
+        <div class="home-container">
+            <div class="club-details-card">
 
                     <!-- TOP: Club Info -->
                     <div class="club-info">
@@ -84,18 +89,30 @@
                         </div>
                     </div>
 
-                    <!-- BOTTOM: Members -->
-                    <div class="club-members">
-                        <h3>
-                            Club Members
-                            <span class="member-badge"><%= members.size() %></span>
-                        </h3>
+                    <div class="club-meta">
+                        <h2><%= club.getClubName() %></h2>
+                        <p class="club-desc"><%= club.getDescription() %></p>
+                        <p class="club-created">
+                            <strong>Created By:</strong> <%= club.getCreatedBy() %><br>
+                            <strong>Created At:</strong> <%= club.getCreatedAt() %>
+                        </p>
 
-                        <!-- table goes here -->
-                        <% if (members == null || members.isEmpty()) { %>
-                            <p class="empty-text">No members have joined this club yet.</p>
-                        <% } else { %>
+                        <a href="editClubDetails.jsp?clubId=<%= club.getClubId() %>" class="edit-btn">
+                            Edit Club Details
+                        </a>
+                    </div>
+                </div>
 
+                <!-- MEMBERS -->
+                <div class="club-members">
+                    <h3>
+                        Club Members
+                        <span class="member-badge"><%= members != null ? members.size() : 0 %></span>
+                    </h3>
+
+                    <% if (members == null || members.isEmpty()) { %>
+                        <p class="empty-text">No members have joined this club yet.</p>
+                    <% } else { %>
                         <table class="members-table">
                             <thead>
                                 <tr>
@@ -147,8 +164,10 @@
                     <% } %>
                     
                 </div>
+
             </div>
         </div>
+    </div>
 
         <script>
             window.onload = function () {
@@ -156,10 +175,10 @@
                 document.body.classList.add('sidebar-collapsed');
             };
 
-            function toggleSidebar() {
-                document.querySelector('.sidebar').classList.toggle('collapsed');
-                document.body.classList.toggle('sidebar-collapsed');
-            }
-        </script>
-    </body>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+    </script>
+</body>
 </html>

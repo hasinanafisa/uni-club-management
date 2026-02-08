@@ -6,17 +6,22 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Announcement"%>
+<%@page import="model.Event"%>
+<%@page import="dao.EventDAO"%>
+<%@page import="java.text.SimpleDateFormat"%>
 
 <%
-//Announcement a = (Announcement) request.getAttribute("announcement");
-Announcement a = new Announcement(); //dummy data
+Announcement a = (Announcement) request.getAttribute("announcement");
 
-a.setAnnouncementId(1);
-a.setTitle("Sports Day 2026");
-a.setContent(
-    "Join us for inter-faculty sports competitions. All students are welcome!"
-);
-a.setCategory("EVENT"); //sampe sitok
+EventDAO eventDAO = new EventDAO();
+Event ev = eventDAO.getEventById(a.getEventId());
+
+SimpleDateFormat dateFormat =
+        new SimpleDateFormat("dd MMM yyyy, h:mm a");
+
+SimpleDateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+SimpleDateFormat eventTimeFormat = new SimpleDateFormat("h:mm a");
+
 if (a == null) {
     out.println("<p>No announcement found.</p>");
     return;
@@ -45,55 +50,66 @@ if (a == null) {
             <div class="details-main">
                 <h1><%= a.getTitle() %></h1>
                 <hr>
-
+                <p style="color:#666;">
+                    Posted on <%= dateFormat.format(a.getPostedAt()) %>
+                </p>
+                <br>
                 <p class="details-content">
                     <%= a.getContent() %>
                 </p>
-
-                <!-- ATTACHMENTS (dummy for now) -->
+                
+                <!-- ATTACHMENTS -->
                 <div class="details-section">
-                    <h3>📎 Attached Files</h3>
-                    <a href="#">file.pdf</a>,
-                    <a href="#">poster.jpg</a>,
-                    <a href="#">forms.docx</a>
+                    <h3>📎 Attachment</h3>
+                    <a href="<%= request.getContextPath() %>/uploads/announcements/<%= a.getAttachmentPath() %>"
+                       download>
+                        Download Attachment
+                    </a>
                 </div>
 
                 <!-- IMAGE -->
                 <div class="details-section">
-                    <h3>🖼 Images</h3>
-                    <img src="${pageContext.request.contextPath}/images/sample-event.jpg"
-                         alt="Announcement Image"
-                         class="details-image">
+                    <h3>📷 Image</h3>
+                        <% if (a.getImagePath() != null && !a.getImagePath().isEmpty()) { %>
+                            <img src="<%= request.getContextPath() %>/announcementImage?id=<%= a.getAnnouncementId() %>"
+                                 class="details-image">
+                        <% } else { %>
+                            <p>No image available.</p>
+                        <% } %>
                 </div>
-
-                <a href="StudentAnnouncementServlet" class="back-link">
-                    ← Back to Announcements
-                </a>
+                
+                <a href="${pageContext.request.contextPath}/announcements"
+                   class="back-link">Back</a>
             </div>
 
             <!-- RIGHT INFO CARD -->
             <div class="details-side card">
                 <h3>📅 Event Info</h3>
 
-                <p><strong>Date / Time:</strong><br> 10 March 2026, 2:00 PM</p>
-                <p><strong>Location:</strong><br> Main Hall</p>
+                <% if (ev != null) { %>
+                    <p>
+                        <strong>Event:</strong><br>
+                        <%= ev.getEventTitle() %>
+                    </p>
 
-                <hr>
+                    <p>
+                        <strong>Date:</strong><br>
+                        <%= eventDateFormat.format(ev.getEventDate()) %>
+                    </p>
 
-                <p><strong>Registration:</strong></p>
-                <a href="#" class="view-btn">Join Event</a>
-                <a href="#" class="cancel-link">Cancel Registration</a>
 
-                <hr>
+                    <p>
+                        <strong>Time:</strong><br>
+                        <%= eventTimeFormat.format(ev.getEventTime()) %>
+                    </p>
 
-                <p><strong>Attendance QR:</strong></p>
-                <img src="${pageContext.request.contextPath}/images/qr-sample.png"
-                     class="qr-img" alt="QR Code">
-
-                <hr>
-
-                <p><strong>Volunteer Roles:</strong></p>
-                <a href="#" class="view-btn">Apply Here</a>
+                    <p>
+                        <strong>Location:</strong><br>
+                        <%= ev.getEventLoc() %>
+                    </p>
+                <% } else { %>
+                    <p>No event information available.</p>
+                <% } %>
             </div>
 
         </div>

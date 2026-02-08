@@ -1,14 +1,12 @@
 <%-- 
     Document   : previewAnnouncement
-    Created on : 2 Jan 2026, 12:57:13 pm
-    Author     : izyan
+    Created on : 2 Jan 2026, 12:57:13 pm
+    Author     : izyanie
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Announcement"%>
 <%@page import="model.Event"%>
 <%@page import="java.text.SimpleDateFormat"%>
-
 <%
     Announcement a = (Announcement) request.getAttribute("announcement");
     Event e = (Event) request.getAttribute("event");
@@ -29,11 +27,13 @@
     </head>
 
     <body class="no-sidebar">
-        <!-- ===== NAVBAR ===== -->
+        <!-- NAVBAR -->
         <div class="navbar">
             <div class="logo">ANNOUNCEMENT PREVIEW</div>
             <ul class="nav-links">
-                <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a></li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a>
+                </li>
             </ul>
         </div>
 
@@ -76,6 +76,7 @@
                         </a>
                     </p>
                 <% } %>
+
             </div>
         </div>
     </body>

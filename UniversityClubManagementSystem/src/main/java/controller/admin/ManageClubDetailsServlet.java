@@ -32,7 +32,6 @@ public class ManageClubDetailsServlet extends HttpServlet {
         
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         ClubDAO clubDAO = new ClubDAO();
-        UserDAO userDAO = new UserDAO();
         
         int userId = user.getUserId();
         int clubId = cmDAO.getClubIdByUser(userId);

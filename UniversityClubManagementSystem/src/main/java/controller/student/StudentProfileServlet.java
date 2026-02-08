@@ -34,8 +34,13 @@ public class StudentProfileServlet extends HttpServlet {
         }
 
         UserDAO dao = new UserDAO();
-        request.setAttribute("events", dao.getJoinedEvents(student.getUserId()));
+        
+        // reload updated user
+        student = dao.getUserById(student.getUserId());
+        session.setAttribute("user", student);
 
+        request.setAttribute("events", dao.getJoinedEvents(student.getUserId()));
         request.getRequestDispatcher("student/myProfile.jsp").forward(request, response);
     }
+    
 }
