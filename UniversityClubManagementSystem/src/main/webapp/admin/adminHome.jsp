@@ -64,7 +64,7 @@
                 <div class="card-container">
                     <div class="card">
                         <i class="fa-solid fa-gear"></i>
-                        <h3>Manage Club Details</h3>
+                        <h3>Club Details</h3>
                         <p>View and update your club information and members.</p>
                         <a href="${pageContext.request.contextPath}/admin/manageClubDetails">Manage</a>
                     </div>

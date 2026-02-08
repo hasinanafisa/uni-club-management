@@ -78,28 +78,13 @@
                             <p class="club-created">
                                 <strong>Created By: </strong>
                                 <%= advisor != null ? advisor.getFullName() : "Unknown" %><br>
-                                <strong>Created At: </strong>
-                                <%= club.getCreatedAt() %>
                             </p>
                             
-                            <a href="editClubDetails.jsp?clubId=<%= club.getClubId() %>"
-                               class="edit-btn">
-                               Edit Club Details
+                            <a href="<%= request.getContextPath() %>/admin/editClubDetails?clubId=<%= club.getClubId() %>"
+                                class="edit-btn">
+                                Edit Club Details
                             </a>
                         </div>
-                    </div>
-
-                    <div class="club-meta">
-                        <h2><%= club.getClubName() %></h2>
-                        <p class="club-desc"><%= club.getDescription() %></p>
-                        <p class="club-created">
-                            <strong>Created By:</strong> <%= club.getCreatedBy() %><br>
-                            <strong>Created At:</strong> <%= club.getCreatedAt() %>
-                        </p>
-
-                        <a href="editClubDetails.jsp?clubId=<%= club.getClubId() %>" class="edit-btn">
-                            Edit Club Details
-                        </a>
                     </div>
                 </div>
 
@@ -158,7 +143,7 @@
                         <div style="margin-top: 15px;">
                             <a href="<%= request.getContextPath() %>/admin/manageClubMembers?clubId=<%= club.getClubId() %>"
                                class="edit-btn">
-                                Manage Club Members
+                               Manage Club Members
                             </a>
                         </div>
                     <% } %>
