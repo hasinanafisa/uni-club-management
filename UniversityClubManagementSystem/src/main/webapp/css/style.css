@@ -880,3 +880,41 @@ button:hover {
     padding: 10px;
     border: 2px solid #ddd;
 }
+
+/* Events header layout */
+.events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Filter dropdown */
+.event-filter,
+.events-header select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Hover */
+.events-header select:hover {
+    border-color: #4CAF50;
+}
+
+/* Focus */
+.events-header select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
+}
+
+/* Optional: match subtitle tone */
+.events-header h3 {
+    margin: 0;
+    color: #333;
+}

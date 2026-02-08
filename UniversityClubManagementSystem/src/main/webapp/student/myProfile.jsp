@@ -10,6 +10,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="dao.ClubMemberDAO" %>
+<%@ page import="java.util.Date" %>
 
 <%
     User student = (User) session.getAttribute("user");
@@ -144,34 +145,39 @@
                     <div class="profile-card">
                         <div class="events-header">
                             <h3>📅 Events Joined</h3>
-                            <select class="event-filter">
-                                <option>All</option>
-                                <option>Current Event</option>
-                                <option>Past Event</option>
+                            <select id="eventFilter" class="event-filter">
+                                <option value="All">All</option>
+                                <option value="Current">Current Event</option>
+                                <option value="Past">Past Event</option>
                             </select>
+
                         </div>
 
-                        <div class="events-list">
+                        <div class="events-list" id="eventsList">
                             <div class="events-title">
                                 <span>Event Name</span>
                                 <span>Date</span>
                             </div>
 
                             <% if (events != null && !events.isEmpty()) { 
-                                for (Event e : events) { %>
-                                    <div class="event-row">
-                                        <span><%= e.getEventTitle() %></span>
-                                        <%
-                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        %>
-                                        <span><%= sdf.format(e.getEventDate()) %></span>
+                                for (Event e : events) {
+                            %>
 
-                                    </div>
-                            <%  } 
-                            } else { %>
+                            <div class="event-row">
+                                <span><%= e.getEventTitle() %></span>
+                                <span><%= new SimpleDateFormat("dd/MM/yyyy").format(e.getEventDate()) %></span>
+                            </div>
+
+                            <%
+                                } // end for
+                            } else {
+                            %>
                                 <p class="no-events">No events joined yet.</p>
-                            <% } %>
+                            <%
+                            }
+                            %>
                         </div>
+
                     </div>
 
                 </div>
@@ -210,6 +216,7 @@
                 <% } %>
     </body>
 </html>
+
 <script>
     function confirmLeave() {
         if (confirm("Are you sure you want to leave this club?")) {
@@ -268,5 +275,20 @@
 
             setTimeout(() => ripple.remove(), 500);
         });
+    });
+    
+    document.getElementById("eventFilter").addEventListener("change", function () {
+
+        const filter = this.value;
+
+        fetch("<%= request.getContextPath() %>/student/filterEvents?filter=" + filter)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("eventsList").innerHTML =
+                    "<div class='events-title'>" +
+                    "<span>Event Name</span>" +
+                    "<span>Date</span>" +
+                    "</div>" + data;
+            });
     });
 </script>
