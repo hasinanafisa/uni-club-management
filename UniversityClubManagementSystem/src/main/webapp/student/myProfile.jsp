@@ -145,7 +145,6 @@
                         <div class="events-list">
                             <div class="events-title">
                                 <span>Event Name</span>
-                                <span>Role</span>
                                 <span>Date</span>
                             </div>
 
@@ -153,7 +152,6 @@
                                 for (Event e : events) { %>
                                     <div class="event-row">
                                         <span><%= e.getEventTitle() %></span>
-                                        <span>Member</span>
                                         <%
                                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                                         %>
