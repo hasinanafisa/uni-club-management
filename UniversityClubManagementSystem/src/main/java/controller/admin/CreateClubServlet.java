@@ -81,7 +81,7 @@ public class CreateClubServlet extends HttpServlet {
             ClubMemberDAO cmDAO = new ClubMemberDAO();
             cmDAO.addAdvisor(user.getUserId(), clubId);
 
-            response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/home");
         } catch (IOException | SQLException e) {
             e.printStackTrace();
             request.setAttribute("error", "Failed to create club." + e.getMessage());

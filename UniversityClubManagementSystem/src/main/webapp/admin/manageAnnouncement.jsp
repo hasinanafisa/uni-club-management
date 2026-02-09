@@ -44,7 +44,7 @@
 
         <!-- SIDEBAR -->
         <div class="sidebar">
-            <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">
+            <a href="${pageContext.request.contextPath}/admin/home">
                 <i class="fa-solid fa-house"></i>Home
             </a>
             <a href="${pageContext.request.contextPath}/admin/manageClubDetails">
@@ -65,16 +65,10 @@
                 <div class="search-filter-bar">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Search event...">
+                        <input type="text" placeholder="Search announcement...">
                         <i class="fa-solid fa-xmark clear-icon"></i>
                     </div>
-                </div>
-                
-                <div class="filter-bar">
-                    <input type="text" id="searchInput"
-                           placeholder="Search announcements..."
-                           onkeyup="filterAnnouncements()">
-
+                    
                     <select id="categoryFilter" onchange="filterAnnouncements()">
                         <option value="ALL">All</option>
                         <option value="IMPORTANT">Important</option>

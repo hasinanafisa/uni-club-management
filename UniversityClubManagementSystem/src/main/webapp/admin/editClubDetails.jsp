@@ -27,12 +27,8 @@
         <div class="navbar">
             <div class="logo">EDIT CLUB DETAILS</div>
             <ul class="nav-links">
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/manageClubDetails">Back</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a>
-                </li>
+                <li><a href="${pageContext.request.contextPath}/admin/manageClubDetails">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/home">Home</a></li>
             </ul>
         </div>
 

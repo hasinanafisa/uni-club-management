@@ -32,12 +32,8 @@
             <div class="logo">EDIT EVENT</div>
         </div>
         <ul class="nav-links">
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a>
-            </li>
+            <li><a href="${pageContext.request.contextPath}/admin/manageEvent">Back</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/home">Home</a></li>
         </ul>
     </div>
 

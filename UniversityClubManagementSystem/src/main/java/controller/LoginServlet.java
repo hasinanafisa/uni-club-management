@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
             if (!hasClub) { // Lecturer without club → MUST create club
                 response.sendRedirect(request.getContextPath() + "/admin/createClub.jsp"); 
             } else {    // Lecturer with club
-                response.sendRedirect(request.getContextPath() + "/admin/adminHome.jsp"); 
+                response.sendRedirect(request.getContextPath() + "/admin/home"); 
             }
         } else {
             // Failure: Return to login with error

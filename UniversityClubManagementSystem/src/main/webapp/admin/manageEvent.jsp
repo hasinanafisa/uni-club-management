@@ -36,7 +36,7 @@
     </div>
 
     <div class="sidebar">
-        <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">
+        <a href="${pageContext.request.contextPath}/admin/home">
             <i class="fa-solid fa-house"></i>Home
         </a>
         <a href="${pageContext.request.contextPath}/admin/manageClubDetails">

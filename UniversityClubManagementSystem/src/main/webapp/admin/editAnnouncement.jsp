@@ -35,7 +35,7 @@
             <div class="logo">EDIT ANNOUNCEMENT</div>
             <ul class="nav-links">
                 <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/home">Home</a></li>
             </ul>
         </div>
 

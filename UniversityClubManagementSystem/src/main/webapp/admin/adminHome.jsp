@@ -39,7 +39,7 @@
         </div>
 
         <div class="sidebar">
-            <a href="${pageContext.request.contextPath}/admin/adminHome.jsp" class="active-link">
+            <a href="${pageContext.request.contextPath}/admin/home" class="active-link">
                 <i class="fa-solid fa-house"></i>Home
             </a>
             <a href="${pageContext.request.contextPath}/admin/manageClubDetails">
@@ -53,12 +53,44 @@
             </a>
         </div>
 
+        <!-- MAIN CONTENT -->
         <div class="home-page">
             <div class="home-container">
+
                 <h1>HEY, <%= user.getFullName().toUpperCase() %>!</h1>
                 <h1>Welcome Back to University Club Management System</h1>
                 <p class="subtitle">Select what to manage for your club today</p>
 
+                <!-- CLUB INSIGHTS (LIGHTWEIGHT, INLINE) -->
+                <div class="club-insights">
+                    <h2 class="section-title">📊 Club Insights</h2>
+
+                    <div class="insight-row">
+                        <div class="insight-item">
+                            <div class="insight-label">Events This Month</div>
+                            <div class="insight-value">${eventsThisMonth}</div>
+                        </div>
+
+                        <div class="insight-item">
+                            <div class="insight-label">Total Participants</div>
+                            <div class="insight-value">${totalParticipants}</div>
+                        </div>
+
+                        <div class="insight-item">
+                            <div class="insight-label">Most Popular Event</div>
+                            <div class="insight-value">
+                                ${popularEvent != null ? popularEvent : "—"}
+                            </div>
+                        </div>
+                    </div>
+
+                    <a class="report-link"
+                       href="${pageContext.request.contextPath}/admin/reports">
+                        View Detailed Reports →
+                    </a>
+                </div>
+
+                <!-- ACTION CARDS -->
                 <div class="card-container">
                     <div class="card">
                         <i class="fa-solid fa-gear"></i>
@@ -81,6 +113,7 @@
                         <a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Manage</a>
                     </div>
                 </div>
+
             </div>
         </div>
 

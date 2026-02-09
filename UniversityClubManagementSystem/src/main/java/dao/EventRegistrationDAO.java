@@ -53,4 +53,59 @@ public class EventRegistrationDAO {
         }
         return false;
     }
+    
+    public int getParticipantCountByEvent(int eventId) {
+        String sql = """
+            SELECT COUNT(*) 
+            FROM event_registration
+            WHERE event_id = ?
+        """;
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, eventId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int getTotalParticipants() {
+        String sql = """
+            SELECT COUNT(*)
+            FROM EVENT_REGISTRATION
+        """;
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int countTotalParticipants() {
+        String sql = "SELECT COUNT(*) FROM event_registration";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
