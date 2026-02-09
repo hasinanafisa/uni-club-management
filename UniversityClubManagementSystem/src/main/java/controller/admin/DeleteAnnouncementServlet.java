@@ -57,20 +57,17 @@ public class DeleteAnnouncementServlet extends HttpServlet {
         }
         
         // 🔐 Ownership check via EVENT → CLUB
-        EventDAO eventDAO = new EventDAO();
-        Event event = eventDAO.getEventById(announcement.getEventId());
-
-        if (event == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
-            return;
-        }
-        
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int userClubId = cmDAO.getClubIdByUser(user.getUserId());
-
-        if (event.getClubId() != userClubId) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
-            return;
+        
+        EventDAO eventDAO = new EventDAO();
+        Integer eventId = announcement.getEventId();
+        if (eventId != null) {
+            Event event = eventDAO.getEventById(eventId);
+            if (event == null || event.getClubId() != userClubId) {
+                response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
+                return;
+            }
         }
         
         // 📁 File cleanup

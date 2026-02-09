@@ -29,42 +29,53 @@
     </head>
 
     <body class="no-sidebar">
+        <div id="toast" class="toast"></div>
 
-    <div id="toast" class="toast"></div>
+        <div class="navbar">
+            <div class="logo">EDIT ANNOUNCEMENT</div>
+            <ul class="nav-links">
+                <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
+            </ul>
+        </div>
 
-    <div class="navbar">
-        <div class="logo">EDIT ANNOUNCEMENT</div>
-        <ul class="nav-links">
-            <li><a href="${pageContext.request.contextPath}/admin/manageAnnouncement">Back</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/adminHome.jsp">Home</a></li>
-        </ul>
-    </div>
+        <div class="home-page">
+            <div class="home-container">
+                <h1>Edit Announcement</h1>
+                <p class="subtitle">Update announcement details below</p>
 
-    <div class="home-page">
-        <div class="home-container">
-            <h1>Edit Announcement</h1>
-            <p class="subtitle">Update announcement details below</p>
+                <form class="create-event-form"
+                      action="${pageContext.request.contextPath}/admin/editAnnouncement"
+                      method="post"
+                      enctype="multipart/form-data">
 
-            <form class="create-event-form"
-                  action="${pageContext.request.contextPath}/admin/editAnnouncement"
-                  method="post"
-                  enctype="multipart/form-data">
+                    <input type="hidden" name="announcementId"
+                           value="<%= a.getAnnouncementId() %>">
 
-                <input type="hidden" name="announcementId"
-                       value="<%= a.getAnnouncementId() %>">
-
-                <!-- RELATED EVENT -->
-                <select name="eventId" required>
-                    <option value="">-- Select Related Event --</option>
-                    <% for (Event ev : events) { %>
-                        <option value="<%= ev.getEventID() %>"
-                            <%= ev.getEventID() == a.getEventId() ? "selected" : "" %>>
-                            <%= ev.getEventTitle() %>
+                    <!-- CATEGORY -->
+                    <select name="category" required>
+                        <option value="">-- Select Category --</option>
+                        <option value="Important"
+                            <%= "Important".equals(a.getCategory()) ? "selected" : "" %>>
+                            Important
                         </option>
                         <option value="General"
                             <%= "General".equals(a.getCategory()) ? "selected" : "" %>>
                             General
                         </option>
+                    </select>
+
+                    <!-- RELATED EVENT (OPTIONAL) -->
+                    <label>Related Event (Optional)</label>
+                    <select name="eventId">
+                        <option value="">-- No Related Event --</option>
+                        <% for (Event ev : events) { %>
+                            <option value="<%= ev.getEventID() %>"
+                                <%= (a.getEventId() != null && ev.getEventID() == a.getEventId())
+                                    ? "selected" : "" %>>
+                                <%= ev.getEventTitle() %>
+                            </option>
+                        <% } %>
                     </select>
 
                     <!-- CURRENT IMAGE -->
@@ -74,59 +85,17 @@
                             <img src="${pageContext.request.contextPath}/announcementFile?id=<%= a.getAnnouncementId() %>&type=image">
                         </p>
                     <% } %>
-                </select>
+                    <input type="file" name="imagePath" accept=".jpg,.png,image/jpeg,image/png">
 
-                <!-- TITLE -->
-                <input type="text" name="title"
-                       value="<%= a.getTitle() %>" required>
+                    <!-- TITLE -->
+                    <input type="text" name="title"
+                           value="<%= a.getTitle() %>" required>
 
-                <!-- CONTENT -->
-                <textarea name="content" rows="4" required>
-                    <%= a.getContent() %>
-                </textarea>
+                    <!-- CONTENT -->
+                    <textarea name="content" rows="4" required>
+                        <%= a.getContent() %>
+                    </textarea>
 
-                <!-- CATEGORY -->
-                <select name="category" required>
-                    <option value="">-- Select Category --</option>
-                    <option value="Important"
-                        <%= "Important".equals(a.getCategory()) ? "selected" : "" %>>
-                        Important
-                    </option>
-                    <option value="General"
-                        <%= "General".equals(a.getCategory()) ? "selected" : "" %>>
-                        General
-                    </option>
-                </select>
-
-                <!-- CURRENT IMAGE -->
-                <% if (a.getImagePath() != null && !a.getImagePath().isEmpty()) { %>
-                    <p>
-                        <strong>Current Image:</strong>
-                        <a href="<%= request.getContextPath() %>/uploads/<%= a.getImagePath() %>" target="_blank">
-                            <%= a.getImagePath() %>
-                        </a>
-                    </p>
-                <% } %>
-                <input type="file" name="imagePath" accept=".jpg,.png,image/jpeg,image/png">
-
-                <!-- CURRENT ATTACHMENT -->
-                <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().isEmpty()) { %>
-                    <p>
-                        <strong>Current Attachment:</strong>
-                        <a href="<%= request.getContextPath() %>/uploads/<%= a.getAttachmentPath() %>" target="_blank">
-                            <%= a.getAttachmentPath() %>
-                        </a>
-                    </p>
-                <% } %>
-                <input type="file" name="attachmentPath" accept=".pdf,application/pdf">
-
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn">
-                        Update Announcement
-                    </button>
-                </div>
-
-            </form>
                     <!-- CURRENT ATTACHMENT -->
                     <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().isEmpty()) { %>
                         <p>
@@ -135,7 +104,7 @@
                         </p>
                     <% } %>
                     <input type="file" name="attachmentPath" accept=".pdf,application/pdf">
-                    
+
                     <!-- ACTIONS -->
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">
@@ -145,7 +114,5 @@
                 </form>
             </div>
         </div>
-    </div>
-
     </body>
 </html>

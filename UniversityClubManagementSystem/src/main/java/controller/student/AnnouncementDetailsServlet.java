@@ -7,10 +7,7 @@ package controller.student;
 import dao.AnnouncementDAO;
 import model.Announcement;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,13 +25,25 @@ public class AnnouncementDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int id = Integer.parseInt(request.getParameter("id"));
+        int id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/student/announcements");
+            return;
+        }
 
         AnnouncementDAO dao = new AnnouncementDAO();
         Announcement announcement = dao.getAnnouncementById(id);
 
+        if (announcement == null) {
+            response.sendRedirect(request.getContextPath() + "/student/announcements");
+            return;
+        }
+
         request.setAttribute("announcement", announcement);
         request.getRequestDispatcher("/student/announcementDetails.jsp")
                .forward(request, response);
+
     }
 }

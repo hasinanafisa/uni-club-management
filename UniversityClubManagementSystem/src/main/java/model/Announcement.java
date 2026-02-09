@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class Announcement {
     private int announcementId;
     private int clubId;
-    private int eventId;
+    private Integer eventId;    //nullable
     private String title;
     private String content;
     private String category;
@@ -32,7 +32,7 @@ public class Announcement {
     public String getAttachmentPath() { return attachmentPath; }
     public int getPostedBy() { return postedBy; }
     public Timestamp getPostedAt() { return postedAt; }
-    public int getEventId() { return eventId; }
+    public Integer getEventId() { return eventId; }
     
     //setters
     public void setAnnouncementId(int announcementId) { this.announcementId = announcementId; }
@@ -44,5 +44,5 @@ public class Announcement {
     public void setAttachmentPath(String attachmentPath) { this.attachmentPath = attachmentPath; }
     public void setPostedBy(int postedBy) { this.postedBy = postedBy; }
     public void setPostedAt(Timestamp postedAt) { this.postedAt = postedAt; }
-    public void setEventId(int eventId) { this.eventId = eventId; }
+    public void setEventId(Integer eventId) { this.eventId = eventId; }
 }

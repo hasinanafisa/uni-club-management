@@ -30,7 +30,10 @@ public class AnnouncementDAO {
                 
                 a.setAnnouncementId(rs.getInt("announcement_id"));
                 a.setClubId(rs.getInt("club_id"));
-                a.setEventId(rs.getInt("event_id"));
+
+                int eid = rs.getInt("event_id");
+                a.setEventId(rs.wasNull() ? null : eid);
+                
                 a.setTitle(rs.getString("title"));
                 a.setContent(rs.getString("content"));
                 a.setCategory(rs.getString("category"));
@@ -38,6 +41,7 @@ public class AnnouncementDAO {
                 a.setAttachmentPath(rs.getString("attachment_path"));
                 a.setPostedBy(rs.getInt("posted_by"));
                 a.setPostedAt(rs.getTimestamp("posted_at"));
+                
                 list.add(a);
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -59,7 +63,10 @@ public class AnnouncementDAO {
                 a = new Announcement();
                 a.setAnnouncementId(rs.getInt("announcement_id"));
                 a.setClubId(rs.getInt("club_id"));
-                a.setEventId(rs.getInt("event_id"));
+
+                int eid = rs.getInt("event_id");
+                a.setEventId(rs.wasNull() ? null : eid);
+                
                 a.setTitle(rs.getString("title"));
                 a.setContent(rs.getString("content"));
                 a.setCategory(rs.getString("category"));
@@ -84,7 +91,7 @@ public class AnnouncementDAO {
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, a.getClubId());
-            ps.setInt(2, a.getEventId());
+            ps.setObject(2, a.getEventId(), Types.INTEGER);
             ps.setString(3, a.getTitle());
             ps.setString(4, a.getContent());
             ps.setString(5, a.getCategory());
@@ -105,21 +112,60 @@ public class AnnouncementDAO {
     // UPDATE
     public void updateAnnouncement(Announcement a) throws SQLException {
         String sql =
-        "UPDATE announcement SET title=?, content=?, category=?, image_path=?, attachment_path=? "
-                + "WHERE announcement_id=?";
+        "UPDATE announcement " + 
+                "SET event_id=?, title=?, content=?, category=?, image_path=?, attachment_path=? " + 
+                "WHERE announcement_id=?";
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
-            ps.setString(1, a.getTitle());
-            ps.setString(2, a.getContent());
-            ps.setString(3, a.getCategory());
-            ps.setString(4, a.getImagePath());
-            ps.setString(5, a.getAttachmentPath());
-            ps.setInt(6, a.getAnnouncementId());
+            ps.setObject(1, a.getEventId(), Types.INTEGER);
+            ps.setString(2, a.getTitle());
+            ps.setString(3, a.getContent());
+            ps.setString(4, a.getCategory());
+            ps.setString(5, a.getImagePath());
+            ps.setString(6, a.getAttachmentPath());
+            ps.setInt(7, a.getAnnouncementId());
             ps.executeUpdate();
             
         } catch (Exception e) { e.printStackTrace(); }
+    }
+    
+    // READ GENERAL ANNOUNCEMENTS (no club required)
+    public List<Announcement> getGeneralAnnouncements() {
+        List<Announcement> list = new ArrayList<>();
+        String sql =
+            "SELECT * FROM announcement " +
+            "WHERE category = 'General' " +
+            "ORDER BY posted_at DESC";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Announcement a = new Announcement();
+                a.setAnnouncementId(rs.getInt("announcement_id"));
+                a.setClubId(rs.getInt("club_id"));
+
+                int eid = rs.getInt("event_id");
+                a.setEventId(rs.wasNull() ? null : eid);
+
+                a.setTitle(rs.getString("title"));
+                a.setContent(rs.getString("content"));
+                a.setCategory(rs.getString("category"));
+                a.setImagePath(rs.getString("image_path"));
+                a.setAttachmentPath(rs.getString("attachment_path"));
+                a.setPostedBy(rs.getInt("posted_by"));
+                a.setPostedAt(rs.getTimestamp("posted_at"));
+
+                list.add(a);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
     
     public int getAnnouncementCount(int clubId) {

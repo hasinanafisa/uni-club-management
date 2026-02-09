@@ -93,23 +93,33 @@ public class EditAnnouncementServlet extends HttpServlet {
             return;
         }
         
-        EventDAO eDAO = new EventDAO();
-        Event event = eDAO.getEventById(existing.getEventId());
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int userClubId = cmDAO.getClubIdByUser(user.getUserId());
-        if (event == null || event.getClubId() != userClubId) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
-            return;
+        
+        EventDAO eDAO = new EventDAO();
+        Integer evId = existing.getEventId();
+        if (evId != null) {
+            Event event = eDAO.getEventById(evId);
+            if (event == null || event.getClubId() != userClubId) {
+                response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
+                return;
+            }
         }
 
         Announcement a = new Announcement();
         
         // TEXT FIELDS
         a.setAnnouncementId(announcementId);
-        a.setEventId(Integer.parseInt(request.getParameter("eventId")));
         a.setTitle(request.getParameter("title"));
         a.setContent(request.getParameter("content"));
         a.setCategory(request.getParameter("category"));
+        
+        String eventIdStr = request.getParameter("eventId");
+        Integer eventId = null;
+        if (eventIdStr != null && !eventIdStr.isBlank()) {
+            eventId = Integer.valueOf(eventIdStr);
+        }
+        a.setEventId(eventId);
         
         Part imagePart = request.getPart("imagePath");
         Part attachmentPart = request.getPart("attachmentPath");

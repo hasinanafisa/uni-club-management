@@ -46,24 +46,21 @@ public class PreviewAnnouncementServlet extends HttpServlet {
         }
 
         // 🔐 Ownership check via EVENT → CLUB
-        EventDAO eventDAO = new EventDAO();
-        Event event = eventDAO.getEventById(announcement.getEventId());
-
-        if (event == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
-            return;
-        }
-
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int userClubId = cmDAO.getClubIdByUser(user.getUserId());
+        
+        EventDAO eventDAO = new EventDAO();
+        Integer eventId = announcement.getEventId();
 
-        if (event.getClubId() != userClubId) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
-            return;
-        }
-
+        if (eventId != null) {
+            Event event = eventDAO.getEventById(eventId);
+            if (event == null || event.getClubId() != userClubId) {
+                response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
+                return;
+            }
+            request.setAttribute("event", event);
+        }        
         request.setAttribute("announcement", announcement);
-        request.setAttribute("event", event);
 
         request.getRequestDispatcher("/admin/previewAnnouncement.jsp").forward(request, response);
     }

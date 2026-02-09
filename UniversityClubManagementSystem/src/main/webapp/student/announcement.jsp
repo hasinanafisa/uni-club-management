@@ -49,6 +49,15 @@ if (announcements == null) {
     <div class="home-container">
         <h1>📢 Announcements</h1>
         <p class="subtitle">Latest updates from clubs</p>
+        <%
+            String info = (String) request.getAttribute("info");
+        %>
+
+        <% if (info != null) { %>
+            <p style="text-align:center; color:#666; margin-bottom:15px;">
+                <%= info %>
+            </p>
+        <% } %>
 
         <!-- < %
             List<Announcement> announcements =

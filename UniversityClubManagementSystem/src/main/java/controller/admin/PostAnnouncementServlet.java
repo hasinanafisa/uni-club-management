@@ -18,9 +18,6 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 
 @MultipartConfig
@@ -77,12 +74,15 @@ public class PostAnnouncementServlet extends HttpServlet {
 
         // 🔐 Validate event belongs to this club
         EventDAO eventDAO = new EventDAO();
-        Event event = eventDAO.getEventById(
-                Integer.parseInt(request.getParameter("eventId"))
-        );
-        if (event == null || event.getClubId() != clubId) {
-            response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
-            return;
+        String eventIdStr = request.getParameter("eventId");
+        Integer eventId = null;
+        if (eventIdStr != null && !eventIdStr.isBlank()) {
+            eventId = Integer.valueOf(eventIdStr);
+            Event event = eventDAO.getEventById(eventId);
+            if (event == null || event.getClubId() != clubId) {
+                response.sendRedirect(request.getContextPath() + "/admin/manageAnnouncement");
+                return;
+            }
         }
         
         Announcement a = new Announcement();
@@ -90,13 +90,12 @@ public class PostAnnouncementServlet extends HttpServlet {
         // REQUIRED FIELDS
         a.setClubId(clubId);
         a.setPostedBy(user.getUserId());
-        a.setEventId(event.getEventID());
+        a.setEventId(eventId);
 
         // TEXT FIELDS
         a.setTitle(request.getParameter("title"));
         a.setContent(request.getParameter("content"));
         a.setCategory(request.getParameter("category"));
-        a.setEventId(Integer.parseInt(request.getParameter("eventId")));
         
         // IMAGE/FILE UPLOADS
         Part imagePart = request.getPart("imagePath");

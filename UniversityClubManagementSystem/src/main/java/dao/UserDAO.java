@@ -59,38 +59,6 @@ public class UserDAO {
         }
     }
 
-    public List<User> getMembersByClubId(int clubId) {
-        List<User> members = new ArrayList<>();
-
-        String sql = """
-            SELECT user_id, full_name, email, user_type
-            FROM users
-            WHERE club_id = ?
-        """;
-
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, clubId);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User u = new User();
-                    u.setUserId(rs.getInt("user_id"));
-                    u.setFullName(rs.getString("full_name"));
-                    u.setEmail(rs.getString("email"));
-                    u.setUserType(rs.getString("user_type"));
-                    members.add(u);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return members;
-    }
-
     // GET EVENTS JOINED BY STUDENT
     public List<Event> getJoinedEvents(int userId) {
         List<Event> events = new ArrayList<>();

@@ -40,16 +40,14 @@
                       method="post"
                       enctype="multipart/form-data">
 
-                    <!-- Related Event -->
-                    <select name="eventId" required>
-                        <option value="">-- Related Event --</option>
-                        <% for (Event e : events) { %>
-                            <option value="<%= e.getEventID() %>">
-                                <%= e.getEventTitle() %>
-                            </option>
-                        <% } %>
+                    <!-- Category -->
+                    <label>Category *</label>
+                    <select name="category" required>
+                        <option value="" disabled selected hidden>-- Select Category --</option>
+                        <option value="Important">Important</option>
+                        <option value="General">General</option>
                     </select>
-
+                    
                     <!-- Title -->
                     <label>Title *</label>
                     <input type="text" name="title" required>
@@ -57,13 +55,16 @@
                     <!-- Content -->
                     <label>Content *</label>
                     <textarea name="content" rows="4" required></textarea>
-
-                    <!-- Category -->
-                    <label>Category *</label>
-                    <select name="category" required>
-                        <option value="" disabled selected hidden>-- Select Category --</option>
-                        <option value="Important">Important</option>
-                        <option value="General">General</option>
+                    
+                    <!-- Related Event -->
+                    <label>Related Event (Optional)</label>
+                    <select name="eventId">
+                        <option value="">-- Related Event --</option>
+                        <% for (Event e : events) { %>
+                            <option value="<%= e.getEventID() %>">
+                                <%= e.getEventTitle() %>
+                            </option>
+                        <% } %>
                     </select>
 
                     <!-- Upload Image -->

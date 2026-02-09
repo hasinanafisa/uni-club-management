@@ -18,7 +18,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Edit Club</title>
+        <title>Edit Club Details</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminstyle.css">
     </head>
 
@@ -40,7 +40,7 @@
         <div class="home-page">
             <div class="home-container">
 
-                <h1>Edit Club</h1>
+                <h1>Edit Club Details</h1>
                 <p class="subtitle">Update club information below</p>
 
                 <form class="create-event-form"

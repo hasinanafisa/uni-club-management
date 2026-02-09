@@ -243,4 +243,20 @@ public class ClubMemberDAO {
 
         return list;
     }
+    
+    public void updateMemberRole(int userId, int clubId, String role) {
+        String sql = "UPDATE club_member SET role = ? WHERE user_id = ? AND club_id = ?";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, role);
+            ps.setInt(2, userId);
+            ps.setInt(3, clubId);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

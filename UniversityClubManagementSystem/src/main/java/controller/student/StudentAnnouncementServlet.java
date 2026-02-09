@@ -45,19 +45,21 @@ public class StudentAnnouncementServlet extends HttpServlet {
         // 📌 Get student's club
         ClubMemberDAO cmDAO = new ClubMemberDAO();
         int clubId = cmDAO.getClubIdByUser(user.getUserId());
-
-        if (clubId == 0) {
-            request.setAttribute("error", "You have not joined any club.");
-            request.getRequestDispatcher("/student/announcement.jsp")
-                   .forward(request, response);
-            return;
-        }
         
         // 📣 Get announcements
         AnnouncementDAO dao = new AnnouncementDAO();
         List<Announcement> announcements = dao.getAnnouncementsByClubId(clubId);
+        
+        if (clubId == 0) {
+            // Student has not joined any club
+            announcements = dao.getGeneralAnnouncements();
+            request.setAttribute("info", "Showing general announcements.");
+        } else {
+            // Student joined a club
+            announcements = dao.getAnnouncementsByClubId(clubId);
+        }
 
         request.setAttribute("announcements", announcements);
-        request.getRequestDispatcher("student/announcement.jsp").forward(request, response);
+        request.getRequestDispatcher("/student/announcement.jsp").forward(request, response);
     }
 }

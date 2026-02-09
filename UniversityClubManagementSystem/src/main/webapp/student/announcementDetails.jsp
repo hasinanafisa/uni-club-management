@@ -13,8 +13,16 @@
 <%
 Announcement a = (Announcement) request.getAttribute("announcement");
 
-EventDAO eventDAO = new EventDAO();
-Event ev = eventDAO.getEventById(a.getEventId());
+if (a == null) {
+    out.println("<p>No announcement found.</p>");
+    return;
+}
+
+Event ev = null;
+if (a.getEventId() != null) {
+    EventDAO eventDAO = new EventDAO();
+    ev = eventDAO.getEventById(a.getEventId());
+}
 
 SimpleDateFormat dateFormat =
         new SimpleDateFormat("dd MMM yyyy, h:mm a");
@@ -22,10 +30,6 @@ SimpleDateFormat dateFormat =
 SimpleDateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 SimpleDateFormat eventTimeFormat = new SimpleDateFormat("h:mm a");
 
-if (a == null) {
-    out.println("<p>No announcement found.</p>");
-    return;
-}
 %>
 
 <!DOCTYPE html>
@@ -58,35 +62,44 @@ if (a == null) {
                     <%= a.getContent() %>
                 </p>
                 
+                <% if (a.getEventId() == null) { %>
+                    <div style="margin-top:25px;">
+                        <a href="<%= request.getContextPath() %>/student/clubOverview?id=<%= a.getClubId() %>"
+                           class="btn-primary">
+                            View Club
+                        </a>
+                    </div>
+                <% } %>
+                
                 <!-- ATTACHMENTS -->
-                <div class="details-section">
-                    <h3>📎 Attachment</h3>
-                    <a href="<%= request.getContextPath() %>/uploads/announcements/<%= a.getAttachmentPath() %>"
-                       download>
-                        Download Attachment
-                    </a>
-                </div>
+                <% if (a.getAttachmentPath() != null && !a.getAttachmentPath().isBlank() && !a.getAttachmentPath().contains("default")) { %>
+                     <div class="details-section">
+                         <h3>📎 Attachment</h3>
+                         <a href="<%= request.getContextPath() %>/uploads/announcements/<%= a.getAttachmentPath() %>"
+                            download>
+                             Download Attachment
+                         </a>
+                     </div>
+                <% } %>
 
                 <!-- IMAGE -->
+                <% if (a.getImagePath() != null && !a.getImagePath().isBlank() && !a.getImagePath().contains("default")) { %>
                 <div class="details-section">
                     <h3>📷 Image</h3>
-                        <% if (a.getImagePath() != null && !a.getImagePath().isEmpty()) { %>
-                            <img src="<%= request.getContextPath() %>/announcementImage?id=<%= a.getAnnouncementId() %>"
+                        <img src="<%= request.getContextPath() %>/announcementImage?id=<%= a.getAnnouncementId() %>"
                                  class="details-image">
-                        <% } else { %>
-                            <p>No image available.</p>
-                        <% } %>
                 </div>
+                <% } %>
                 
-                <a href="${pageContext.request.contextPath}/announcements"
+                <a href="${pageContext.request.contextPath}/student/announcements"
                    class="back-link">Back</a>
             </div>
 
             <!-- RIGHT INFO CARD -->
-            <div class="details-side card">
-                <h3>📅 Event Info</h3>
+            <% if (ev != null) { %>
+                <div class="details-side card">
+                    <h3>📅 Event Info</h3>
 
-                <% if (ev != null) { %>
                     <p>
                         <strong>Event:</strong><br>
                         <%= ev.getEventTitle() %>
@@ -97,7 +110,6 @@ if (a == null) {
                         <%= eventDateFormat.format(ev.getEventDate()) %>
                     </p>
 
-
                     <p>
                         <strong>Time:</strong><br>
                         <%= eventTimeFormat.format(ev.getEventTime()) %>
@@ -107,11 +119,8 @@ if (a == null) {
                         <strong>Location:</strong><br>
                         <%= ev.getEventLoc() %>
                     </p>
-                <% } else { %>
-                    <p>No event information available.</p>
-                <% } %>
-            </div>
-
+                </div>
+            <% } %>
         </div>
     </div>
 </div>

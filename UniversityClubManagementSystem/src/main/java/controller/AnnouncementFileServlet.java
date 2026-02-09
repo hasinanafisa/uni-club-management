@@ -47,13 +47,16 @@ public class AnnouncementFileServlet extends HttpServlet {
         }
 
         String relativePath;
-        if ("image".equals(type)) {
-            relativePath = a.getImagePath();
-        } else if ("attachment".equals(type)) {
-            relativePath = a.getAttachmentPath();
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
+        switch (type) {
+            case "image":
+                relativePath = a.getImagePath();
+                break;
+            case "attachment":
+                relativePath = a.getAttachmentPath();
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
         }
 
         if (relativePath == null) {

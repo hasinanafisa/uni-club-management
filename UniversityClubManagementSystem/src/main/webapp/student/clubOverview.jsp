@@ -48,7 +48,6 @@
 
             <!-- CLUB CONTENT -->
             <div class="card-container">
-<<<<<<< HEAD
 
                 <!-- ABOUT -->
                 <div class="card">
@@ -85,7 +84,7 @@
             <!-- JOIN BUTTON -->
             <div style="text-align:center; margin-top:30px;">
                 <form action="${pageContext.request.contextPath}/student/joinClub" method="post">
-                    <input type="hidden" name="clubId" value="<%= club.getClubID() %>">
+                    <input type="hidden" name="clubId" value="<%= club.getClubId() %>">
                     <button type="submit" class="join-btn">
                         Join Club
                     </button>

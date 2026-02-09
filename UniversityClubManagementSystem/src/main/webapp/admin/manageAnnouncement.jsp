@@ -61,6 +61,27 @@
         <!-- MAIN CONTENT -->
         <div class="home-page">
             <div class="home-container">
+                
+                <div class="search-filter-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search event...">
+                        <i class="fa-solid fa-xmark clear-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="filter-bar">
+                    <input type="text" id="searchInput"
+                           placeholder="Search announcements..."
+                           onkeyup="filterAnnouncements()">
+
+                    <select id="categoryFilter" onchange="filterAnnouncements()">
+                        <option value="ALL">All</option>
+                        <option value="IMPORTANT">Important</option>
+                        <option value="GENERAL">General</option>
+                        <option value="EVENT">Events</option>
+                    </select>
+                </div>
 
                 <%
                     EventDAO eventDao = new EventDAO();
@@ -71,7 +92,10 @@
                     <div class="empty-box"><p>No announcement found.</p></div>
                 <% } else {
                     for (Announcement a : announcements) {
-                        Event ev = eventDao.getEventById(a.getEventId());
+                        Event ev = null;
+                        if (a.getEventId() != null) {
+                            ev = eventDao.getEventById(a.getEventId());
+                        }
                 %>
 
                 <div class="announcement-card">
@@ -96,6 +120,8 @@
                                 <strong>Date:</strong> <%= ev.getEventDate() %><br>
                                 <strong>Time:</strong> <%= timeFormat.format(ev.getEventTime()) %>
                             </p>
+                        <% } else { %>
+                            <em>General announcement</em>
                         <% } %>
                     </div>
 

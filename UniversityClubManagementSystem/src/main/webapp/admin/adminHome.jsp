@@ -28,9 +28,6 @@
     </head>
 
     <body>
-
-        <div id="toast" class="toast"></div>
-
         <div class="navbar">
             <div style="display:flex; align-items:center;">
                 <i class="fa-solid fa-bars menu-toggle" onclick="toggleSidebar()"></i>
@@ -58,8 +55,9 @@
 
         <div class="home-page">
             <div class="home-container">
+                <h1>HEY, <%= user.getFullName().toUpperCase() %>!</h1>
                 <h1>Welcome Back to University Club Management System</h1>
-                <p class="subtitle">Admin Dashboard</p>
+                <p class="subtitle">Select what to manage for your club today</p>
 
                 <div class="card-container">
                     <div class="card">
