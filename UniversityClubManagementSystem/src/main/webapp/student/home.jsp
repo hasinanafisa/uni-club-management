@@ -66,7 +66,7 @@
                     <i class="fa-solid fa-bell"></i>
                     <h3>NEWS</h3>
                     <p>Read the latest club announcements.</p>
-                    <a href="announcements.jsp">READ</a>
+                    <a href="${pageContext.request.contextPath}/student/announcements">READ</a>
                 </div>
             </div>
         </div>
