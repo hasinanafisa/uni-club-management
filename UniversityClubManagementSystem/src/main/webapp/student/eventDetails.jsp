@@ -5,12 +5,23 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Event"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.sql.Date"%>
 
 <%
     Event event = (Event) request.getAttribute("event");
     boolean hasJoined = request.getAttribute("hasJoined") != null
                         && (Boolean) request.getAttribute("hasJoined");
+
+    boolean isPastEvent = false;
+
+    if (event != null && event.getEventDate() != null) {
+        LocalDate today = LocalDate.now();
+        LocalDate eventDate = event.getEventDate().toLocalDate();
+        isPastEvent = eventDate.isBefore(today);
+    }
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -100,14 +111,18 @@
             <!-- ACTIONS -->
             <div class="event-actions">
                 <%
-                    if (!hasJoined) {
+                    if (isPastEvent) {
+                %>
+                    <button class="joined-btn" disabled>Event Ended</button>
+                <%
+                } else if (!hasJoined) {
                 %>
                     <form action="${pageContext.request.contextPath}/student/joinEvent" method="post">
-                        <input type="hidden" name="eventId" value="<%= event.getEventID() %>">
+                        <input type="hidden" name="eventId" value="<%= event.getEventID()%>">
                         <button type="submit" class="join-btn">Join Event</button>
                     </form>
                 <%
-                    } else {
+                } else {
                 %>
                     <button class="joined-btn" disabled>Joined</button>
                 <%

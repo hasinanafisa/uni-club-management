@@ -61,20 +61,21 @@
         <!-- MAIN CONTENT -->
         <div class="home-page">
             <div class="home-container">
-                
                 <div class="search-filter-bar">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Search announcement...">
-                        <i class="fa-solid fa-xmark clear-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Search announcement...">
+                        <i class="fa-solid fa-xmark clear-icon" id="clearSearch"></i>
                     </div>
-                    
-                    <select id="categoryFilter" onchange="filterAnnouncements()">
-                        <option value="ALL">All</option>
-                        <option value="IMPORTANT">Important</option>
-                        <option value="GENERAL">General</option>
-                        <option value="EVENT">Events</option>
-                    </select>
+
+                    <div class="status-filter">
+                        <select id="categoryFilter">
+                            <option value="all">ALL</option>
+                            <option value="important">IMPORTANT</option>
+                            <option value="general">GENERAL</option>
+                            <option value="event">EVENT</option>
+                        </select>
+                    </div>
                 </div>
 
                 <%
@@ -92,7 +93,9 @@
                         }
                 %>
 
-                <div class="announcement-card">
+                <div class="announcement-card"
+                     data-title="<%= a.getTitle().toLowerCase()%>"
+                     data-category="<%= a.getCategory().toLowerCase()%>">
                     <div class="announce-category-badge <%= a.getCategory().toLowerCase() %>">
                         <%= a.getCategory() %>
                     </div>
@@ -162,7 +165,40 @@
                 window.location.href =
                     "<%= request.getContextPath() %>/admin/deleteAnnouncement?id=" + announcementId;
             }
-        </script>
+            
+            const searchInput = document.getElementById("searchInput");
+            const categoryFilter = document.getElementById("categoryFilter");
+            const clearBtn = document.getElementById("clearSearch");
+            const cards = document.querySelectorAll(".announcement-card");
 
+            function filterAnnouncements() {
+                const searchText = searchInput.value.toLowerCase().trim();
+                const selectedCategory = categoryFilter.value;
+
+                cards.forEach(card => {
+                    const title = card.dataset.title;
+                    const category = card.dataset.category;
+
+                    const matchSearch = title.includes(searchText);
+                    const matchCategory =
+                        selectedCategory === "all" || category === selectedCategory;
+
+                    if (matchSearch && matchCategory) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            }
+
+            searchInput.addEventListener("input", filterAnnouncements);
+            categoryFilter.addEventListener("change", filterAnnouncements);
+
+            clearBtn.addEventListener("click", () => {
+                searchInput.value = "";
+                categoryFilter.value = "all";
+                filterAnnouncements();
+            });
+        </script>
     </body>
 </html>

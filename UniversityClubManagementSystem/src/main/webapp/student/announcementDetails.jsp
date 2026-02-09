@@ -64,7 +64,7 @@ SimpleDateFormat eventTimeFormat = new SimpleDateFormat("h:mm a");
                 
                 <% if (a.getEventId() == null) { %>
                     <div style="margin-top:25px;">
-                        <a href="<%= request.getContextPath() %>/student/clubOverview?id=<%= a.getClubId() %>"
+                        <a href="<%= request.getContextPath() %>/student/club?clubId=<%= a.getClubId() %>"
                            class="btn-primary">
                             View Club
                         </a>

@@ -34,6 +34,7 @@
                 <div class="logo">HOME</div>
             </div>
             <ul class="nav-links">
+                <li><a href="<%= request.getContextPath() %>/admin/myProfile">My Profile</a></li>
                 <li><a href="<%= request.getContextPath() %>/LogoutServlet">Logout</a></li>
             </ul>
         </div>
@@ -79,7 +80,7 @@
                         <div class="insight-item">
                             <div class="insight-label">Most Popular Event</div>
                             <div class="insight-value">
-                                ${popularEvent != null ? popularEvent : "—"}
+                                ${empty popularEvent ? "—" : popularEvent}
                             </div>
                         </div>
                     </div>

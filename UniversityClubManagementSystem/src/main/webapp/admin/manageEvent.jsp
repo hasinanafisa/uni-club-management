@@ -56,8 +56,16 @@
             <div class="search-filter-bar">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search event...">
-                    <i class="fa-solid fa-xmark clear-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search event...">
+                    <i class="fa-solid fa-xmark clear-icon" id="clearSearch"></i>
+                </div>
+
+                <div class="status-filter">
+                    <select id="statusFilter">
+                        <option value="all">ALL</option>
+                        <option value="upcoming">UPCOMING</option>
+                        <option value="past">PAST</option>
+                    </select>
                 </div>
             </div>
 
@@ -90,7 +98,9 @@
                             : "Past";
             %>
 
-            <div class="event-card">
+            <div class="event-card"
+                 data-title="<%= e.getEventTitle().toLowerCase()%>"
+                 data-status="<%= status.toLowerCase()%>">
                 <div class="event-info">
                     <p>
                         <strong>Event Name:</strong>
@@ -150,7 +160,44 @@
             window.location.href =
                 "<%= request.getContextPath() %>/admin/deleteEvent?id=" + eventID;
         }
-    </script>
+        
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+        const clearBtn = document.getElementById("clearSearch");
+        const eventCards = document.querySelectorAll(".event-card");
 
+        function filterEvents() {
+            const searchText = searchInput.value.toLowerCase().trim();
+            const selectedStatus = statusFilter.value;
+
+            let visibleCount = 0;
+
+            eventCards.forEach(card => {
+                const title = card.dataset.title;
+                const status = card.dataset.status;
+
+                const matchSearch = title.includes(searchText);
+                const matchStatus =
+                    selectedStatus === "all" || status === selectedStatus;
+
+                if (matchSearch && matchStatus) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        searchInput.addEventListener("input", filterEvents);
+        statusFilter.addEventListener("change", filterEvents);
+
+        clearBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            statusFilter.value = "all";
+            filterEvents();
+        });
+    </script>
+    
     </body>
 </html>

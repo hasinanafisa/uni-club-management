@@ -1,7 +1,9 @@
 package controller.admin;
 
+import model.User;
+import dao.ClubMemberDAO;
 import dao.EventDAO;
-import dao.EventRegistrationDAO;
+
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,26 +13,31 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/admin/home")
 public class AdminHomeServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        User user = (User) request.getSession().getAttribute("user");
+
+        ClubMemberDAO clubMemberDAO = new ClubMemberDAO();
+        Integer clubId = clubMemberDAO.getAdvisedClubId(user.getUserId());
+
+        // 🔒 Safety check
+        if (clubId == null) {
+            request.setAttribute("eventsThisMonth", 0);
+            request.setAttribute("totalParticipants", 0);
+            request.setAttribute("popularEvent", "N/A");
+            request.getRequestDispatcher("/admin/adminHome.jsp").forward(request, response);
+            return;
+        }
+
         EventDAO eventDAO = new EventDAO();
 
-        // 🔢 Events this month
-        int eventsThisMonth = eventDAO.countEventsThisMonth();
+        request.setAttribute("eventsThisMonth",eventDAO.countEventsThisMonthByClub(clubId));
 
-        // 👥 Total participants
-        int totalParticipants = eventDAO.getTotalParticipants();
+        request.setAttribute("totalParticipants",eventDAO.getTotalParticipantsByClub(clubId));
 
-        // ⭐ Most popular event
-        String popularEvent = eventDAO.getMostPopularEvent();
-
-        // Send to JSP
-        request.setAttribute("eventsThisMonth", eventsThisMonth);
-        request.setAttribute("totalParticipants", totalParticipants);
-        request.setAttribute("popularEvent", popularEvent);
+        request.setAttribute("popularEvent",eventDAO.getMostPopularEventByClub(clubId));
 
         request.getRequestDispatcher("/admin/adminHome.jsp").forward(request, response);
     }

@@ -48,7 +48,6 @@
 
             <!-- CLUB CONTENT -->
             <div class="card-container">
-
                 <!-- ABOUT -->
                 <div class="card">
                     <h3>About the Club</h3>
@@ -78,7 +77,6 @@
                                 : "No achievements recorded yet." %>
                     </p>
                 </div>
-
             </div>
                     
             <!-- JOIN BUTTON -->
@@ -89,38 +87,6 @@
                         Join Club
                     </button>
                 </form>
-            </div>
-
-                <!-- ABOUT -->
-                <div class="card">
-                    <h3>About the Club</h3>
-                    <p>
-                        <%= club.getDescription() != null
-                                ? club.getDescription()
-                                : "This club has no description yet." %>
-                    </p>
-                </div>
-
-                <!-- MISSION -->
-                <div class="card">
-                    <h3>Mission</h3>
-                    <p>
-                        <%= club.getMission() != null && !club.getMission().isBlank()
-                                ? club.getMission()
-                                : "Mission has not been set yet." %>
-                    </p>
-                </div>
-
-                <!-- ACHIEVEMENTS -->
-                <div class="card">
-                    <h3>Achievements</h3>
-                    <p>
-                        <%= club.getAchievements() != null && !club.getAchievements().isBlank()
-                                ? club.getAchievements()
-                                : "No achievements recorded yet." %>
-                    </p>
-                </div>
-
             </div>
         </div>
     </div>

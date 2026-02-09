@@ -23,21 +23,24 @@ if (announcements == null) {
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
-        function filterAnnouncements() {
-            let search = document.getElementById("searchInput").value.toLowerCase();
-            let category = document.getElementById("categoryFilter").value;
-            let cards = document.querySelectorAll(".card");
+    function filterAnnouncements() {
+        const search = document.getElementById("searchInput").value
+            .toLowerCase()
+            .trim();
 
-            cards.forEach(card => {
-                let title = card.dataset.title;
-                let cardCategory = card.dataset.category;
+        const category = document.getElementById("categoryFilter").value;
+        const cards = document.querySelectorAll(".card-container .card");
 
-                let matchSearch = title.includes(search);
-                let matchCategory = (category === "ALL" || cardCategory === category);
+        cards.forEach(card => {
+            const title = card.dataset.title || "";
+            const cardCategory = card.dataset.category || "";
 
-                card.style.display = (matchSearch && matchCategory) ? "block" : "none";
-            });
-        }
+            const matchSearch = title.includes(search);
+            const matchCategory = (category === "ALL" || cardCategory === category);
+
+            card.style.display = (matchSearch && matchCategory) ? "block" : "none";
+        });
+    }
     </script>
 </head>
 <body>
@@ -68,9 +71,14 @@ if (announcements == null) {
         %>-->
         
         <div class="filter-bar">
-            <input type="text" id="searchInput"
-                   placeholder="Search announcements..."
-                   onkeyup="filterAnnouncements()">
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text"
+                       id="searchInput"
+                       placeholder="Search announcements..."
+                       onkeyup="filterAnnouncements()">
+            </div>
 
             <select id="categoryFilter" onchange="filterAnnouncements()">
                 <option value="ALL">All</option>
@@ -78,7 +86,9 @@ if (announcements == null) {
                 <option value="GENERAL">General</option>
                 <option value="EVENT">Events</option>
             </select>
+
         </div>
+
 
 
         <div class="card-container">

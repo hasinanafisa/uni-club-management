@@ -120,7 +120,7 @@ public class UserDAO {
     }
     
     public void updateProfile(User user) {
-        String sql = "UPDATE users SET full_name=?, email=?, course=?, faculty=?, profile_image=? WHERE user_id=?";
+        String sql = "UPDATE users SET full_name=?, email=?, course=?, faculty=? WHERE user_id=?";
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -198,6 +198,5 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
-
 
 }

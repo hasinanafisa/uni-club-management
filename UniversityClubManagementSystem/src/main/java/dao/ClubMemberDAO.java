@@ -202,27 +202,47 @@ public class ClubMemberDAO {
         return false;
     }
 
-    public List<User> getMembersByClubId(int clubId) {
-        List<User> list = new java.util.ArrayList<>();
+    public List<User> getMembersByClubId(int clubId, String sort) {
+        List<User> list = new ArrayList<>();
+
+        String orderBy;
+
+        if ("name".equals(sort)) {
+            orderBy = "u.full_name ASC";
+        } else if ("role".equals(sort)) {
+            orderBy = """
+            CASE cm.role
+                WHEN 'Advisor' THEN 1
+                WHEN 'President' THEN 2
+                WHEN 'Vice President' THEN 3
+                WHEN 'Secretary' THEN 4
+                WHEN 'Treasurer' THEN 5
+                WHEN 'Member' THEN 6
+            END, u.full_name ASC
+        """;
+        } else {
+            // DEFAULT: role + name
+            orderBy = """
+            CASE cm.role
+                WHEN 'Advisor' THEN 1
+                WHEN 'President' THEN 2
+                WHEN 'Vice President' THEN 3
+                WHEN 'Secretary' THEN 4
+                WHEN 'Treasurer' THEN 5
+                WHEN 'Member' THEN 6
+            END, u.full_name ASC
+        """;
+        }
 
         String sql = """
-            SELECT u.user_id, u.full_name, u.email, cm.role
-            FROM club_member cm
-            JOIN users u ON cm.user_id = u.user_id
-            WHERE cm.club_id = ?
-            ORDER BY
-                CASE cm.role
-                    WHEN 'Advisor' THEN 1
-                    WHEN 'President' THEN 2
-                    WHEN 'Vice President' THEN 3
-                    WHEN 'Secretary' THEN 4
-                    WHEN 'Treasurer' THEN 5
-                    WHEN 'Member' THEN 6
-                END
-        """;
+        SELECT u.user_id, u.full_name, u.email, cm.role
+        FROM club_member cm
+        JOIN users u ON cm.user_id = u.user_id
+        WHERE cm.club_id = ?
+        ORDER BY %s
+    """.formatted(orderBy);
 
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, clubId);
             ResultSet rs = ps.executeQuery();
@@ -232,8 +252,7 @@ public class ClubMemberDAO {
                 u.setUserId(rs.getInt("user_id"));
                 u.setFullName(rs.getString("full_name"));
                 u.setEmail(rs.getString("email"));
-                u.setRole(rs.getString("role")); // club role
-
+                u.setRole(rs.getString("role"));
                 list.add(u);
             }
 
@@ -259,4 +278,27 @@ public class ClubMemberDAO {
             e.printStackTrace();
         }
     }
+    
+    public Integer getAdvisedClubId(int userId) {
+        String sql = """
+        SELECT club_id
+        FROM club_member
+        WHERE user_id = ?
+          AND role = 'Advisor'
+    """;
+
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("club_id");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

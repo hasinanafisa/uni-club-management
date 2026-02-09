@@ -25,10 +25,12 @@ public class ManageClubMembersServlet extends HttpServlet {
         }
 
         int clubId = Integer.parseInt(request.getParameter("clubId"));
+        String sort = request.getParameter("sort"); // NEW
 
         ClubMemberDAO clubMemberDAO = new ClubMemberDAO();
-        List<User> members = clubMemberDAO.getMembersByClubId(clubId);
+        List<User> members = clubMemberDAO.getMembersByClubId(clubId, sort);
 
+        request.setAttribute("sort", sort);
         request.setAttribute("clubId", clubId);
         request.setAttribute("members", members);
 
@@ -40,7 +42,7 @@ public class ManageClubMembersServlet extends HttpServlet {
 
         session.setAttribute("clubRole", clubRole);
 
-        request.getRequestDispatcher("/admin/manageMembers.jsp")
+        request.getRequestDispatcher("/admin/manageClubMembers.jsp")
                .forward(request, response);
     }
 }

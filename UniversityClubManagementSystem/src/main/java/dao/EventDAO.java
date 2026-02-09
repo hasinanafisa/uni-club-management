@@ -170,21 +170,23 @@ public class EventDAO {
         return 0;
     }
     
-    public int getMonthlyEventCount(int clubId) {
+    public int countEventsThisMonthByClub(int clubId) {
         String sql = """
-            SELECT COUNT(*) 
-            FROM event
-            WHERE club_id = ?
-              AND MONTH(event_date) = MONTH(CURRENT_DATE)
-              AND YEAR(event_date) = YEAR(CURRENT_DATE)
+        SELECT COUNT(*)
+        FROM event
+        WHERE club_id = ?
+          AND MONTH(event_date) = MONTH(CURRENT_DATE)
+          AND YEAR(event_date) = YEAR(CURRENT_DATE)
         """;
 
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, clubId);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -192,15 +194,16 @@ public class EventDAO {
         return 0;
     }
     
-    public String getMostPopularEventTitle(int clubId) {
+    public String getMostPopularEventByClub(int clubId) {
         String sql = """
-        SELECT e.title
+        SELECT e.title, COUNT(er.registration_id) AS total
         FROM event e
-        JOIN event_registration er ON e.event_id = er.event_id
+        LEFT JOIN event_registration er
+            ON e.event_id = er.event_id
         WHERE e.club_id = ?
-        GROUP BY e.event_id
-        ORDER BY COUNT(er.user_id) DESC
-        LIMIT 1
+        GROUP BY e.event_id, e.title
+        ORDER BY total DESC
+        FETCH FIRST 1 ROWS ONLY
         """;
 
         try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -217,71 +220,25 @@ public class EventDAO {
         return "N/A";
     }
     
-    public int countEventsThisMonth() {
+    public int getTotalParticipantsByClub(int clubId) {
         String sql = """
-            SELECT COUNT(*)
-            FROM EVENT
-            WHERE EVENT_DATE >=
-                  TIMESTAMPADD(SQL_TSI_DAY, 1 - DAY(CURRENT_DATE), CURRENT_DATE)
-              AND EVENT_DATE <
-                  TIMESTAMPADD(SQL_TSI_MONTH, 1,
-                      TIMESTAMPADD(SQL_TSI_DAY, 1 - DAY(CURRENT_DATE), CURRENT_DATE))
+        SELECT COUNT(*)
+        FROM event_registration er
+        JOIN event e ON er.event_id = e.event_id
+        WHERE e.club_id = ?
         """;
 
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
-    
-    public String getMostPopularEvent() {
-        String sql = """
-            SELECT e.EVENT_TITLE, COUNT(r.REGISTRATION_ID) AS total
-            FROM EVENT e
-            LEFT JOIN EVENT_REGISTRATION r
-                ON e.EVENT_ID = r.EVENT_ID
-            GROUP BY e.EVENT_ID, e.EVENT_TITLE
-            ORDER BY total DESC
-            FETCH FIRST 1 ROWS ONLY
-        """;
-
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                return rs.getString("EVENT_TITLE");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
-    public int getTotalParticipants() {
-        String sql = """
-            SELECT COUNT(*)
-            FROM EVENT_REGISTRATION
-        """;
-
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
 }
