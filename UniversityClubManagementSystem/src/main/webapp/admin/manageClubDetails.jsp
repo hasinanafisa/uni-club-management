@@ -3,6 +3,7 @@
     Created on : 28 Jan 2026, 2:07:52 am
     Author     : izyanie
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Club"%>
 <%@page import="model.ClubMember"%>
@@ -13,7 +14,7 @@
 <%
     User user = (User) session.getAttribute("user");
     Club club = (Club) request.getAttribute("club");
-    List<ClubMember> members = (List<ClubMember>) request.getAttribute("members");
+    List<User> members = (List<User>) request.getAttribute("members");
     UserDAO userDAO = new UserDAO();
     User advisor = userDAO.getUserById(club.getCreatedBy());
 
@@ -46,7 +47,7 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <a href="${pageContext.request.contextPath}/admin/adminHome.jsp">
+        <a href="${pageContext.request.contextPath}/admin/home">
             <i class="fa-solid fa-house"></i>Home
         </a>
         <a href="${pageContext.request.contextPath}/admin/manageClubDetails" class="active-link">
@@ -64,97 +65,121 @@
     <div class="home-page">
         <div class="home-container">
             <div class="club-details-card">
+                <!-- TOP: Club Info -->
+                <div class="club-info">
+                    <div class="club-logo">
+                        <img src="${pageContext.request.contextPath}/clubImage?id=<%= club.getClubId() %>">
+                    </div>
 
-                    <!-- TOP: Club Info -->
-                    <div class="club-info">
-                        <div class="club-logo">
-                            <img src="${pageContext.request.contextPath}/clubImage?id=<%= club.getClubId() %>">
-                        </div>
+                    <div class="club-meta">
+                        <h2><%= club.getClubName() %></h2>
+                        <p class="club-desc"><%= club.getDescription() %></p>
 
-                        <div class="club-meta">
-                            <h2><%= club.getClubName() %></h2>
-                            <p class="club-desc"><%= club.getDescription() %></p>
+                        <p class="club-created">
+                            <strong>Created By: </strong>
+                            <%= advisor != null ? advisor.getFullName() : "Unknown" %><br>
+                        </p>
 
-                            <p class="club-created">
-                                <strong>Created By: </strong>
-                                <%= advisor != null ? advisor.getFullName() : "Unknown" %><br>
-                            </p>
-                            
-                            <a href="<%= request.getContextPath() %>/admin/editClubDetails?clubId=<%= club.getClubId() %>"
-                                class="edit-btn">
-                                Edit Club Details
-                            </a>
-                        </div>
+                        <a href="<%= request.getContextPath() %>/admin/editClubDetails?clubId=<%= club.getClubId() %>"
+                            class="edit-btn">
+                            Edit Club Details
+                        </a>
                     </div>
                 </div>
-
-                <!-- MEMBERS -->
-                <div class="club-members">
-                    <h3>
-                        Club Members
-                        <span class="member-badge"><%= members != null ? members.size() : 0 %></span>
-                    </h3>
-
-                    <% if (members == null || members.isEmpty()) { %>
-                        <p class="empty-text">No members have joined this club yet.</p>
-                    <% } else { %>
-                        <table class="members-table">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Name</th>
-                                    <th>User Type</th>
-                                    <th>Role</th>
-                                    <th>Join Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <%
-                                int i = 1;
-                                for (ClubMember m : members) {
-                                    User u = userDAO.getUserById(m.getUserId());
-                            %>
-                                <tr>
-                                    <td><%= i++ %></td>
-                                    <td><%= u.getFullName() %></td>
-                                    <td><%= u.getUserType() %></td>
-                                    <td class="role"><%= m.getRole() %></td>
-                                    <td><%= m.getJoinDate() %></td>
-                                </tr>
-                            <% } %>
-                            </tbody>
-                        </table>
-
-                        <% } %>
-                    </div>
-                    
-                    <%-- Only Advisor or President can manage members --%>
-                    <%
-                        String myRole = null;
-                        for (ClubMember m : members) {
-                            if (m.getUserId() == user.getUserId()) {
-                                myRole = m.getRole();
-                                break;
-                            }
-                        }
-                    %>
-
-                    <% if ("Advisor".equals(myRole) || "President".equals(myRole)) { %>
-                        <div style="margin-top: 15px;">
-                            <a href="<%= request.getContextPath() %>/admin/manageClubMembers?clubId=<%= club.getClubId() %>"
-                               class="edit-btn">
-                               Manage Club Members
-                            </a>
-                        </div>
-                    <% } %>
-                    
-                </div>
-
             </div>
+
+            <!-- MEMBERS -->
+            <div class="club-members">
+            <h3>
+                Club Members
+                <span class="member-badge"><%= members != null ? members.size() : 0 %></span>
+            </h3>
+            <% if (members == null || members.isEmpty()) { %>
+                <p class="empty-text">No members have joined this club yet.</p>
+            <% } else { %>
+            <div class="table-scroll">
+                <table class="members-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Profile Image</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            int i = 1;
+                            for (User u : members) {
+                        %>
+                        <tr>
+                            <td><%= i++%></td>
+
+                            <td class="profile-cell">
+                                <img
+                                    src="<%= request.getContextPath()%>/profileImage?id=<%= u.getUserId()%>"
+                                    class="profile-img"
+                                    onclick="openImage(this.src)">
+                            </td>
+
+                            <td><%= u.getFullName()%></td>
+                            <td class="role"><%= u.getRole()%></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                    </table>
+                </div>
+            <% } %>
+            </div>
+            
+            <div class="sort-bar">
+                <form method="get" action="${pageContext.request.contextPath}/admin/manageClubDetails">
+                    <input type="hidden" name="clubId" value="<%= club.getClubId() %>">
+
+                    <label>Sort members by:</label>
+
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="">Role (Default)</option>
+                        <option value="role"
+                                <%= "role".equals(request.getAttribute("sort")) ? "selected" : ""%>>
+                            Role
+                        </option>
+                        <option value="name"
+                                <%= "name".equals(request.getAttribute("sort")) ? "selected" : ""%>>
+                            Alphabetical
+                        </option>
+                    </select>
+                </form>
+            </div>
+                    
+            <%-- Only Advisor or President can manage members --%>
+            <%
+                String myRole = null;
+                for (User u : members) {
+                    if (u.getUserId() == user.getUserId()) {
+                        myRole = u.getRole();
+                        break;
+                    }
+                }
+            %>
+
+            <% if ("Advisor".equals(myRole)) {%>
+            <div style="margin-top: 15px;">
+                <a href="<%= request.getContextPath()%>/admin/manageClubMembers?clubId=<%= club.getClubId()%>"
+                   class="edit-btn">
+                    Manage Club Members
+                </a>
+            </div>
+            <% }%>
         </div>
     </div>
+    
+    <!-- IMAGE MODAL -->
+    <div id="imageModal" class="image-modal" onclick="closeImage()">
+        <img id="modalImg">
+    </div>
 
-        <script>
+    <script>
             window.onload = function () {
                 document.querySelector('.sidebar').classList.add('collapsed');
                 document.body.classList.add('sidebar-collapsed');
@@ -163,6 +188,17 @@
         function toggleSidebar() {
             document.querySelector('.sidebar').classList.toggle('collapsed');
             document.body.classList.toggle('sidebar-collapsed');
+        }
+        
+        function openImage(src) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImg");
+            modalImg.src = src;
+            modal.style.display = "flex";
+        }
+
+        function closeImage() {
+            document.getElementById("imageModal").style.display = "none";
         }
     </script>
 </body>
