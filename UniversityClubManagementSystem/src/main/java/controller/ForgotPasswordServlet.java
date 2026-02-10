@@ -31,7 +31,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         UserDAO dao = new UserDAO();
         String action = request.getParameter("action");
 
-        // Create bean (MODEL)
+        // Create bean
         ForgotPasswordBean bean = new ForgotPasswordBean();
 
         /* STEP 1 — VERIFY EMAIL */
